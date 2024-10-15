@@ -11,6 +11,8 @@ import {
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
 import React, { useState } from 'react'
+import { Link, Route, Routes } from 'react-router-dom'
+import { CommonTable } from '../components/Table/CommonTable'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -42,7 +44,7 @@ const items: MenuProps['items'] = [
 
 export const AdminLayout: React.FC = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken()
   const [collapsed, setCollapsed] = useState(false)
 
@@ -57,7 +59,10 @@ export const AdminLayout: React.FC = () => {
           header
         </Header>
         <Content>
-          123
+          <Routes>
+            <Route path="/dashboard" element={<div>Dashboard Page</div>} />
+            <Route path="/users" element={<CommonTable />} />
+          </Routes>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           footer
