@@ -2,7 +2,7 @@ import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
-import { createColumns } from './helpers/columns'
+import { createColumns, createExtensibleColumns } from './helpers/columns'
 import { ColumnProps } from 'antd/es/table'
 import { ColumnPropsWithFormatTime } from './types'
 
@@ -25,9 +25,7 @@ export const CommonTable: React.FC<TableProps> = (props) => {
       // 模拟 获取数据
       const res = await http.get(getUrl)
       setData(res)
-      console.log(createColumns({ columns, data: res }));
-      
-      setTableColumns(createColumns({ columns, data: res }))
+      setTableColumns(createExtensibleColumns({ columns}))
     }
 
     fetchData()

@@ -2,6 +2,8 @@ import { ColumnProps } from "antd/es/table"
 
 export enum COLUMNTYPE {
   TIME = 'time',
+  CUSTOM = 'custom',
+  CURRENCY = "CURRENCY",
 }
 
 export interface ColumnPropsWithFormatTime extends ColumnProps<any> {

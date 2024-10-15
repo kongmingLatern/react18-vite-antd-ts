@@ -1,4 +1,4 @@
-import { renderNestedColumn, renderTimeColumns } from "./render"
+import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./render"
 import { ColumnPropsWithFormatTime, COLUMNTYPE } from "../types"
 import { getNestedValue } from "@react18-vite-antd-ts/utils"
 
@@ -15,38 +15,58 @@ function isTimeColumn(column: ColumnPropsWithFormatTime) {
 export function createColumns(props: {
   columns: ColumnPropsWithFormatTime[]
 }) {
-
   return props.columns?.map((column) => {
-    let key = column.key
-    if (isNestedKey(key as string)) {
-      if (column.render) {
-        // 如果设置了render，则不进行嵌套渲染
-        return {
-          ...column,
-          dataIndex: key,
-        }
-      }
-      column.render = (_, record, index) => {
-        const targetValue = getNestedValue(record, key)
-        return renderNestedColumn(targetValue, {
-          column,
-          record,
-          index
-        }) 
-      } 
+    const processedColumn = { ...column, dataIndex: column.key };
+
+    if (isNestedKey(column.key as string)) {
+      processedColumn.render = column.render || ((_, record, index) => {
+        const targetValue = getNestedValue(record, column.key);
+        return renderNestedColumn(targetValue, { column, record, index });
+      });
     }
-    // 如果列是时间列，则使用 formatTime 格式化时间 (根据 key)
+
     if (isTimeColumn(column)) {
-      return {
-        ...column,
-        dataIndex: key,
-        render: (text: string) => renderTimeColumns(text, column.formatTime),
-      }
+      processedColumn.render = (text: string) => renderTimeColumns(text, column.formatTime);
     }
-    return {
-      ...column,
-      // 自动设置
-      dataIndex: column.key,
+
+    return processedColumn;
+  });
+}
+
+// 添加新的列类型处理函数
+type ColumnProcessor = (column: ColumnPropsWithFormatTime) => Partial<ColumnPropsWithFormatTime>;
+
+const columnProcessors: Record<string, ColumnProcessor> = {
+  [COLUMNTYPE.TIME]: (column) => ({
+    render: (text: string) => renderTimeColumns(text, column.formatTime),
+  }),
+  [COLUMNTYPE.CURRENCY]: (column) => ({
+    render: (text: number) => renderCurrencyColumn(text, column.formatTime),
+  }),
+};
+
+// 扩展性更强的列创建函数
+export function createExtensibleColumns(props: {
+  columns: ColumnPropsWithFormatTime[]
+  customProcessors?: Record<string, ColumnProcessor>
+}) {
+  const { columns, customProcessors = {} } = props;
+  const allProcessors = { ...columnProcessors, ...customProcessors };
+
+  return columns?.map((column) => {
+    let processedColumn = { ...column, dataIndex: column.key };
+
+    if (isNestedKey(column.key as string) && !column.render) {
+      processedColumn.render = (_, record, index) => {
+        const targetValue = getNestedValue(record, column.key);
+        return renderNestedColumn(targetValue, { column, record, index });
+      };
     }
-  })
+
+    if (column.type && allProcessors[column.type]) {
+      processedColumn = { ...processedColumn, ...allProcessors[column.type](column) };
+    }
+
+    return processedColumn;
+  });
 }

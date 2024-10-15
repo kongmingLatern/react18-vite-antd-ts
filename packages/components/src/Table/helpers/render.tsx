@@ -16,3 +16,7 @@ export const renderNestedColumn = (targetValue: any, {
 }) => {
   return column.customRender ? column.customRender(targetValue, record, index) : targetValue
 }
+
+export const renderCurrencyColumn = (value: number, format: string = 'USD') => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: format }).format(value);
+}
