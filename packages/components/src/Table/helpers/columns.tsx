@@ -1,5 +1,5 @@
 import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./render"
-import { ColumnPropsWithFormatTime, COLUMNTYPE } from "../types"
+import { ColumnPropsWithCustomRender, ColumnPropsWithFormatTime, COLUMNTYPE, EnhanceColumnProps } from "../types"
 import { getNestedValue } from "@react18-vite-antd-ts/utils"
 
 function isNestedKey(key: string) {
@@ -34,7 +34,9 @@ export function createColumns(props: {
 }
 
 // 添加新的列类型处理函数
-type ColumnProcessor = (column: ColumnPropsWithFormatTime) => Partial<ColumnPropsWithFormatTime>;
+import { Button } from 'antd';
+
+type ColumnProcessor = (column: ColumnPropsWithCustomRender) => Partial<ColumnPropsWithCustomRender>;
 
 const columnProcessors: Record<string, ColumnProcessor> = {
   [COLUMNTYPE.TIME]: (column) => ({
@@ -43,11 +45,39 @@ const columnProcessors: Record<string, ColumnProcessor> = {
   [COLUMNTYPE.CURRENCY]: (column) => ({
     render: (text: number) => renderCurrencyColumn(text, column.formatTime),
   }),
+  [COLUMNTYPE.ACTION]: (column) => ({
+    render: (_, record) => {
+      const { actions = ['view', 'edit', 'delete'] } = column;
+      return (
+        <>
+          {actions.includes('view') && (
+            <Button type="link" onClick={() => column.onView?.(record)}>
+              查看
+            </Button>
+          )}
+          {actions.includes('edit') && (
+            <Button type="link" onClick={() => column.onEdit?.(record)}>
+              修改
+            </Button>
+          )}
+          {actions.includes('delete') && (
+            <Button type="link" onClick={() => column.onDelete?.(record)}>
+              删除
+            </Button>
+          )}
+          {column.customActions?.map((action, index) => (
+            <Button key={index} type="link" onClick={() => action.onClick(record)}>
+              {action.text}
+            </Button>
+          ))}
+        </>
+      );
+    },
+  }),
 };
 
-// 扩展性更强的列创建函数
 export function createExtensibleColumns(props: {
-  columns: ColumnPropsWithFormatTime[]
+  columns: EnhanceColumnProps[]
   customProcessors?: Record<string, ColumnProcessor>
 }) {
   const { columns, customProcessors = {} } = props;
@@ -56,7 +86,7 @@ export function createExtensibleColumns(props: {
   return columns?.map((column) => {
     let processedColumn = { ...column, dataIndex: column.key };
 
-    if (isNestedKey(column.key as string) && !column.render) {
+    if (!column.actions && isNestedKey(column.key as string) && !column.render) {
       processedColumn.render = (_, record, index) => {
         const targetValue = getNestedValue(record, column.key);
         return renderNestedColumn(targetValue, { column, record, index });

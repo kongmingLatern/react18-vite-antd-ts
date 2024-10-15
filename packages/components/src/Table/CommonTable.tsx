@@ -2,15 +2,15 @@ import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
-import { createColumns, createExtensibleColumns } from './helpers/columns'
+import {createExtensibleColumns } from './helpers/columns'
 import { ColumnProps } from 'antd/es/table'
-import { ColumnPropsWithFormatTime } from './types'
+import { ColumnPropsWithCustomRender, ColumnPropsWithFormatTime } from './types'
 
 
 interface TableProps {
   dataCfg: {
     getUrl?: string
-    columns: ColumnPropsWithFormatTime[]
+    columns: (ColumnPropsWithFormatTime & ColumnPropsWithCustomRender)[]
   }
 }
 

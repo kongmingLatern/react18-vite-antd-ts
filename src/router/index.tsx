@@ -42,6 +42,11 @@ const router = createBrowserRouter([
                   title: '创建时间',
                   key: 'createTime',
                 },
+                {
+                  type: COLUMNTYPE.ACTION,
+                  title: '操作',
+                  actions: ['view', 'edit', 'delete'],
+                },
               ],
             }}
           />
