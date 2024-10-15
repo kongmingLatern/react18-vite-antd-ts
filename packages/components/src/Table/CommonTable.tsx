@@ -1,6 +1,7 @@
 import type { TableProps } from 'antd'
 import { Space, Table, Tag } from 'antd'
 import React from 'react'
+import { useDrawer } from '../Drawer/hooks/useDrawer'
 
 interface DataType {
   key: string
@@ -10,59 +11,6 @@ interface DataType {
   tags: string[]
 }
 
-const columns: TableProps<DataType>['columns'] = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green'
-          if (tag === 'loser') {
-            color = 'volcano'
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          )
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a onClick={() => {
-          console.log(record)
-        }}>
-          Invite
-          {record.name}
-        </a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-]
 
 const data: DataType[] = [
   {
@@ -88,4 +36,67 @@ const data: DataType[] = [
   },
 ]
 
-export const CommonTable: React.FC = () => <Table<DataType> columns={columns} dataSource={data} />
+export const CommonTable: React.FC = () => {
+  const { showDrawer, DrawerComponent } = useDrawer()
+  return (
+    <>
+      <Table<DataType> columns={
+        [{
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+          render: text => <a>{text}</a>,
+        },
+        {
+          title: 'Age',
+          dataIndex: 'age',
+          key: 'age',
+        },
+        {
+          title: 'Address',
+          dataIndex: 'address',
+          key: 'address',
+        },
+        {
+          title: 'Tags',
+          key: 'tags',
+          dataIndex: 'tags',
+          render: (_, { tags }) => (
+            <>
+              {tags.map((tag) => {
+                let color = tag.length > 5 ? 'geekblue' : 'green'
+                if (tag === 'loser') {
+                  color = 'volcano'
+                }
+                return (
+                  <Tag color={color} key={tag}>
+                    {tag.toUpperCase()}
+                  </Tag>
+                )
+              })}
+            </>
+          ),
+        },
+        {
+          title: 'Action',
+          key: 'action',
+          render: (_, record) => {
+            return (
+              <Space size="middle">
+                <a onClick={() => {
+
+                  showDrawer(<div>123</div>)
+                }}>
+                  Invite
+                  {record.name}
+                </a>
+                <a>Delete</a>
+              </Space>
+            )
+          },
+        },
+        ]} dataSource={data} />
+      {DrawerComponent()}
+    </>
+  )
+}
