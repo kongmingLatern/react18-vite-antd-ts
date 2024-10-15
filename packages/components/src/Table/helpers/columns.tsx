@@ -1,6 +1,7 @@
 import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./render"
-import { ColumnPropsWithCustomRender, ColumnPropsWithFormatTime, COLUMNTYPE, EnhanceColumnProps } from "../types"
+import {ColumnPropsWithFormatTime, COLUMNTYPE, EnhanceColumnProps } from "../types"
 import { getNestedValue } from "@react18-vite-antd-ts/utils"
+import { ActionButton } from "./ActionButton"
 
 function isNestedKey(key: string) {
   return key.split('.')?.length > 1
@@ -36,7 +37,7 @@ export function createColumns(props: {
 // 添加新的列类型处理函数
 import { Button } from 'antd';
 
-type ColumnProcessor = (column: ColumnPropsWithCustomRender) => Partial<ColumnPropsWithCustomRender>;
+type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>;
 
 const columnProcessors: Record<string, ColumnProcessor> = {
   [COLUMNTYPE.TIME]: (column) => ({
@@ -46,32 +47,12 @@ const columnProcessors: Record<string, ColumnProcessor> = {
     render: (text: number) => renderCurrencyColumn(text, column.formatTime),
   }),
   [COLUMNTYPE.ACTION]: (column) => ({
+    title: '操作',
     render: (_, record) => {
-      const { actions = ['view', 'edit', 'delete'] } = column;
-      return (
-        <>
-          {actions.includes('view') && (
-            <Button type="link" onClick={() => column.onView?.(record)}>
-              查看
-            </Button>
-          )}
-          {actions.includes('edit') && (
-            <Button type="link" onClick={() => column.onEdit?.(record)}>
-              修改
-            </Button>
-          )}
-          {actions.includes('delete') && (
-            <Button type="link" onClick={() => column.onDelete?.(record)}>
-              删除
-            </Button>
-          )}
-          {column.customActions?.map((action, index) => (
-            <Button key={index} type="link" onClick={() => action.onClick(record)}>
-              {action.text}
-            </Button>
-          ))}
-        </>
-      );
+      return <ActionButton
+        {...column}
+        record={record}
+      />
     },
   }),
 };
