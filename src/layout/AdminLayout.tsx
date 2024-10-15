@@ -11,8 +11,7 @@ import {
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
 import React, { useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
-import { CommonTable } from '../components/Table/CommonTable'
+import { Outlet } from 'react-router-dom'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -59,10 +58,7 @@ export const AdminLayout: React.FC = () => {
           header
         </Header>
         <Content>
-          <Routes>
-            <Route path="/dashboard" element={<div>Dashboard Page</div>} />
-            <Route path="/users" element={<CommonTable />} />
-          </Routes>
+          <Outlet />
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           footer
