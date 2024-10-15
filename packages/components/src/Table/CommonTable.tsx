@@ -1,4 +1,4 @@
-import { Space, Table, Tag } from 'antd'
+import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
@@ -93,7 +93,7 @@ export const CommonTable: React.FC<TableProps> = (props) => {
 
   return (
     <>
-      <Table<DataType> columns={createColumns({ columns }) as ColumnProps<DataType>[]} dataSource={data} />
+      <Table<DataType> columns={createColumns({ columns, data }) as ColumnProps<DataType>[]} dataSource={data} />
       {DrawerComponent()}
     </>
   )
