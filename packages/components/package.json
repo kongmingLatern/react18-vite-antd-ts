@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react18-vite-antd-ts/hooks": "workspace:*"
+    "@react18-vite-antd-ts/hooks": "workspace:*",
+    "@react18-vite-antd-ts/utils": "workspace:*",
+    "@react18-vite-antd-ts/axios": "workspace:*"
   }
 }
