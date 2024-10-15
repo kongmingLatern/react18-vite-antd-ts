@@ -50,14 +50,14 @@ export const AdminLayout: React.FC = () => {
   return (
     <Layout hasSider>
       <Sider collapsible style={siderStyle} collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
-        <div className="text-white p-15px">123123</div>
+        <div className="text-white p-15px text-center">123123</div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>
           header
         </Header>
-        <Content>
+        <Content style={{ margin: '24px 16px 0' }}>
           <Outlet />
         </Content>
         <Footer style={{ textAlign: 'center' }}>
