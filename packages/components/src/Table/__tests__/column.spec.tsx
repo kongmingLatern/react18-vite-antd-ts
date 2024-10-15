@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { createColumns, renderTimeColumns, ColumnType, ColumnPropsWithFormatTime } from '../helpers/columns'
-import { formatDate, getNestedValue } from '@react18-vite-antd-ts/utils'
+
+import { createColumns } from '../helpers/columns'
+import { renderTimeColumns } from '../helpers/render'
+import { COLUMNTYPE, ColumnPropsWithFormatTime } from '../types'
+
+import { formatDate } from '@react18-vite-antd-ts/utils'
 
 vi.mock('@react18-vite-antd-ts/utils', () => ({
   formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`),
   getNestedValue: vi.fn((obj, path) => obj[path])
 }))
 
-// Mock the formatDate function
-// vi.mock('@react18-vite-antd-ts/utils', () => ({
-//   formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`)
-// }))
 
 describe('columns helpers', () => {
   describe('createColumns', () => {
@@ -21,7 +21,7 @@ describe('columns helpers', () => {
       columns = [
         { key: 'name', title: 'Name' },
         { key: 'age', title: 'Age' },
-        { key: 'birthDate', title: 'Birth Date', type: ColumnType.TIME }
+        { key: 'birthDate', title: 'Birth Date', type: COLUMNTYPE.TIME }
       ]
       data = [
         { name: '123', age: 12, birthDate: '2023-04-01' },
@@ -39,7 +39,7 @@ describe('columns helpers', () => {
       expect(result[2]).toEqual(expect.objectContaining({
         key: 'birthDate',
         title: 'Birth Date',
-        type: ColumnType.TIME,
+        type: COLUMNTYPE.TIME,
         dataIndex: 'birthDate',
       }))
       expect(result[2].render).toBeDefined()
@@ -48,7 +48,7 @@ describe('columns helpers', () => {
     it('should auto format by nested key', () => {
       columns = [
         { key: 'user.name', title: 'User Name' },
-        { key: 'user.time', title: 'User Time', type: ColumnType.TIME },
+        { key: 'user.time', title: 'User Time', type: COLUMNTYPE.TIME },
         { key: 'user.age', title: 'User Age', render: (value) => value + 1 }
       ]
       data = [
@@ -62,22 +62,21 @@ describe('columns helpers', () => {
       expect(result[2]).toEqual(expect.objectContaining({ key: 'user.age', title: 'User Age', dataIndex: 'user.age', render: expect.any(Function) }))
     })
   })
-
-  describe('renderTimeColumns', () => {
-    it('should format time with default format', () => {
-      const time = '2023-04-01'
-      const result = renderTimeColumns(time)
-      expect(formatDate).toHaveBeenCalledWith(time, 'YYYY-MM-DD HH:mm:ss')
-      expect(result).toBe('Formatted: 2023-04-01, YYYY-MM-DD HH:mm:ss')
-    })
-
-    it('should format time with custom format', () => {
-      const time = '2023-04-01'
-      const format = 'DD/MM/YYYY'
-      const result = renderTimeColumns(time, format)
-      expect(formatDate).toHaveBeenCalledWith(time, format)
-      expect(result).toBe('Formatted: 2023-04-01, DD/MM/YYYY')
-    })
-  })
 })
 
+describe('renderTimeColumns', () => {
+  it('should format time with default format', () => {
+    const time = '2023-04-01'
+    const result = renderTimeColumns(time)
+    expect(formatDate).toHaveBeenCalledWith(time, 'YYYY-MM-DD HH:mm:ss')
+    expect(result).toBe('Formatted: 2023-04-01, YYYY-MM-DD HH:mm:ss')
+  })
+
+  it('should format time with custom format', () => {
+    const time = '2023-04-01'
+    const format = 'DD/MM/YYYY'
+    const result = renderTimeColumns(time, format)
+    expect(formatDate).toHaveBeenCalledWith(time, format)
+    expect(result).toBe('Formatted: 2023-04-01, DD/MM/YYYY')
+  })
+})

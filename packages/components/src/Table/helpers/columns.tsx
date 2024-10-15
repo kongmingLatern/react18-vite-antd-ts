@@ -1,14 +1,6 @@
-import { ColumnProps } from "antd/es/table"
-import { formatDate, getNestedValue } from '@react18-vite-antd-ts/utils'
-
-export enum ColumnType {
-  TIME = 'time',
-}
-
-export interface ColumnPropsWithFormatTime extends ColumnProps<any> {
-  type?: ColumnType
-  formatTime?: string
-}
+import { getNestedValue } from "@react18-vite-antd-ts/utils"
+import { renderTimeColumns } from "./render"
+import { ColumnPropsWithFormatTime, COLUMNTYPE } from "../types"
 
 function isNestedKey(key: string) {
   return key.split('.')?.length > 1
@@ -16,7 +8,7 @@ function isNestedKey(key: string) {
 
 // 如果设置type为time，就自动格式化时间
 function isTimeColumn(column: ColumnPropsWithFormatTime) {
-  return column.type === ColumnType.TIME
+  return column.type === COLUMNTYPE.TIME
 }
 
 // 这里封装一些通用展示的列
@@ -50,8 +42,4 @@ export function createColumns(props: {
       dataIndex: column.key,
     }
   })
-}
-
-export const renderTimeColumns = (time: string | number, format: string = 'YYYY-MM-DD HH:mm:ss') => {
-  return formatDate(time, format)
 }
