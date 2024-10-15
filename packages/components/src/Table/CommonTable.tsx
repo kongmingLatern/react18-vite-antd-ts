@@ -2,16 +2,10 @@ import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
-import { ColumnPropsWithFormatTime, createColumns } from './helpers/columns'
+import { createColumns } from './helpers/columns'
 import { ColumnProps } from 'antd/es/table'
+import { ColumnPropsWithFormatTime } from './types'
 
-interface DataType {
-  key: string
-  name: string
-  age: number
-  address: string
-  tags: string[]
-}
 
 interface TableProps {
   dataCfg: {
@@ -20,80 +14,30 @@ interface TableProps {
   }
 }
 
-// const columns = [{
-//   title: 'Name',
-//   dataIndex: 'name',
-//   key: 'name',
-//   render: text => <a>{text}</a>,
-// },
-// {
-//   title: 'Age',
-//   dataIndex: 'age',
-//   key: 'age',
-// },
-// {
-//   title: 'Address',
-//   dataIndex: 'address',
-//   key: 'address',
-// },
-// {
-//   title: 'Tags',
-//   key: 'tags',
-//   dataIndex: 'tags',
-//   render: (_, { tags }) => (
-//     <>
-//       {tags.map((tag) => {
-//         let color = tag.length > 5 ? 'geekblue' : 'green'
-//         if (tag === 'loser') {
-//           color = 'volcano'
-//         }
-//         return (
-//           <Tag color={color} key={tag}>
-//             {tag.toUpperCase()}
-//           </Tag>
-//         )
-//       })}
-//     </>
-//   ),
-// },
-// {
-//   title: 'Action',
-//   key: 'action',
-//   render: (_, record) => {
-//     return (
-//       <Space size="middle">
-//         <a onClick={() => {
-
-//           showDrawer(<div>123</div>)
-//         }}>
-//           Invite
-//           {record.name}
-//         </a>
-//         <a>Delete</a>
-//       </Space>
-//     )
-//   },
-// },
-// ]
-
 export const CommonTable: React.FC<TableProps> = (props) => {
-  const [data, setData] = useState<DataType[]>([])
+  const [data, setData] = useState<[]>([])
   const { DrawerComponent } = useDrawer()
   const { getUrl, columns } = props.dataCfg
+  const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
 
   useEffect(() => {
     async function fetchData() {
       // 模拟 获取数据
       const res = await http.get(getUrl)
-      setData(res.data)
+      setData(res)
+      console.log(createColumns({ columns, data: res }));
+      
+      setTableColumns(createColumns({ columns, data: res }))
     }
 
     fetchData()
+
   }, [])
+
 
   return (
     <>
-      <Table<DataType> columns={createColumns({ columns, data }) as ColumnProps<DataType>[]} dataSource={data} />
+      <Table columns={tableColumns} dataSource={data} rowKey={'id'} />
       {DrawerComponent()}
     </>
   )

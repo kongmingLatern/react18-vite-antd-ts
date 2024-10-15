@@ -76,6 +76,4 @@ class HttpClient {
   }
 }
 
-export {
-  HttpClient as http
-};
+export const http = new HttpClient()

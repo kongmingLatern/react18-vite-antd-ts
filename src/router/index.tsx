@@ -1,4 +1,4 @@
-import { CommonTable } from '@react18-vite-antd-ts/components'
+import { COLUMNTYPE, CommonTable } from '@react18-vite-antd-ts/components'
 // 初始化路由
 import { createBrowserRouter } from 'react-router-dom'
 import App from '../App'
@@ -20,7 +20,32 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'dashboard',
-        element: <CommonTable />,
+        element: (
+          <CommonTable
+            dataCfg={{
+              getUrl: 'https://jsonplaceholder.typicode.com/users',
+              columns: [
+                {
+                  title: 'id',
+                  key: 'id',
+                },
+                {
+                  title: '名字',
+                  key: 'name',
+                },
+                {
+                  title: '公司',
+                  key: 'company.name',
+                },
+                {
+                  type: COLUMNTYPE.TIME,
+                  title: '创建时间',
+                  key: 'createTime',
+                },
+              ],
+            }}
+          />
+        ),
       },
     ],
   },

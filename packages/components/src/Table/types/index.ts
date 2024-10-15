@@ -8,3 +8,8 @@ export interface ColumnPropsWithFormatTime extends ColumnProps<any> {
   type?: COLUMNTYPE
   formatTime?: string
 }
+
+export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
+  // 自定义渲染，脱离render函数
+  customRender?: (text: any, record: any, index: number) => React.ReactNode
+}

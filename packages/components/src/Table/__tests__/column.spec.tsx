@@ -23,15 +23,11 @@ describe('columns helpers', () => {
         { key: 'age', title: 'Age' },
         { key: 'birthDate', title: 'Birth Date', type: COLUMNTYPE.TIME }
       ]
-      data = [
-        { name: '123', age: 12, birthDate: '2023-04-01' },
-        { name: '133', age: 13, birthDate: '2023-04-02' },
-        { name: '143', age: 14, birthDate: '2023-04-03' },
-      ]
+   
     })
 
     it('should create columns with correct properties', () => {
-      const result = createColumns({ columns, data })
+      const result = createColumns({ columns})
 
       expect(result).toHaveLength(3)
       expect(result[0]).toEqual(expect.objectContaining({ key: 'name', title: 'Name', dataIndex: 'name' }))
@@ -51,12 +47,8 @@ describe('columns helpers', () => {
         { key: 'user.time', title: 'User Time', type: COLUMNTYPE.TIME },
         { key: 'user.age', title: 'User Age', render: (value) => value + 1 }
       ]
-      data = [
-        { user: { time: '123', name: '123', age: 12 } },
-        { user: { time: '133', name: '133', age: 13 } },
-        { user: { time: '143', name: '143', age: 14 } },
-      ]
-      const result = createColumns({ columns, data })
+    
+      const result = createColumns({ columns })
       expect(result[0]).toEqual(expect.objectContaining({ key: 'user.name', title: 'User Name', dataIndex: 'user.name', render: expect.any(Function) }))
       expect(result[1]).toEqual(expect.objectContaining({ key: 'user.time', title: 'User Time', dataIndex: 'user.time', render: expect.any(Function) }))
       expect(result[2]).toEqual(expect.objectContaining({ key: 'user.age', title: 'User Age', dataIndex: 'user.age', render: expect.any(Function) }))
