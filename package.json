@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"antd": "^5.21.4",
+		"dayjs": "^1.11.13",
 		"husky": "^9.1.6",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
@@ -22,10 +23,10 @@
 	},
 	"devDependencies": {
 		"@ant-design/icons": "^5.5.1",
-		"@react18-vite-antd-ts/components": "workspace:*",
-		"@react18-vite-antd-ts/layouts": "workspace:*",
 		"@antfu/eslint-config": "^3.7.3",
 		"@eslint/js": "^9.11.1",
+		"@react18-vite-antd-ts/components": "workspace:*",
+		"@react18-vite-antd-ts/layouts": "workspace:*",
 		"@types/node": "^22.7.5",
 		"@types/react": "^18.3.10",
 		"@types/react-dom": "^18.3.0",

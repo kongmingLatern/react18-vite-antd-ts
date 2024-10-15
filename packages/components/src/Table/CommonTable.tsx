@@ -1,7 +1,6 @@
-import type { TableProps } from 'antd'
 import { Space, Table, Tag } from 'antd'
 import React from 'react'
-import { useDrawer } from '../Drawer/hooks/useDrawer'
+import { useDrawer } from '@react18-vite-antd-ts/hooks'
 
 interface DataType {
   key: string
@@ -36,7 +35,7 @@ const data: DataType[] = [
   },
 ]
 
-export const CommonTable: React.FC = () => {
+export const CommonTable: React.FC = (props) => {
   const { showDrawer, DrawerComponent } = useDrawer()
   return (
     <>

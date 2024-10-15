@@ -11,6 +11,9 @@ importers:
       antd:
         specifier: ^5.21.4
         version: 5.21.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -85,7 +88,13 @@ importers:
         specifier: ^2.1.3
         version: 2.1.3(@types/node@22.7.5)(jsdom@25.0.1)(sass@1.79.5)
 
-  packages/components: {}
+  packages/components:
+    dependencies:
+      '@react18-vite-antd-ts/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+
+  packages/hooks: {}
 
   packages/layouts: {}
 
