@@ -52,7 +52,9 @@ const columns: TableProps<DataType>['columns'] = [
     key: 'action',
     render: (_, record) => (
       <Space size="middle">
-        <a>
+        <a onClick={() => {
+          console.log(record)
+        }}>
           Invite
           {record.name}
         </a>

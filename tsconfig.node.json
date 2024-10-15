@@ -18,7 +18,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@react18-vite-antd-ts/*": ["./packages/*/src"],
     }
   },
   "include": ["vite.config.ts"]

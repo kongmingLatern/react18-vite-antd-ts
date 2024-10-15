@@ -36,6 +36,12 @@ importers:
       '@eslint/js':
         specifier: ^9.11.1
         version: 9.12.0
+      '@react18-vite-antd-ts/components':
+        specifier: workspace:*
+        version: link:packages/components
+      '@react18-vite-antd-ts/layouts':
+        specifier: workspace:*
+        version: link:packages/layouts
       '@types/node':
         specifier: ^22.7.5
         version: 22.7.5
@@ -78,6 +84,10 @@ importers:
       vitest:
         specifier: ^2.1.3
         version: 2.1.3(@types/node@22.7.5)(jsdom@25.0.1)(sass@1.79.5)
+
+  packages/components: {}
+
+  packages/layouts: {}
 
 packages:
 

@@ -2,10 +2,9 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react-swc'
 import path from 'node:path'
 import Unocss from 'unocss/vite'
-import { presetUno } from 'unocss'
-import { presetAttributify } from 'unocss'
-import { presetIcons } from 'unocss'
-// https://vitejs.dev/config/
+import { presetUno, presetAttributify, presetIcons } from 'unocss'
+
+
 export default defineConfig({
 	test: {
 		globals: true,

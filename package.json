@@ -22,6 +22,8 @@
 	},
 	"devDependencies": {
 		"@ant-design/icons": "^5.5.1",
+		"@react18-vite-antd-ts/components": "workspace:*",
+		"@react18-vite-antd-ts/layouts": "workspace:*",
 		"@antfu/eslint-config": "^3.7.3",
 		"@eslint/js": "^9.11.1",
 		"@types/node": "^22.7.5",
