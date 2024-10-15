@@ -26,6 +26,7 @@ export function createColumns(props: {
     if (isTimeColumn(column)) {
       return {
         ...column,
+        dataIndex: column.key,
         render: (value: string | number) => renderTimeColumns(value, column.formatTime),
       }
     }
@@ -40,8 +41,4 @@ export function createColumns(props: {
 
 export const renderTimeColumns = (time: string | number, format: string = 'YYYY-MM-DD HH:mm:ss') => {
   return formatDate(time, format)
-}
-
-function getNestedValue(column: ColumnPropsWithFormatTime, arg1: string) {
-  throw new Error("Function not implemented.")
 }
