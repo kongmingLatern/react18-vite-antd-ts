@@ -35,6 +35,14 @@ const router = createBrowserRouter([
                   key: 'createTime',
                 },
                 {
+                  title: '精度',
+                  key: 'address.geo.lat',
+                },
+                {
+                  title: '纬度',
+                  key: 'address.geo.lng',
+                },
+                {
                   type: COLUMNTYPE.ACTION,
                   actions: ['view', 'edit', 'delete'],
                   onView: (record) => {
@@ -61,9 +69,11 @@ const router = createBrowserRouter([
         element: (
           <CommonTable
             dataCfg={{
-              showIndex: true,
               getUrl: 'https://jsonplaceholder.typicode.com/users',
               columns: [
+                {
+                  type: COLUMNTYPE.INDEX,
+                },
                 {
                   title: 'id',
                   key: 'id',
@@ -77,9 +87,12 @@ const router = createBrowserRouter([
                   key: 'company.name',
                 },
                 {
-                  type: COLUMNTYPE.TIME,
-                  title: '创建时间',
-                  key: 'createTime',
+                  title: '精度',
+                  key: 'address.geo.lat',
+                },
+                {
+                  title: '纬度',
+                  key: 'address.geo.lng',
                 },
                 {
                   type: COLUMNTYPE.ACTION,

@@ -16,7 +16,7 @@ export function ActionButton(props: {
 
   const { showDrawer, DrawerComponent } = useDrawer()
 
-  function handleView(record: any) {
+  function handleView(record: Record<string, any>) {
     console.log(record);
     if (props.onView) {
       props.onView(record)
@@ -29,7 +29,7 @@ export function ActionButton(props: {
     })
   }
 
-  function handleEdit(record) {
+  function handleEdit(record: Record<string, any>) {
     if (props.onEdit) {
       props.onEdit(record)
       return

@@ -1,5 +1,5 @@
 import { useState, ReactNode } from 'react';
-import { Drawer } from 'antd';
+import { Button, Drawer, Space } from 'antd';
 
 interface UseDrawerProps {
   title?: string;
@@ -33,18 +33,33 @@ export const useDrawer = ({
     setDrawerState((prevState) => ({ ...prevState, visible: false }));
   };
 
-  const DrawerComponent = () => (
-    <Drawer
+  const DrawerComponent = () => {
+
+    function handleSave() {
+      console.log('save')
+    }
+
+    return <Drawer
       title={drawerState.title}
       placement={placement}
       width={placement === 'left' || placement === 'right' ? width : undefined}
       height={placement === 'top' || placement === 'bottom' ? height : undefined}
       onClose={closeDrawer}
       open={drawerState.visible}
+      footer={
+        <Space className='justify-end w-full'>
+          <Button color="default" variant="outlined" onClick={closeDrawer}>
+            关闭
+          </Button>
+          <Button type="primary" onClick={handleSave}>
+            保存
+          </Button>
+        </Space>
+      }
     >
       {drawerState.content}
     </Drawer>
-  );
+  };
 
   return {
     showDrawer,

@@ -1,6 +1,5 @@
 import { Table } from 'antd'
 import React, { useState } from 'react'
-import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
 import { createExtensibleColumns } from './helpers/columns'
 import { ColumnProps } from 'antd/es/table'
@@ -14,20 +13,30 @@ export interface TableProps {
      * 行键， 默认为 id
      */
     rowKey?: string
-    getUrl?: string
-    columns: (ColumnPropsWithFormat & ColumnPropsWithCustomRender)[]
     /**
-     * 是否显示序号，默认为 false
+     * 后台请求地址
      */
-    showIndex?: boolean
+    getUrl?: string
+    /**
+     * 列配置
+     */
+    columns: (ColumnPropsWithFormat & ColumnPropsWithCustomRender)[]
+
+    /**
+     * 是否显示操作列，默认为 false
+     */
+    showAction?: boolean
   }
 }
 
 export const CommonTable: React.FC<TableProps> = (props) => {
-  const { DrawerComponent } = useDrawer()
   const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
 
   const { getUrl, columns, rowKey = 'id' } = props.dataCfg
+
+  if (!getUrl) {
+    throw new Error('getUrl is required')
+  }
 
   const { data, loading } = useRequest<any, any>(() => http.get(getUrl), {
     onSuccess: () => {
@@ -46,7 +55,6 @@ export const CommonTable: React.FC<TableProps> = (props) => {
         }}
         loading={loading}
       />
-      {DrawerComponent()}
     </>
   )
 }

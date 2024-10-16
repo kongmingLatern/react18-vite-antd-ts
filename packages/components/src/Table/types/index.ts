@@ -5,6 +5,7 @@ export enum COLUMNTYPE {
   CUSTOM = 'custom',
   CURRENCY = "CURRENCY",
   ACTION = "ACTION",
+  INDEX = "INDEX",
 }
 
 export interface ColumnPropsWithFormat extends ColumnProps<any> {

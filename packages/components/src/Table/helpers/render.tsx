@@ -1,8 +1,10 @@
 import { formatDate } from "@react18-vite-antd-ts/utils"
-import { ColumnPropsWithCustomRender, EnhanceColumnProps} from "../types"
-import { Button } from "antd"
+import { ColumnPropsWithCustomRender } from "../types"
 
 export const renderTimeColumns = (time: string | number, format: string = 'YYYY-MM-DD HH:mm:ss') => {
+  if (!time) {
+    return ''
+  }
   return formatDate(time, format)
 }
 
