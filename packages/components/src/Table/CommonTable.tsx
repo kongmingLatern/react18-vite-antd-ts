@@ -2,11 +2,11 @@ import { Table } from 'antd'
 import React, { useState } from 'react'
 import { http } from '@react18-vite-antd-ts/axios'
 import { createExtensibleColumns } from './helpers/columns'
-import { ColumnProps } from 'antd/es/table'
+import { ColumnProps, TableProps } from 'antd/es/table'
 import { ColumnPropsWithCustomRender, ColumnPropsWithFormat } from './types'
 import { useRequest } from 'ahooks'
 
-export interface TableProps {
+export interface CommonTableProps {
 	dataCfg: {
 		/**
 		 * 行键， 默认为 id
@@ -33,10 +33,14 @@ export interface TableProps {
 			total?: number
 			onChange?: (page: number, pageSize: number) => void
 		}
+		/**
+		 * 表格配置
+		 */
+		tableProps?: TableProps<any>
 	}
 }
 
-export const CommonTable: React.FC<TableProps> = props => {
+export const CommonTable: React.FC<CommonTableProps> = props => {
 	const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
 	const [pagination, setPagination] = useState({
 		current: props.dataCfg.pagination?.current || 1,
@@ -93,6 +97,7 @@ export const CommonTable: React.FC<TableProps> = props => {
 				}}
 				loading={loading}
 				onChange={handleTableChange}
+				{...props.dataCfg.tableProps}
 			/>
 		</>
 	)

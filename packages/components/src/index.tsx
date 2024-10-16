@@ -1,3 +1,6 @@
+// NOTE: type
+export type { CommonTableProps } from './Table/CommonTable'
+
 // NOTE: enum
 export { COLUMNTYPE } from './Table/types'
 

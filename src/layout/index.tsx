@@ -1,1 +1,1 @@
-export * from './AdminLayout'
+export * from '../../packages/layouts/src/AdminLayout'
