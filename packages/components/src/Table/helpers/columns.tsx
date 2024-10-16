@@ -54,6 +54,7 @@ const columnProcessors: Record<string, ColumnProcessor> = {
     title: '操作',
     render: (_, record) => {
       return <ActionButton
+        // actions={column.actions}
         {...column}
         record={record}
       />

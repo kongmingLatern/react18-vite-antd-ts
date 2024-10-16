@@ -1,4 +1,5 @@
 import { ColumnProps } from "antd/es/table"
+import { ActionConfig } from "../helpers/ActionButton";
 
 export enum COLUMNTYPE {
   TIME = 'time',
@@ -15,7 +16,7 @@ export interface ColumnPropsWithFormat extends ColumnProps<any> {
 }
 
 export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
-  actions?: ('view' | 'edit' | 'delete')[];
+  actions?: ActionConfig[];
 
   customActions?: {
     text: string

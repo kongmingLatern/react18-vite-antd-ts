@@ -43,7 +43,14 @@ const router = createBrowserRouter([
                 },
                 {
                   type: COLUMNTYPE.ACTION,
-                  actions: ['view', 'edit', 'delete'],
+                  actions: [
+                    {
+                      text: '查看',
+                      onClick: (record) => {
+                        console.log(record)
+                      },
+                    },
+                  ],
                 },
               ],
             }}
@@ -92,7 +99,6 @@ const router = createBrowserRouter([
                 },
                 {
                   type: COLUMNTYPE.ACTION,
-                  actions: ['view', 'edit', 'delete'],
                 },
               ],
             }}

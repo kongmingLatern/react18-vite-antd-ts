@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Select, DatePicker, Button, Space } from 'antd';
-import { FormInstance } from 'antd/es/form';
+import { FormInstance, FormProps } from 'antd/es/form';
 
 // 定义表单项类型
 export type FormItemType = 'input' | 'select' | 'datePicker';
@@ -23,6 +23,7 @@ interface BasicFormProps {
   initialValues?: Record<string, any>;
   form?: FormInstance;
   footer?: React.ReactNode;
+  formProps?: FormProps;
 }
 
 // BasicForm组件
@@ -32,11 +33,14 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
   onFinishFailed,
   initialValues,
   form,
-  footer
+  footer,
+  formProps
 }, ref) => {
   const [formInstance] = Form.useForm(form);
-  console.log('initialValues', initialValues);
-
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+};
 
   React.useImperativeHandle(ref, () => formInstance);
 
@@ -66,10 +70,11 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
     <Form
       ref={ref}
       form={formInstance}
-      layout="vertical"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       initialValues={initialValues}
+      {...layout}
+      {...formProps}
     >
       {formItems.map((item) => (
         <Form.Item
@@ -95,42 +100,3 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
     </Form>
   );
 });
-
-// 使用示例
-/*
-const App: React.FC = () => {
-  const formItems: FormItemConfig[] = [
-    {
-      name: 'name',
-      label: '姓名',
-      type: 'input',
-      rules: [{ required: true, message: '请输入姓名' }],
-      placeholder: '请输入姓名',
-    },
-    {
-      name: 'gender',
-      label: '性别',
-      type: 'select',
-      rules: [{ required: true, message: '请选择性别' }],
-      options: [
-        { value: 'male', label: '男' },
-        { value: 'female', label: '女' },
-      ],
-      placeholder: '请选择性别',
-    },
-    {
-      name: 'birthdate',
-      label: '出生日期',
-      type: 'datePicker',
-      rules: [{ required: true, message: '请选择出生日期' }],
-    },
-  ];
-
-  const onFinish = (values: any) => {
-    console.log('Form values:', values);
-  };
-
-  return <BasicForm formItems={formItems} onFinish={onFinish} />;
-};
-*/
-
