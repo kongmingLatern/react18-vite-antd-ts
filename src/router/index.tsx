@@ -99,6 +99,30 @@ const router = createBrowserRouter([
                 },
                 {
                   type: COLUMNTYPE.ACTION,
+                  actions: [
+                    {
+                      text: '启用',
+                      needConfirm: true,
+                      onClick: (record) => {
+                        console.log(record)
+                      },
+                      index: 2,
+                    },
+                    {
+                      text: '新增子部门',
+                      onClick: (record) => {
+                        console.log(record)
+                      },
+                    },
+                    {
+                      text: '编辑123',
+                      render: (action, record) => {
+                        console.log(action, record)
+                        return <a>编辑123</a>
+                      },
+                      index: 1,
+                    },
+                  ],
                 },
               ],
             }}

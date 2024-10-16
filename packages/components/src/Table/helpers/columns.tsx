@@ -39,19 +39,23 @@ export function createColumns(props: {
 type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>;
 
 const columnProcessors: Record<string, ColumnProcessor> = {
-  [COLUMNTYPE.INDEX]: () => ({
+  [COLUMNTYPE.INDEX]: (column) => ({
     title: '序号',
     key: COLUMNTYPE.INDEX,
     render: (_, __, index) => index + 1,
+    ...column
   }),
   [COLUMNTYPE.TIME]: (column) => ({
     render: (text: string) => renderTimeColumns(text, column.formatTime),
+    ...column
   }),
   [COLUMNTYPE.CURRENCY]: (column) => ({
     render: (text: number) => renderCurrencyColumn(text, column.formatCurrency),
+    ...column
   }),
   [COLUMNTYPE.ACTION]: (column) => ({
     title: '操作',
+    align: 'center',
     render: (_, record) => {
       return <ActionButton
         // actions={column.actions}
@@ -59,6 +63,7 @@ const columnProcessors: Record<string, ColumnProcessor> = {
         record={record}
       />
     },
+    ...column
   }),
 };
 
@@ -66,11 +71,13 @@ export function createExtensibleColumns(props: {
   columns: EnhanceColumnProps[]
   dataCfg: TableProps['dataCfg']
   customProcessors?: Record<string, ColumnProcessor>
+  customRender?: (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 }) {
-  const { columns, customProcessors = {}, dataCfg } = props;
+  const { columns, customProcessors = {}, dataCfg, customRender } = props;
   const { showAction = true } = dataCfg || {}
   const allProcessors = { ...columnProcessors, ...customProcessors };
 
+  // 判断是否需要显示操作列
   function needShowActionColumn(column: EnhanceColumnProps) {
     return showAction && ((column?.actions?.length || 0) > 0 || (column?.customActions?.length || 0) > 0);
   }
@@ -78,6 +85,12 @@ export function createExtensibleColumns(props: {
   return columns?.map((column) => {
     let processedColumn = { ...column, dataIndex: column.key };
 
+    // 如果设置了customRender，则使用customRender
+    if (customRender) {
+      processedColumn = { ...processedColumn, ...customRender(column) };
+    }
+
+    // 非操作列，且是嵌套列，且没有render，则使用默认的render
     if (!needShowActionColumn(column) && isNestedKey(column?.key as string) && !column.render) {
       processedColumn.render = (_, record, index) => {
         const targetValue = getNestedValue(record, column.key);
@@ -85,6 +98,7 @@ export function createExtensibleColumns(props: {
       };
     }
 
+    // 如果设置了type，则使用对应的processor
     if (column.type && allProcessors[column.type]) {
       processedColumn = { ...processedColumn, ...allProcessors[column.type](column) };
     }
