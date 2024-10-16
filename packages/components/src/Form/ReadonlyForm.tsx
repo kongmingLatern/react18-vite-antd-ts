@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Select, DatePicker } from 'antd';
+import { Form, Input, DatePicker } from 'antd';
 import { FormInstance } from 'antd/es/form';
 import { FormItemConfig } from './BasicForm';
 
 interface ReadonlyFormProps {
-  formItems: FormItemConfig[];
+  formItems: ReadonlyFormItemConfig[];
   initialValues?: Record<string, any>;
   form?: FormInstance;
 }

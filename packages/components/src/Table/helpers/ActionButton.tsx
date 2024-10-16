@@ -98,8 +98,8 @@ export function ActionButton(props: {
     })
   }
 
-  function handleDelete(record) {
-
+  function handleDelete(record: Record<string, any>) {
+    console.log(record);
   }
 
   return (
