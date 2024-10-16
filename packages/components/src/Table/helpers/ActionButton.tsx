@@ -1,5 +1,8 @@
 import { useDrawer } from "@react18-vite-antd-ts/hooks"
-import { Button, Popconfirm } from "antd"
+import { Button, FormInstance, message, Popconfirm } from "antd"
+import { BasicForm } from "../../Form/BasicForm"
+import { useRef } from "react"
+import { ReadonlyForm } from "../../Form/ReadonlyForm"
 
 export function ActionButton(props: {
   actions?: ('view' | 'edit' | 'delete')[]
@@ -13,6 +16,7 @@ export function ActionButton(props: {
   }[]
 }) {
   const { actions = ['view', 'edit', 'delete'], record } = props;
+  const formRef = useRef<FormInstance<any> | null>(null);
 
   const { showDrawer, DrawerComponent } = useDrawer()
 
@@ -25,7 +29,29 @@ export function ActionButton(props: {
 
     showDrawer({
       title: '查看',
-      content: <div>查看</div>
+      content: <ReadonlyForm
+        initialValues={record}
+        formItems={[{
+          name: 'name',
+          label: '姓名',
+          type: 'input',
+          // rules: [{ required: true, message: '请输入姓名' }],
+          placeholder: '请输入姓名',
+        },
+        {
+          name: 'username',
+          label: '用户名',
+          type: 'input',
+          // rules: [{ required: true, message: '请选择性别' }],
+          placeholder: '请输入用户名',
+        },
+        {
+          name: 'password',
+          label: '密码',
+          type: 'input',
+          placeholder: '请输入密码',
+        },
+        ]} />,
     })
   }
 
@@ -36,7 +62,39 @@ export function ActionButton(props: {
     }
     showDrawer({
       title: '编辑',
-      content: <div>编辑</div>
+      content: <BasicForm
+        ref={formRef}
+        initialValues={record}
+        formItems={[{
+          name: 'name',
+          label: '姓名',
+          type: 'input',
+          // rules: [{ required: true, message: '请输入姓名' }],
+          placeholder: '请输入姓名',
+        },
+        {
+          name: 'username',
+          label: '用户名',
+          type: 'input',
+          // rules: [{ required: true, message: '请选择性别' }],
+          placeholder: '请输入用户名',
+        },
+        {
+          name: 'password',
+          label: '密码',
+          type: 'input',
+          placeholder: '请输入密码',
+        },
+        ]} />,
+      onFinish: async () => {
+        const form = formRef.current;
+
+        if (form) {
+          const values = await form.validateFields();
+          message.success(`保存成功: ${JSON.stringify(values)}`)
+          console.log('Form values:', values);
+        }
+      }
     })
   }
 
@@ -47,13 +105,13 @@ export function ActionButton(props: {
   return (
     <>
       {actions.includes('view') && (
-        <Button color="primary" variant="link" onClick={handleView}>
+        <Button color='default' variant="link" style={{ color: 'green' }} onClick={() => handleView(record)}>
           查看
         </Button>
       )}
       {actions.includes('edit') && (
-        <Button color="primary" variant="link" onClick={handleEdit}>
-          修改
+        <Button color="primary" variant="link" onClick={() => handleEdit(record)}>
+          编辑
         </Button>
       )}
       {actions.includes('delete') && (

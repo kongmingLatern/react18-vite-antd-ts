@@ -12,6 +12,7 @@ interface DrawerState {
   title: string;
   visible: boolean;
   content: ReactNode | null;
+  onFinish?: () => Promise<void>;
 }
 
 export const useDrawer = ({
@@ -25,7 +26,7 @@ export const useDrawer = ({
     content: null,
   });
 
-  const showDrawer = (options: { title: string, content: ReactNode }) => {
+  const showDrawer = (options: { title: string, content: ReactNode, onFinish?: () => Promise<void> }) => {
     setDrawerState({ visible: true, ...options });
   };
 
@@ -35,8 +36,9 @@ export const useDrawer = ({
 
   const DrawerComponent = () => {
 
-    function handleSave() {
-      console.log('save')
+    async function handleSave() {
+      await drawerState.onFinish?.()
+      closeDrawer();
     }
 
     return <Drawer
