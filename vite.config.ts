@@ -1,45 +1,51 @@
-import { defineConfig } from 'vitest/config'
+import { ConfigEnv, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'node:path'
 import Unocss from 'unocss/vite'
 import { presetUno, presetAttributify, presetIcons } from 'unocss'
+import { defineConfig } from 'vitest/config'
 
+export default defineConfig(({ mode }: ConfigEnv) => {
+	const env = loadEnv(mode, process.cwd(), '')
 
-export default defineConfig({
-	test: {
-		globals: true,
-		environment: 'jsdom',
-	},
-	plugins: [react(), Unocss({
-		presets: [
-			presetUno(),
-			presetAttributify(),
-			presetIcons(),
-		]
-	})],
-	resolve: {
-		alias: {
-			'@': path.resolve(__dirname, './src'),
+	return {
+		test: {
+			globals: true,
+			environment: 'jsdom',
 		},
-	},
-	build: {
-		outDir: "dist",
-		// esbuild 打包更快，但是不能去除 console.log，去除 console 使用 terser 模式
-		minify: "esbuild",
-		// minify: "terser",
-		// terserOptions: {
-		// 	compress: {
-		// 		drop_console: viteEnv.VITE_DROP_CONSOLE,
-		// 		drop_debugger: true
-		// 	}
-		// },
-		rollupOptions: {
-			output: {
-				// Static resource classification and packaging
-				chunkFileNames: "assets/js/[name]-[hash].js",
-				entryFileNames: "assets/js/[name]-[hash].js",
-				assetFileNames: "assets/[ext]/[name]-[hash].[ext]"
-			}
+		plugins: [
+			react(),
+			Unocss({
+				presets: [
+					presetUno(),
+					presetAttributify(),
+					presetIcons(),
+				]
+			}),
+			// Add more plugins here as needed
+		],
+		resolve: {
+			alias: {
+				'@': path.resolve(__dirname, './src'),
+			},
 		},
-	},
+		build: {
+			outDir: "dist",
+			// minify: env.VITE_MINIFY || "esbuild",
+			terserOptions: env.VITE_MINIFY === 'terser' ? {
+				compress: {
+					drop_console: env.VITE_DROP_CONSOLE === 'true',
+					drop_debugger: true
+				}
+			} : undefined,
+			rollupOptions: {
+				output: {
+					chunkFileNames: "assets/js/[name]-[hash].js",
+					entryFileNames: "assets/js/[name]-[hash].js",
+					assetFileNames: "assets/[ext]/[name]-[hash].[ext]"
+				}
+			},
+		},
+		// Add more configuration options here as needed
+	}
 })
