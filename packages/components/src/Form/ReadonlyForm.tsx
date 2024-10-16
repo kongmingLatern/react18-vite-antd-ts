@@ -21,6 +21,11 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
   const [formInstance] = Form.useForm(form);
   const [asyncOptions, setAsyncOptions] = useState<Record<string, any[]>>({});
 
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  }
+
   useEffect(() => {
     // Load async options for select fields
     const loadAsyncOptions = async () => {
@@ -52,7 +57,6 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
           <Input
             value={selectedOption?.label || value}
             readOnly
-            bordered={false}
           />
         );
       case 'datePicker':
@@ -61,7 +65,6 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
             value={value ? new Date(value) : undefined}
             format="YYYY-MM-DD"
             disabled
-            bordered={false}
           />
         );
       default:
@@ -72,14 +75,15 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
   return (
     <Form
       form={formInstance}
-      layout="vertical"
       initialValues={initialValues}
+      labelWrap
+      {...layout}
     >
       {formItems.map((item) => (
         <Form.Item
           key={item.name}
-          name={item.name}
-          label={item.label}
+          name={item.name.split('.')}
+          label={<span className='font-semibold'>{item.label}</span>}
         >
           {renderReadonlyItem(item)}
         </Form.Item>

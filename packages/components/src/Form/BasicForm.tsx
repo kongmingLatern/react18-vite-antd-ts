@@ -38,8 +38,8 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
 }, ref) => {
   const [formInstance] = Form.useForm(form);
   const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
+    labelCol: { span: 4 },
+    wrapperCol: { span: 20 },
 };
 
   React.useImperativeHandle(ref, () => formInstance);
@@ -73,14 +73,16 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       initialValues={initialValues}
+      scrollToFirstError
+      labelWrap
       {...layout}
       {...formProps}
     >
       {formItems.map((item) => (
         <Form.Item
           key={item.name}
-          name={item.name}
-          label={item.label}
+          name={item.name.split('.')}
+          label={<span className='font-semibold'>{item.label}</span>}
           rules={item.rules}
         >
           {renderFormItem(item)}

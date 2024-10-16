@@ -74,23 +74,6 @@ export function createExtensibleColumns(props: {
   function needShowActionColumn(column: EnhanceColumnProps) {
     return showAction && ((column?.actions?.length || 0) > 0 || (column?.customActions?.length || 0) > 0);
   }
-  console.log(columns?.map((column) => {
-    let processedColumn = { ...column, dataIndex: column?.key || column.type };
-
-    if (!needShowActionColumn(column) && isNestedKey(column.key as string) && !column.render) {
-      processedColumn.render = (_, record, index) => {
-        const targetValue = getNestedValue(record, column.key);
-        return renderNestedColumn(targetValue, { column, record, index });
-      };
-    }
-
-    if (column.type && allProcessors[column.type]) {
-      processedColumn = { ...processedColumn, ...allProcessors[column.type](column) };
-    }
-
-    return processedColumn;
-  }));
-  
 
   return columns?.map((column) => {
     let processedColumn = { ...column, dataIndex: column.key };

@@ -18,8 +18,8 @@ interface DrawerState {
 
 export const useDrawer = ({
   placement = 'right',
-  width = 378,
-  height = 378,
+  width = 450,
+  // height = 378,
 }: UseDrawerProps = {}) => {
   const [drawerState, setDrawerState] = useState<DrawerState>({
     title: '信息',

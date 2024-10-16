@@ -59,6 +59,12 @@ export function ActionButton(props: {
               type: 'input',
               placeholder: '请输入密码',
             },
+            {
+              name: 'address.street',
+              label: 'a long text demo',
+              type: 'input',
+              placeholder: '请输入地址',
+            },
             ]} />,
         })
       },
@@ -96,6 +102,12 @@ export function ActionButton(props: {
               label: '密码',
               type: 'input',
               placeholder: '请输入密码',
+            },
+            {
+              name: 'address.street',
+              label: '地址',
+              type: 'input',
+              placeholder: '请输入地址',
             },
             ]} />,
           onFinish: async () => {
