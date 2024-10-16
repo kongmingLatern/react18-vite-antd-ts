@@ -7,9 +7,10 @@ export enum COLUMNTYPE {
   ACTION = "ACTION",
 }
 
-export interface ColumnPropsWithFormatTime extends ColumnProps<any> {
+export interface ColumnPropsWithFormat extends ColumnProps<any> {
   type?: COLUMNTYPE
   formatTime?: string
+  formatCurrency?: 'USD' | 'CNY'
 }
 
 export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
@@ -31,4 +32,4 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
   onDelete?: (record: any) => void
 }
 
-export type EnhanceColumnProps = ColumnPropsWithFormatTime & ColumnPropsWithCustomRender
+export type EnhanceColumnProps = ColumnPropsWithFormat & ColumnPropsWithCustomRender

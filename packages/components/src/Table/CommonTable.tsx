@@ -1,41 +1,51 @@
 import { Table } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { http } from '@react18-vite-antd-ts/axios'
-import {createExtensibleColumns } from './helpers/columns'
+import { createExtensibleColumns } from './helpers/columns'
 import { ColumnProps } from 'antd/es/table'
-import { ColumnPropsWithCustomRender, ColumnPropsWithFormatTime } from './types'
+import { ColumnPropsWithCustomRender, ColumnPropsWithFormat } from './types'
+import { useRequest } from 'ahooks'
 
 
-interface TableProps {
+export interface TableProps {
   dataCfg: {
+    /**
+     * 行键， 默认为 id
+     */
+    rowKey?: string
     getUrl?: string
-    columns: (ColumnPropsWithFormatTime & ColumnPropsWithCustomRender)[]
+    columns: (ColumnPropsWithFormat & ColumnPropsWithCustomRender)[]
+    /**
+     * 是否显示序号，默认为 false
+     */
+    showIndex?: boolean
   }
 }
 
 export const CommonTable: React.FC<TableProps> = (props) => {
-  const [data, setData] = useState<[]>([])
   const { DrawerComponent } = useDrawer()
-  const { getUrl, columns } = props.dataCfg
   const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
 
-  useEffect(() => {
-    async function fetchData() {
-      // 模拟 获取数据
-      const res = await http.get(getUrl)
-      setData(res)
-      setTableColumns(createExtensibleColumns({ columns}))
-    }
+  const { getUrl, columns, rowKey = 'id' } = props.dataCfg
 
-    fetchData()
-
-  }, [])
-
+  const { data, loading } = useRequest<any, any>(() => http.get(getUrl), {
+    onSuccess: () => {
+      setTableColumns(createExtensibleColumns({ columns, dataCfg: props.dataCfg }))
+    },
+  })
 
   return (
     <>
-      <Table columns={tableColumns} dataSource={data} rowKey={'id'} />
+      <Table
+        columns={tableColumns}
+        dataSource={data}
+        rowKey={rowKey}
+        pagination={{
+          position: ['bottomRight']
+        }}
+        loading={loading}
+      />
       {DrawerComponent()}
     </>
   )

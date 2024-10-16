@@ -8,14 +8,6 @@ import Login from '../modules/Login'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/admin',
     element: <AdminLayout />,
     children: [
       {
@@ -44,7 +36,53 @@ const router = createBrowserRouter([
                 },
                 {
                   type: COLUMNTYPE.ACTION,
-                  title: '操作',
+                  actions: ['view', 'edit', 'delete'],
+                  onView: (record) => {
+                    console.log('record', record)
+                  },
+                },
+              ],
+            }}
+          />
+        ),
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    children: [
+      {
+        path: 'dashboard',
+        element: (
+          <CommonTable
+            dataCfg={{
+              showIndex: true,
+              getUrl: 'https://jsonplaceholder.typicode.com/users',
+              columns: [
+                {
+                  title: 'id',
+                  key: 'id',
+                },
+                {
+                  title: '名字',
+                  key: 'name',
+                },
+                {
+                  title: '公司',
+                  key: 'company.name',
+                },
+                {
+                  type: COLUMNTYPE.TIME,
+                  title: '创建时间',
+                  key: 'createTime',
+                },
+                {
+                  type: COLUMNTYPE.ACTION,
                   actions: ['view', 'edit', 'delete'],
                 },
               ],

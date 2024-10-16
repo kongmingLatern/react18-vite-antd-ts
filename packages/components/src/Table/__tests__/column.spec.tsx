@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 import { createColumns, createExtensibleColumns } from '../helpers/columns'
 import { renderTimeColumns } from '../helpers/render'
-import { COLUMNTYPE, ColumnPropsWithFormatTime } from '../types'
+import { COLUMNTYPE, ColumnPropsWithFormat } from '../types'
 
 import { formatDate, getNestedValue } from '@react18-vite-antd-ts/utils'
 
@@ -14,7 +14,7 @@ vi.mock('@react18-vite-antd-ts/utils', () => ({
 
 describe('columns helpers', () => {
   describe('createColumns', () => {
-    let columns: ColumnPropsWithFormatTime[]
+    let columns: ColumnPropsWithFormat[]
     let data: any[]
 
     beforeEach(() => {
@@ -23,11 +23,11 @@ describe('columns helpers', () => {
         { key: 'age', title: 'Age' },
         { key: 'birthDate', title: 'Birth Date', type: COLUMNTYPE.TIME }
       ]
-   
+
     })
 
     it('should create columns with correct properties', () => {
-      const result = createColumns({ columns})
+      const result = createColumns({ columns })
 
       expect(result).toHaveLength(3)
       expect(result[0]).toEqual(expect.objectContaining({ key: 'name', title: 'Name', dataIndex: 'name' }))
@@ -47,7 +47,7 @@ describe('columns helpers', () => {
         { key: 'user.time', title: 'User Time', type: COLUMNTYPE.TIME },
         { key: 'user.age', title: 'User Age', render: (value) => value + 1 }
       ]
-    
+
       const result = createColumns({ columns })
       expect(result[0]).toEqual(expect.objectContaining({ key: 'user.name', title: 'User Name', dataIndex: 'user.name', render: expect.any(Function) }))
       expect(result[1]).toEqual(expect.objectContaining({ key: 'user.time', title: 'User Time', dataIndex: 'user.time', render: expect.any(Function) }))
@@ -74,7 +74,7 @@ describe('renderTimeColumns', () => {
 })
 
 describe('createExtensibleColumns', () => {
-  let columns: ColumnPropsWithFormatTime[]
+  let columns: ColumnPropsWithFormat[]
 
   beforeEach(() => {
     columns = [
@@ -108,7 +108,7 @@ describe('createExtensibleColumns', () => {
 
   it('should apply custom processors', () => {
     const customProcessors = {
-      [COLUMNTYPE.CUSTOM]: (column: ColumnPropsWithFormatTime) => ({
+      [COLUMNTYPE.CUSTOM]: (column: ColumnPropsWithFormat) => ({
         render: () => 'Custom Rendered'
       })
     }

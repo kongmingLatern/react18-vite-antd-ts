@@ -1,20 +1,21 @@
 import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./render"
-import {ColumnPropsWithFormatTime, COLUMNTYPE, EnhanceColumnProps } from "../types"
+import { ColumnPropsWithFormat, COLUMNTYPE, EnhanceColumnProps } from "../types"
 import { getNestedValue } from "@react18-vite-antd-ts/utils"
 import { ActionButton } from "./ActionButton"
+import { TableProps } from "../CommonTable"
 
 function isNestedKey(key: string) {
   return key.split('.')?.length > 1
 }
 
 // 如果设置type为time，就自动格式化时间
-function isTimeColumn(column: ColumnPropsWithFormatTime) {
+function isTimeColumn(column: ColumnPropsWithFormat) {
   return column.type === COLUMNTYPE.TIME
 }
 
 // 这里封装一些通用展示的列
 export function createColumns(props: {
-  columns: ColumnPropsWithFormatTime[]
+  columns: ColumnPropsWithFormat[]
 }) {
   return props.columns?.map((column) => {
     const processedColumn = { ...column, dataIndex: column.key };
@@ -34,8 +35,6 @@ export function createColumns(props: {
   });
 }
 
-// 添加新的列类型处理函数
-import { Button } from 'antd';
 
 type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>;
 
@@ -44,7 +43,7 @@ const columnProcessors: Record<string, ColumnProcessor> = {
     render: (text: string) => renderTimeColumns(text, column.formatTime),
   }),
   [COLUMNTYPE.CURRENCY]: (column) => ({
-    render: (text: number) => renderCurrencyColumn(text, column.formatTime),
+    render: (text: number) => renderCurrencyColumn(text, column.formatCurrency),
   }),
   [COLUMNTYPE.ACTION]: (column) => ({
     title: '操作',
@@ -59,10 +58,19 @@ const columnProcessors: Record<string, ColumnProcessor> = {
 
 export function createExtensibleColumns(props: {
   columns: EnhanceColumnProps[]
+  dataCfg: TableProps['dataCfg']
   customProcessors?: Record<string, ColumnProcessor>
 }) {
   const { columns, customProcessors = {} } = props;
   const allProcessors = { ...columnProcessors, ...customProcessors };
+
+  if (props.dataCfg.showIndex) {
+    columns.unshift({
+      title: '序号',
+      key: 'index',
+      render: (_, __, index) => index + 1,
+    })
+  }
 
   return columns?.map((column) => {
     let processedColumn = { ...column, dataIndex: column.key };
