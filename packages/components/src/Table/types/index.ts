@@ -34,6 +34,7 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
   onDelete?: (record: any) => void
 
   defaultActionCfg?: Partial<{
+    hiddenBtn?: ('view' | 'edit' | 'delete')[]
     viewCfg: DefaultActionConfig;
     editCfg: DefaultActionConfig;
     deleteCfg: DefaultActionConfig;

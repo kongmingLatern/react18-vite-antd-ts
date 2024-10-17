@@ -35,16 +35,6 @@ const UserManagement: React.FC = () => {
       },
       {
         type: COLUMNTYPE.ACTION,
-        defaultActionCfg: {
-          viewCfg: {
-            key: 'view',
-            text: '查看',
-            hidden: (row) => {
-              console.log('row', row)
-              return false
-            },
-          },
-        },
       },
     ],
   }

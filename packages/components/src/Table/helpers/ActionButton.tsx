@@ -13,6 +13,7 @@ import { DownOutlined } from '@ant-design/icons'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
 import { BasicForm } from '../../Form/BasicForm'
 import { ReadonlyForm } from '../../Form/ReadonlyForm'
+import { MenuItemType } from 'antd/es/menu/interface'
 
 // 定义基础操作配置接口
 export interface BaseActionConfig {
@@ -33,7 +34,7 @@ export type DefaultActionType = 'view' | 'edit' | 'delete'
 
 // 定义默认操作配置接口
 export interface DefaultActionConfig extends BaseActionConfig {
-	key: DefaultActionType
+	key?: DefaultActionType
 }
 
 // 定义操作按钮属性接口
@@ -337,7 +338,7 @@ export function ActionButton({
 		(action, index) => ({
 			key: action.key,
 			label: renderTextLink(action, index),
-		})
+		} as MenuItemType)
 	)
 
 	return (
