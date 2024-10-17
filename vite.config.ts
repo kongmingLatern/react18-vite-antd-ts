@@ -1,8 +1,10 @@
 import type { ConfigEnv } from 'vite'
 import path from 'node:path'
+import process from 'node:process'
 import react from '@vitejs/plugin-react-swc'
 import { presetAttributify, presetIcons, presetUno } from 'unocss'
 import Unocss from 'unocss/vite'
+
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 

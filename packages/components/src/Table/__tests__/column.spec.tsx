@@ -15,7 +15,6 @@ vi.mock('@react18-vite-antd-ts/utils', () => ({
 describe('columns helpers', () => {
   describe('createColumns', () => {
     let columns: ColumnPropsWithFormat[]
-    let data: any[]
 
     beforeEach(() => {
       columns = [
@@ -107,7 +106,7 @@ describe('createExtensibleColumns', () => {
 
   it('should apply custom processors', () => {
     const customProcessors = {
-      [COLUMNTYPE.CUSTOM]: (column: ColumnPropsWithFormat) => ({
+      [COLUMNTYPE.CUSTOM]: (_: ColumnPropsWithFormat) => ({
         render: () => 'Custom Rendered',
       }),
     }
@@ -133,14 +132,14 @@ describe('createExtensibleColumns', () => {
     const record = { user: { address: '123 Main St' } }
     const result = createExtensibleColumns({ columns })
 
-    const renderedValue = result[3].render!('any', record, 0)
+    result[3].render!('any', record, 0)
     expect(getNestedValue).toHaveBeenCalledWith(record, 'user.address')
   })
 
   it('should handle time columns correctly', () => {
     const result = createExtensibleColumns({ columns })
     const timeValue = '2023-05-01'
-    const renderedTime = result[2].render!(timeValue, {}, 0)
+    result[2].render!(timeValue, {}, 0)
 
     expect(formatDate).toHaveBeenCalledWith(timeValue, 'YYYY-MM-DD HH:mm:ss')
   })

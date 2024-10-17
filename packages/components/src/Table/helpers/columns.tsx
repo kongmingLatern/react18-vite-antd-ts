@@ -72,7 +72,7 @@ const columnProcessors: Record<string, ColumnProcessor> = {
 
 export function createExtensibleColumns(props: {
   columns: EnhanceColumnProps[]
-  dataCfg: CommonTableProps['dataCfg']
+  dataCfg?: CommonTableProps['dataCfg']
   customProcessors?: Record<string, ColumnProcessor>
   customRender?: (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 }) {

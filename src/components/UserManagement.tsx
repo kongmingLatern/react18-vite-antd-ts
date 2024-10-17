@@ -35,7 +35,7 @@ const UserManagement: React.FC = () => {
       },
       {
         type: COLUMNTYPE.ACTION,
-        maxVisible: (record, index) => {
+        maxVisible: (_, index) => {
           return index % 2 === 0 ? 1 : 4
         },
         defaultActionCfg: {

@@ -50,15 +50,13 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
     switch (item.type) {
       case 'input':
         return <Input value={value} readOnly bordered={false} />
-      case 'select':
-        const options = item.loadOptions ? asyncOptions[item.name] : item.options
+      case 'select': {
+        const options = item.loadOptions
+          ? asyncOptions[item.name]
+          : item.options
         const selectedOption = options?.find(option => option.value === value)
-        return (
-          <Input
-            value={selectedOption?.label || value}
-            readOnly
-          />
-        )
+        return <Input value={selectedOption?.label || value} readOnly />
+      }
       case 'datePicker':
         return (
           <DatePicker
