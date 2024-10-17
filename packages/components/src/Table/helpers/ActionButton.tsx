@@ -58,7 +58,10 @@ const renderAction = (
 		isTextLink ? (
 			<a
 				href="#"
-				className={`text-link text-center w-full ${action.danger ? 'text-red-500' : 'text-blue-500'}`}
+				className={`text-link text-center w-full`}
+        style={{
+          color: action.danger ? '#ff4d4f' : '#1890ff'
+        }}
 				{...commonProps}
 			>
 				{action.text}
