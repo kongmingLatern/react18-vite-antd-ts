@@ -36,17 +36,19 @@ const renderAction = (
 	record: any,
 	index: number,
 	isTextLink: boolean,
-	customRender?: (action: BaseActionConfig, index: number, record: any) => React.ReactNode
+	customRender?: (action: BaseActionConfig, record: Record<string, any>, index: number) => React.ReactNode
 ) => {
 	if (action.render) {
 		return action.render(action, record)
 	}
 
 	if (customRender) {
-		return customRender(action, index, record)
+		return customRender(action, record, index)
 	}
 
-	const commonProps = {
+  const commonProps = action.needConfirm ? {
+		...action.buttonProps,
+	} : {
 		onClick: (e: React.MouseEvent) => {
 			e.preventDefault()
 			action.onClick?.(record)
@@ -58,18 +60,19 @@ const renderAction = (
 
 	const content = (
 		isTextLink ? (
-			<a
-				href="#"
+			<span
+				key={index}
 				className={`text-link text-center w-full`}
-        style={{
+				style={{
           color: action.danger ? '#ff4d4f' : '#1890ff'
         }}
 				{...commonProps}
 			>
 				{actionText}
-			</a>
+			</span>
 		) : (
 			<Button
+				key={index}
 				className="px-8px"
 				type="link"
 				danger={action.danger}

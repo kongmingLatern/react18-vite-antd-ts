@@ -31,6 +31,8 @@
 		"@eslint/js": "^9.11.1",
 		"@react18-vite-antd-ts/components": "workspace:*",
 		"@react18-vite-antd-ts/layouts": "workspace:*",
+		"@testing-library/dom": "^10.4.0",
+		"@testing-library/react": "^16.0.1",
 		"@types/node": "^22.7.5",
 		"@types/react": "^18.3.10",
 		"@types/react-dom": "^18.3.0",

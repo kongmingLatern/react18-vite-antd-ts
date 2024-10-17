@@ -40,13 +40,13 @@ export interface ActionButtonProps {
   onDelete?: (record: any) => void
   renderButton?: (
     action: BaseActionConfig,
-    index: number,
-    record: any
+    record: Record<string, any>,
+    index: number
   ) => React.ReactNode
   renderTextLink?: (
     action: BaseActionConfig,
+    record: Record<string, any>,
     index: number,
-    record: any
   ) => React.ReactNode
   defaultActionCfg?: Partial<ActionButtonDefaultConfig>
 }
