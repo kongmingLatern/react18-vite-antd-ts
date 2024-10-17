@@ -35,6 +35,18 @@ const UserManagement: React.FC = () => {
       },
       {
         type: COLUMNTYPE.ACTION,
+        maxVisible: 2,
+        actions: [
+          {
+            text: '渲染',
+            hidden: (record) => {
+              return record.id % 2 === 0
+            },
+            onClick: (record) => {
+              console.log('record', record)
+            },
+          },
+        ],
       },
     ],
   }

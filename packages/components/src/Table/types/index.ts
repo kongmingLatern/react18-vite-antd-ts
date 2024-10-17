@@ -1,5 +1,5 @@
 import { ColumnProps } from "antd/es/table"
-import { ActionConfig, DefaultActionConfig } from "../helpers/ActionButton";
+import { BaseActionConfig, DefaultActionConfig } from "./action";
 
 export enum COLUMNTYPE {
   TIME = 'time',
@@ -16,7 +16,10 @@ export interface ColumnPropsWithFormat extends ColumnProps<any> {
 }
 
 export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
-  actions?: ActionConfig[];
+  actions?: BaseActionConfig[];
+
+  // 最大可见操作按钮数，不包含“更多”， 设置为2，则会有3个按扭（其中一个为'更多'）
+  maxVisible?: number
 
   customActions?: {
     text: string

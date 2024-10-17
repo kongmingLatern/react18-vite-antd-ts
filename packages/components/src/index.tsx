@@ -1,4 +1,5 @@
 // NOTE: type
+export * from './Table/types'
 export type { CommonTableProps } from './Table/CommonTable'
 
 // NOTE: enum
