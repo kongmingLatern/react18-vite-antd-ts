@@ -35,10 +35,32 @@ const UserManagement: React.FC = () => {
       },
       {
         type: COLUMNTYPE.ACTION,
-        maxVisible: 2,
+        maxVisible: (record, index) => {
+          return index % 2 === 0 ? 1 : 4
+        },
+        defaultActionCfg: {
+          viewCfg: {
+            text: (record) => {
+              return `查看${record.id}`
+            },
+          },
+          editCfg: {
+            text: (record, index) => {
+              return `编辑${record.id}${index + 3}`
+            },
+          },
+          deleteCfg: {
+            text: (record, index) => {
+              return `删除${record.id}${index}`
+            },
+          },
+        },
         actions: [
           {
-            text: '渲染',
+            text: (record) => {
+              return `自定义渲染${record.id}`
+            },
+            danger: true,
             hidden: (record) => {
               return record.id % 2 === 0
             },

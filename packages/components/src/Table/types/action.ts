@@ -3,7 +3,7 @@ import { ButtonProps } from "antd"
 // 定义基础操作配置接口
 export interface BaseActionConfig {
   key?: string
-  text?: string
+  text?: string | ((record: any, index: number) => string)
   buttonProps?: ButtonProps
   onClick?: (record: any) => void
   danger?: boolean
@@ -33,7 +33,8 @@ export interface ActionButtonDefaultConfig {
 export interface ActionButtonProps {
   actions?: BaseActionConfig[]
   record: any
-  maxVisible?: number
+  index: number
+  maxVisible?: number | ((record: any, mergedActions: number) => number)
   onView?: (record: any) => void
   onEdit?: (record: any) => void
   onDelete?: (record: any) => void

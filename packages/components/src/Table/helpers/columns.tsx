@@ -56,10 +56,11 @@ const columnProcessors: Record<string, ColumnProcessor> = {
   [COLUMNTYPE.ACTION]: (column) => ({
     title: '操作',
     align: 'center',
-    render: (_, record) => {
+    render: (_, record, index) => {
       return <ActionButton
         // actions={column.actions}
         {...column}
+        index={index}
         record={record}
       />
     },

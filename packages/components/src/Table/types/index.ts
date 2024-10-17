@@ -20,7 +20,7 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
 
   // 最大可见操作按钮数（不包含“更多”），默认为3
   // 若设置为2，则会有3个按扭（其中一个为'更多'）
-  maxVisible?: number
+  maxVisible?: number | ((record: any, index: number) => number)
 
   customActions?: {
     text: string

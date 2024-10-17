@@ -54,6 +54,8 @@ const renderAction = (
 		...action.buttonProps,
 	}
 
+	const actionText = typeof action.text === 'function' ? action.text(record, index) : action.text
+
 	const content = (
 		isTextLink ? (
 			<a
@@ -64,7 +66,7 @@ const renderAction = (
         }}
 				{...commonProps}
 			>
-				{action.text}
+				{actionText}
 			</a>
 		) : (
 			<Button
@@ -73,7 +75,7 @@ const renderAction = (
 				danger={action.danger}
 				{...commonProps}
 			>
-				{action.text}
+				{actionText}
 			</Button>
 		)
 	)
@@ -82,7 +84,7 @@ const renderAction = (
 		return (
 			<Popconfirm
 				key={index}
-				title={action.confirmTitle || `确定要${action.text}吗？`}
+				title={action.confirmTitle || `确定要${actionText}吗？`}
 				onConfirm={() => action.onClick?.(record)}
 				okText="确定"
 				cancelText="取消"
@@ -98,6 +100,7 @@ const renderAction = (
 export function ActionButton({
 	actions: customActions = [],
 	record,
+	index,
 	maxVisible = 3,
 	onView,
 	onEdit,
@@ -211,9 +214,12 @@ export function ActionButton({
 		})
 		.sort((a, b) => (a.index || 0) - (b.index || 0))
 
+	// 计算实际的maxVisible值
+	const actualMaxVisible = typeof maxVisible === 'function' ? maxVisible(record, index) : maxVisible
+
 	// 分割可见和隐藏的操作
-	const visibleActions = mergedActions.slice(0, maxVisible)
-	const hiddenActions = mergedActions.slice(maxVisible)
+	const visibleActions = mergedActions.slice(0, actualMaxVisible)
+	const hiddenActions = mergedActions.slice(actualMaxVisible)
 
 	// 构建下拉菜单项
 	const dropdownItems: MenuProps['items'] = hiddenActions.map(
