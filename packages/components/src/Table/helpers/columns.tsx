@@ -2,7 +2,7 @@ import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./r
 import { ColumnPropsWithFormat, COLUMNTYPE, EnhanceColumnProps } from "../types"
 import { getNestedValue } from "@react18-vite-antd-ts/utils"
 import { ActionButton } from "./ActionButton"
-import { TableProps } from "../CommonTable"
+import { CommonTableProps } from "../CommonTable"
 
 function isNestedKey(key: string) {
   return key && key?.split('.')?.length > 1
@@ -69,7 +69,7 @@ const columnProcessors: Record<string, ColumnProcessor> = {
 
 export function createExtensibleColumns(props: {
   columns: EnhanceColumnProps[]
-  dataCfg: TableProps['dataCfg']
+  dataCfg: CommonTableProps['dataCfg']
   customProcessors?: Record<string, ColumnProcessor>
   customRender?: (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 }) {

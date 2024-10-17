@@ -1,25 +1,29 @@
-import { COLUMNTYPE, CommonTable } from "@react18-vite-antd-ts/components";
 // 初始化路由
-import { createBrowserRouter } from "react-router-dom";
-import UserManagement from "../components/UserManagement";
-import { AdminLayout } from "../layout";
-import Login from "../modules/Login";
+import { createHashRouter, Navigate } from 'react-router-dom'
+import UserManagement from '../components/UserManagement'
+import { AdminLayout } from '../layout'
+import Login from '../modules/Login'
 
-export const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <AdminLayout />,
-		children: [
-			{
-				path: "user-management",
-				element: <UserManagement />,
-			},
-		],
-	},
-	{
-		path: "/login",
-		element: <Login />,
-	},
-]);
+export const router = createHashRouter([
+  {
+    path: '/',
+    element: <AdminLayout />,
+    // 重定向
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/user-management" replace />,
+      },
+      {
+        path: 'user-management',
+        element: <UserManagement />,
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+])
 
-export default router;
+export default router

@@ -1,5 +1,5 @@
 import { ColumnProps } from "antd/es/table"
-import { ActionConfig } from "../helpers/ActionButton";
+import { ActionConfig, DefaultActionConfig } from "../helpers/ActionButton";
 
 export enum COLUMNTYPE {
   TIME = 'time',
@@ -32,6 +32,12 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
   onEdit?: (record: any) => void
   // 删除操作的回调函数
   onDelete?: (record: any) => void
+
+  defaultActionCfg?: Partial<{
+    viewCfg: DefaultActionConfig;
+    editCfg: DefaultActionConfig;
+    deleteCfg: DefaultActionConfig;
+  }>;
 }
 
 export type EnhanceColumnProps = ColumnPropsWithFormat & ColumnPropsWithCustomRender

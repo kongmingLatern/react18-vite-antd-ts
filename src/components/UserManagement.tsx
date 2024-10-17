@@ -1,10 +1,11 @@
+import type { CommonTableProps } from '@react18-vite-antd-ts/components'
 import { COLUMNTYPE } from '@react18-vite-antd-ts/components'
 import { AdminContentLayout } from '@react18-vite-antd-ts/layouts'
 import React from 'react'
 
 const UserManagement: React.FC = () => {
   // Define your table columns and data here
-  const dataCfg = {
+  const dataCfg: CommonTableProps['dataCfg'] = {
     getUrl: 'https://jsonplaceholder.typicode.com/users',
     columns: [
       {
@@ -34,6 +35,16 @@ const UserManagement: React.FC = () => {
       },
       {
         type: COLUMNTYPE.ACTION,
+        defaultActionCfg: {
+          viewCfg: {
+            key: 'view',
+            text: '查看',
+            hidden: (row) => {
+              console.log('row', row)
+              return false
+            },
+          },
+        },
       },
     ],
   }

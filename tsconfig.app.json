@@ -25,6 +25,7 @@
   "include": [
     "src",
     "packages/components/src/Table",
-    "packages/components/src/__tests__"
-, "packages/layouts/src/AdminLayout.tsx"  ]
+    "packages/components/src/__tests__",
+    "packages/layouts/src/AdminLayout.tsx"
+  ]
 }
