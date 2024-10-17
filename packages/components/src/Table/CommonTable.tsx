@@ -40,15 +40,15 @@ export interface CommonTableProps {
   }
 }
 
-export const CommonTable: React.FC<CommonTableProps> = (props) => {
+export const CommonTable: React.FC<CommonTableProps> = ({ dataCfg }) => {
   const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
   const [pagination, setPagination] = useState({
-    current: props.dataCfg.pagination?.current || 1,
-    pageSize: props.dataCfg.pagination?.pageSize || 10,
-    total: props.dataCfg.pagination?.total || 0,
+    current: dataCfg.pagination?.current || 1,
+    pageSize: dataCfg.pagination?.pageSize || 10,
+    total: dataCfg.pagination?.total || 0,
   })
 
-  const { getUrl, columns, rowKey = 'id' } = props.dataCfg
+  const { getUrl, columns, rowKey = 'id' } = dataCfg
 
   if (!getUrl) {
     throw new Error('getUrl is required')
@@ -63,7 +63,7 @@ export const CommonTable: React.FC<CommonTableProps> = (props) => {
       refreshDeps: [pagination.current, pagination.pageSize],
       onSuccess: (result) => {
         setTableColumns(
-          createExtensibleColumns({ columns, dataCfg: props.dataCfg }),
+          createExtensibleColumns({ columns, dataCfg }),
         )
         setPagination(prev => ({ ...prev, total: result.total }))
       },
@@ -76,29 +76,27 @@ export const CommonTable: React.FC<CommonTableProps> = (props) => {
       current: newPagination.current,
       pageSize: newPagination.pageSize,
     }))
-    props.dataCfg.pagination?.onChange?.(
+    dataCfg.pagination?.onChange?.(
       newPagination.current,
       newPagination.pageSize,
     )
   }
 
   return (
-    <>
-      <Table
-        columns={tableColumns}
-        dataSource={data}
-        rowKey={rowKey}
-        pagination={{
-          ...pagination,
-          position: ['bottomRight'],
-          showSizeChanger: true,
-          showQuickJumper: true,
-          showTotal: total => `共 ${total} 条`,
-        }}
-        loading={loading}
-        onChange={handleTableChange}
-        {...props.dataCfg.tableProps}
-      />
-    </>
+    <Table
+      columns={tableColumns}
+      dataSource={data}
+      rowKey={rowKey}
+      pagination={{
+        ...pagination,
+        position: ['bottomRight'],
+        showSizeChanger: true,
+        showQuickJumper: true,
+        showTotal: total => `共 ${total} 条`,
+      }}
+      loading={loading}
+      onChange={handleTableChange}
+      {...dataCfg.tableProps}
+    />
   )
 }

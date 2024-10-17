@@ -33,7 +33,13 @@ const defaultActionConfig: ActionButtonDefaultConfig = {
 }
 
 // 渲染操作按钮或链接
-function renderAction(action: BaseActionConfig,	record: any,	index: number,	isTextLink: boolean,	customRender?: (action: BaseActionConfig, record: Record<string, any>, index: number) => React.ReactNode) {
+function renderAction(
+  action: BaseActionConfig,
+  record: any,
+  index: number,
+  isTextLink: boolean,
+  customRender?: (action: BaseActionConfig, record: Record<string, any>, index: number) => React.ReactNode,
+) {
   if (action.render) {
     return action.render(action, record)
   }
@@ -101,6 +107,7 @@ function renderAction(action: BaseActionConfig,	record: any,	index: number,	isTe
 }
 
 export function ActionButton({
+  // eslint-disable-next-line react/no-unstable-default-props
   actions: customActions = [],
   record,
   index,
@@ -176,7 +183,6 @@ export function ActionButton({
             if (form) {
               const values = await form.validateFields()
               message.success(`保存成功: ${JSON.stringify(values)}`)
-              console.log('Form values:', values)
               form.resetFields()
             }
           },
