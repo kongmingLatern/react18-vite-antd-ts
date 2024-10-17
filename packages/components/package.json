@@ -2,13 +2,13 @@
   "name": "@react18-vite-antd-ts/components",
   "version": "1.0.0",
   "description": "react18-vite-antd-ts components",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
   "main": "./src/index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@react18-vite-antd-ts/axios": "workspace:*",
     "@react18-vite-antd-ts/hooks": "workspace:*",

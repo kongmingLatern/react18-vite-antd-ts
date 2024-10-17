@@ -1,45 +1,46 @@
-import { useState, ReactNode } from 'react';
-import { Button, Drawer, Space } from 'antd';
+import type { ReactNode } from 'react'
+import { Button, Drawer, Space } from 'antd'
+import { useState } from 'react'
 
 interface UseDrawerProps {
-  title?: string;
-  placement?: 'left' | 'right' | 'top' | 'bottom';
-  width?: number;
-  height?: number;
+  title?: string
+  placement?: 'left' | 'right' | 'top' | 'bottom'
+  width?: number
+  height?: number
 }
 
 interface DrawerState {
-  title: string;
-  visible: boolean;
-  content: ReactNode | null;
-  onFinish?: () => Promise<void>;
-  showFooter?: boolean;
+  title: string
+  visible: boolean
+  content: ReactNode | null
+  onFinish?: () => Promise<void>
+  showFooter?: boolean
 }
 
-export const useDrawer = ({
+export function useDrawer({
   placement = 'right',
   width = 450,
   // height = 378,
-}: UseDrawerProps = {}) => {
+}: UseDrawerProps = {}) {
   const [drawerState, setDrawerState] = useState<DrawerState>({
     title: '信息',
     visible: false,
     content: null,
     showFooter: true,
-  });
+  })
 
   const showDrawer = (options: Omit<DrawerState, 'visible'>) => {
-    setDrawerState((prevState) => ({ ...prevState, visible: true, ...options }));
-  };
+    setDrawerState(prevState => ({ ...prevState, visible: true, ...options }))
+  }
 
   const closeDrawer = () => {
-    setDrawerState((prevState) => ({ ...prevState, visible: false }));
-  };
+    setDrawerState(prevState => ({ ...prevState, visible: false }))
+  }
 
   const DrawerComponent = () => {
     async function handleSave() {
       await drawerState.onFinish?.()
-      closeDrawer();
+      closeDrawer()
     }
 
     return (
@@ -51,26 +52,28 @@ export const useDrawer = ({
         onClose={closeDrawer}
         open={drawerState.visible}
         footer={
-          drawerState.showFooter ? (
-            <Space className='justify-end w-full'>
-              <Button color="default" variant="outlined" onClick={closeDrawer}>
-                关闭
-              </Button>
-              <Button type="primary" onClick={handleSave}>
-                保存
-              </Button>
-            </Space>
-          ) : null
+          drawerState.showFooter
+            ? (
+                <Space className="justify-end w-full">
+                  <Button color="default" variant="outlined" onClick={closeDrawer}>
+                    关闭
+                  </Button>
+                  <Button type="primary" onClick={handleSave}>
+                    保存
+                  </Button>
+                </Space>
+              )
+            : null
         }
       >
         {drawerState.content}
       </Drawer>
-    );
-  };
+    )
+  }
 
   return {
     showDrawer,
     closeDrawer,
     DrawerComponent,
-  };
-};
+  }
+}

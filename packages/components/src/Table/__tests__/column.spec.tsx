@@ -1,16 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-
-import { createColumns, createExtensibleColumns } from '../helpers/columns'
-import { renderTimeColumns } from '../helpers/render'
-import { COLUMNTYPE, ColumnPropsWithFormat } from '../types'
+import type { ColumnPropsWithFormat } from '../types'
 
 import { formatDate, getNestedValue } from '@react18-vite-antd-ts/utils'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { createColumns, createExtensibleColumns } from '../helpers/columns'
+
+import { renderTimeColumns } from '../helpers/render'
+import { COLUMNTYPE } from '../types'
 
 vi.mock('@react18-vite-antd-ts/utils', () => ({
   formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`),
-  getNestedValue: vi.fn((obj, path) => obj[path])
+  getNestedValue: vi.fn((obj, path) => obj[path]),
 }))
-
 
 describe('columns helpers', () => {
   describe('createColumns', () => {
@@ -21,9 +21,8 @@ describe('columns helpers', () => {
       columns = [
         { key: 'name', title: 'Name' },
         { key: 'age', title: 'Age' },
-        { key: 'birthDate', title: 'Birth Date', type: COLUMNTYPE.TIME }
+        { key: 'birthDate', title: 'Birth Date', type: COLUMNTYPE.TIME },
       ]
-
     })
 
     it('should create columns with correct properties', () => {
@@ -45,7 +44,7 @@ describe('columns helpers', () => {
       columns = [
         { key: 'user.name', title: 'User Name' },
         { key: 'user.time', title: 'User Time', type: COLUMNTYPE.TIME },
-        { key: 'user.age', title: 'User Age', render: (value) => value + 1 }
+        { key: 'user.age', title: 'User Age', render: value => value + 1 },
       ]
 
       const result = createColumns({ columns })
@@ -96,21 +95,21 @@ describe('createExtensibleColumns', () => {
       title: 'Birth Date',
       type: COLUMNTYPE.TIME,
       dataIndex: 'birthDate',
-      render: expect.any(Function)
+      render: expect.any(Function),
     }))
     expect(result[3]).toEqual(expect.objectContaining({
       key: 'user.address',
       title: 'Address',
       dataIndex: 'user.address',
-      render: expect.any(Function)
+      render: expect.any(Function),
     }))
   })
 
   it('should apply custom processors', () => {
     const customProcessors = {
       [COLUMNTYPE.CUSTOM]: (column: ColumnPropsWithFormat) => ({
-        render: () => 'Custom Rendered'
-      })
+        render: () => 'Custom Rendered',
+      }),
     }
 
     columns.push({ key: 'custom', title: 'Custom', type: COLUMNTYPE.CUSTOM as any })
@@ -123,7 +122,7 @@ describe('createExtensibleColumns', () => {
       title: 'Custom',
       type: COLUMNTYPE.CUSTOM,
       dataIndex: 'custom',
-      render: expect.any(Function)
+      render: expect.any(Function),
     }))
 
     const customRendered = result[4].render!('any', {}, 0)

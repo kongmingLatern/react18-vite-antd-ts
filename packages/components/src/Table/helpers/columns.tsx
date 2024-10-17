@@ -1,8 +1,9 @@
-import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from "./render"
-import { ColumnPropsWithFormat, COLUMNTYPE, EnhanceColumnProps } from "../types"
-import { getNestedValue } from "@react18-vite-antd-ts/utils"
-import { ActionButton } from "./ActionButton"
-import { CommonTableProps } from "../CommonTable"
+import type { CommonTableProps } from '../CommonTable'
+import type { ColumnPropsWithFormat, EnhanceColumnProps } from '../types'
+import { getNestedValue } from '@react18-vite-antd-ts/utils'
+import { COLUMNTYPE } from '../types'
+import { ActionButton } from './ActionButton'
+import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from './render'
 
 function isNestedKey(key: string) {
   return key && key?.split('.')?.length > 1
@@ -18,55 +19,56 @@ export function createColumns(props: {
   columns: ColumnPropsWithFormat[]
 }) {
   return props.columns?.map((column) => {
-    const processedColumn = { ...column, dataIndex: column.key };
+    const processedColumn = { ...column, dataIndex: column.key }
 
     if (isNestedKey(column.key as string)) {
       processedColumn.render = column.render || ((_, record, index) => {
-        const targetValue = getNestedValue(record, column.key);
-        return renderNestedColumn(targetValue, { column, record, index });
-      });
+        const targetValue = getNestedValue(record, column.key)
+        return renderNestedColumn(targetValue, { column, record, index })
+      })
     }
 
     if (isTimeColumn(column)) {
-      processedColumn.render = (text: string) => renderTimeColumns(text, column.formatTime);
+      processedColumn.render = (text: string) => renderTimeColumns(text, column.formatTime)
     }
 
-    return processedColumn;
-  });
+    return processedColumn
+  })
 }
 
-
-type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>;
+type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 
 const columnProcessors: Record<string, ColumnProcessor> = {
-  [COLUMNTYPE.INDEX]: (column) => ({
+  [COLUMNTYPE.INDEX]: column => ({
     title: '序号',
     key: COLUMNTYPE.INDEX,
     render: (_, __, index) => index + 1,
-    ...column
+    ...column,
   }),
-  [COLUMNTYPE.TIME]: (column) => ({
+  [COLUMNTYPE.TIME]: column => ({
     render: (text: string) => renderTimeColumns(text, column.formatTime),
-    ...column
+    ...column,
   }),
-  [COLUMNTYPE.CURRENCY]: (column) => ({
+  [COLUMNTYPE.CURRENCY]: column => ({
     render: (text: number) => renderCurrencyColumn(text, column.formatCurrency),
-    ...column
+    ...column,
   }),
-  [COLUMNTYPE.ACTION]: (column) => ({
+  [COLUMNTYPE.ACTION]: column => ({
     title: '操作',
     align: 'center',
     render: (_, record, index) => {
-      return <ActionButton
+      return (
+        <ActionButton
         // actions={column.actions}
-        {...column}
-        index={index}
-        record={record}
-      />
+          {...column}
+          index={index}
+          record={record}
+        />
+      )
     },
-    ...column
+    ...column,
   }),
-};
+}
 
 export function createExtensibleColumns(props: {
   columns: EnhanceColumnProps[]
@@ -74,36 +76,36 @@ export function createExtensibleColumns(props: {
   customProcessors?: Record<string, ColumnProcessor>
   customRender?: (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 }) {
-  const { columns, customProcessors = {}, dataCfg, customRender } = props;
+  const { columns, customProcessors = {}, dataCfg, customRender } = props
   const { showAction = true } = dataCfg || {}
-  const allProcessors = { ...columnProcessors, ...customProcessors };
+  const allProcessors = { ...columnProcessors, ...customProcessors }
 
   // 判断是否需要显示操作列
   function needShowActionColumn(column: EnhanceColumnProps) {
-    return showAction && ((column?.actions?.length || 0) > 0 || (column?.customActions?.length || 0) > 0);
+    return showAction && ((column?.actions?.length || 0) > 0 || (column?.customActions?.length || 0) > 0)
   }
 
   return columns?.map((column) => {
-    let processedColumn = { ...column, dataIndex: column.key };
+    let processedColumn = { ...column, dataIndex: column.key }
 
     // 如果设置了customRender，则使用customRender
     if (customRender) {
-      processedColumn = { ...processedColumn, ...customRender(column) };
+      processedColumn = { ...processedColumn, ...customRender(column) }
     }
 
     // 非操作列，且是嵌套列，且没有render，则使用默认的render
     if (!needShowActionColumn(column) && isNestedKey(column?.key as string) && !column.render) {
       processedColumn.render = (_, record, index) => {
-        const targetValue = getNestedValue(record, column.key);
-        return renderNestedColumn(targetValue, { column, record, index });
-      };
+        const targetValue = getNestedValue(record, column.key)
+        return renderNestedColumn(targetValue, { column, record, index })
+      }
     }
 
     // 如果设置了type，则使用对应的processor
     if (column.type && allProcessors[column.type]) {
-      processedColumn = { ...processedColumn, ...allProcessors[column.type](column) };
+      processedColumn = { ...processedColumn, ...allProcessors[column.type](column) }
     }
 
-    return processedColumn;
-  });
+    return processedColumn
+  })
 }

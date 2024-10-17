@@ -8,7 +8,8 @@ export function getNestedValue(obj, path) {
     for (const pathSegment of pathArray) {
       if (value && typeof value === 'object' && pathSegment in value) {
         value = value[pathSegment]
-      } else {
+      }
+      else {
         value = undefined
         break
       }
@@ -23,7 +24,8 @@ export function getNestedValue(obj, path) {
   for (const pathSegment of pathArray) {
     if (value && typeof value === 'object' && pathSegment in value) {
       value = value[pathSegment]
-    } else {
+    }
+    else {
       value = undefined
       break
     }
@@ -34,7 +36,8 @@ export function getNestedValue(obj, path) {
 
 export function setNestedValue(obj, path, newValue) {
   // 支持path传入的字符串数组，例如 'a[0],'a[0].b','a[0][1]', 'a[0].b[1]', 'a[0][1].b'
-  if (!obj) return
+  if (!obj)
+    return
 
   if (path?.includes('[')) {
     const pathArray = path.split(/[[\].]/).filter(Boolean)
@@ -46,15 +49,19 @@ export function setNestedValue(obj, path, newValue) {
 
       if (nextPathSegment === '0' || Number.parseInt(nextPathSegment)) {
         // 如果路径不存在，创建空数组
-        if (!(pathSegment in currentObj) || !currentObj[pathSegment]) currentObj[pathSegment] = []
+        if (!(pathSegment in currentObj) || !currentObj[pathSegment])
+          currentObj[pathSegment] = []
 
         // 如果路径不存在，创建空对象
-        if (typeof currentObj[pathSegment] !== 'object') currentObj[pathSegment] = {}
+        if (typeof currentObj[pathSegment] !== 'object')
+          currentObj[pathSegment] = {}
 
         currentObj = currentObj[pathSegment]
-      } else {
+      }
+      else {
         // 如果路径不存在，创建空对象
-        if (!(pathSegment in currentObj) || !currentObj[pathSegment]) currentObj[pathSegment] = {}
+        if (!(pathSegment in currentObj) || !currentObj[pathSegment])
+          currentObj[pathSegment] = {}
 
         currentObj = currentObj[pathSegment]
       }

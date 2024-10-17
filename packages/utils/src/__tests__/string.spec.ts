@@ -1,4 +1,4 @@
-import { getNestedValue, setNestedValue } from "../string"
+import { getNestedValue, setNestedValue } from '../string'
 
 describe('getNestedValue', () => {
   it('happy path', () => {

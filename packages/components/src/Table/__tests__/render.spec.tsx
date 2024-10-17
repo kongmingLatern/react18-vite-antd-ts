@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { renderTimeColumns, renderCurrencyColumn, renderNestedColumn } from '../helpers/render'
 import { formatDate } from '@react18-vite-antd-ts/utils'
+import { describe, expect, it, vi } from 'vitest'
+import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from '../helpers/render'
 
 // Mock the formatDate function
 vi.mock('@react18-vite-antd-ts/utils', () => ({
-  formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`)
+  formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`),
 }))
 
 describe('render helpers', () => {
@@ -57,7 +57,7 @@ describe('render helpers', () => {
       const context = {
         column: { key: 'test', title: 'Test' },
         record: { test: 'Test Value' },
-        index: 0
+        index: 0,
       }
       const result = renderNestedColumn(value, context)
       expect(result).toBe('Test Value')
@@ -68,7 +68,7 @@ describe('render helpers', () => {
       const context = {
         column: { key: 'test', title: 'Test' },
         record: {},
-        index: 0
+        index: 0,
       }
       const result = renderNestedColumn(value, context)
       expect(result).toBe(undefined)
@@ -79,7 +79,7 @@ describe('render helpers', () => {
       const context = {
         column: { key: 'test', title: 'Test' },
         record: { test: null },
-        index: 0
+        index: 0,
       }
       const result = renderNestedColumn(value, context)
       expect(result).toBe(null)

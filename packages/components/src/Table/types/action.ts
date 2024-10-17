@@ -1,4 +1,4 @@
-import { ButtonProps } from "antd"
+import type { ButtonProps } from 'antd'
 
 // 定义基础操作配置接口
 export interface BaseActionConfig {

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, DatePicker } from 'antd';
-import { FormInstance } from 'antd/es/form';
-import { FormItemConfig } from './BasicForm';
+import type { FormInstance } from 'antd/es/form'
+import type { FormItemConfig } from './BasicForm'
+import { DatePicker, Form, Input } from 'antd'
+import React, { useEffect, useState } from 'react'
 
 interface ReadonlyFormProps {
-  formItems: ReadonlyFormItemConfig[];
-  initialValues?: Record<string, any>;
-  form?: FormInstance;
+  formItems: ReadonlyFormItemConfig[]
+  initialValues?: Record<string, any>
+  form?: FormInstance
 }
 
 interface ReadonlyFormItemConfig extends FormItemConfig {
-  loadOptions?: () => Promise<any[]>;
+  loadOptions?: () => Promise<any[]>
 }
 
 export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
@@ -18,8 +18,8 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
   initialValues,
   form,
 }) => {
-  const [formInstance] = Form.useForm(form);
-  const [asyncOptions, setAsyncOptions] = useState<Record<string, any[]>>({});
+  const [formInstance] = Form.useForm(form)
+  const [asyncOptions, setAsyncOptions] = useState<Record<string, any[]>>({})
 
   const layout = {
     labelCol: { span: 6 },
@@ -30,35 +30,35 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
     // Load async options for select fields
     const loadAsyncOptions = async () => {
       const asyncSelectItems = formItems.filter(
-        (item) => item.type === 'select' && item.loadOptions
-      );
+        item => item.type === 'select' && item.loadOptions,
+      )
 
       for (const item of asyncSelectItems) {
         if (item.loadOptions) {
-          const options = await item.loadOptions();
-          setAsyncOptions((prev) => ({ ...prev, [item.name]: options }));
+          const options = await item.loadOptions()
+          setAsyncOptions(prev => ({ ...prev, [item.name]: options }))
         }
       }
-    };
+    }
 
-    loadAsyncOptions();
-  }, [formItems]);
+    loadAsyncOptions()
+  }, [formItems])
 
   const renderReadonlyItem = (item: ReadonlyFormItemConfig) => {
-    const value = initialValues?.[item.name];
+    const value = initialValues?.[item.name]
 
     switch (item.type) {
       case 'input':
-        return <Input value={value} readOnly bordered={false} />;
+        return <Input value={value} readOnly bordered={false} />
       case 'select':
-        const options = item.loadOptions ? asyncOptions[item.name] : item.options;
-        const selectedOption = options?.find((option) => option.value === value);
+        const options = item.loadOptions ? asyncOptions[item.name] : item.options
+        const selectedOption = options?.find(option => option.value === value)
         return (
           <Input
             value={selectedOption?.label || value}
             readOnly
           />
-        );
+        )
       case 'datePicker':
         return (
           <DatePicker
@@ -66,11 +66,11 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
             format="YYYY-MM-DD"
             disabled
           />
-        );
+        )
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <Form
@@ -79,15 +79,15 @@ export const ReadonlyForm: React.FC<ReadonlyFormProps> = ({
       labelWrap
       {...layout}
     >
-      {formItems.map((item) => (
+      {formItems.map(item => (
         <Form.Item
           key={item.name}
           name={item.name.split('.')}
-          label={<span className='font-semibold'>{item.label}</span>}
+          label={<span className="font-semibold">{item.label}</span>}
         >
           {renderReadonlyItem(item)}
         </Form.Item>
       ))}
     </Form>
-  );
-};
+  )
+}

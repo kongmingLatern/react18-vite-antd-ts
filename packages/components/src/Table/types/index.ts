@@ -1,12 +1,12 @@
-import { ColumnProps } from "antd/es/table"
-import { BaseActionConfig, DefaultActionConfig } from "./action";
+import type { ColumnProps } from 'antd/es/table'
+import type { BaseActionConfig, DefaultActionConfig } from './action'
 
 export enum COLUMNTYPE {
   TIME = 'time',
   CUSTOM = 'custom',
-  CURRENCY = "CURRENCY",
-  ACTION = "ACTION",
-  INDEX = "INDEX",
+  CURRENCY = 'CURRENCY',
+  ACTION = 'ACTION',
+  INDEX = 'INDEX',
 }
 
 export interface ColumnPropsWithFormat extends ColumnProps<any> {
@@ -16,7 +16,7 @@ export interface ColumnPropsWithFormat extends ColumnProps<any> {
 }
 
 export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
-  actions?: BaseActionConfig[];
+  actions?: BaseActionConfig[]
 
   // 最大可见操作按钮数（不包含“更多”），默认为3
   // 若设置为2，则会有3个按扭（其中一个为'更多'）
@@ -28,7 +28,7 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
   }[]
 
   // 自定义渲染，脱离render函数
-  customRender?: (text: any, record: any, index: number) => React.ReactNode;
+  customRender?: (text: any, record: any, index: number) => React.ReactNode
 
   // 查看操作的回调函数
   onView?: (record: any) => void
@@ -39,10 +39,10 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
 
   defaultActionCfg?: Partial<{
     hiddenBtn?: ('view' | 'edit' | 'delete')[]
-    viewCfg: DefaultActionConfig;
-    editCfg: DefaultActionConfig;
-    deleteCfg: DefaultActionConfig;
-  }>;
+    viewCfg: DefaultActionConfig
+    editCfg: DefaultActionConfig
+    deleteCfg: DefaultActionConfig
+  }>
 }
 
 export type EnhanceColumnProps = ColumnPropsWithFormat & ColumnPropsWithCustomRender

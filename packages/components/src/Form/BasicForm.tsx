@@ -1,29 +1,29 @@
-import React from 'react';
-import { Form, Input, Select, DatePicker, Button, Space } from 'antd';
-import { FormInstance, FormProps } from 'antd/es/form';
+import type { FormInstance, FormProps } from 'antd/es/form'
+import { Button, DatePicker, Form, Input, Select, Space } from 'antd'
+import React from 'react'
 
 // 定义表单项类型
-export type FormItemType = 'input' | 'select' | 'datePicker';
+export type FormItemType = 'input' | 'select' | 'datePicker'
 
 // 定义表单项配置接口
 export interface FormItemConfig {
-  name: string;
-  label: string;
-  type: FormItemType;
-  rules?: any[];
-  options?: { value: string | number; label: string }[];
-  placeholder?: string;
+  name: string
+  label: string
+  type: FormItemType
+  rules?: any[]
+  options?: { value: string | number, label: string }[]
+  placeholder?: string
 }
 
 // 定义BasicForm组件的props接口
 interface BasicFormProps {
-  formItems: FormItemConfig[];
-  onFinish?: (values: any) => Promise<void>;
-  onFinishFailed?: (errorInfo: any) => Promise<void>;
-  initialValues?: Record<string, any>;
-  form?: FormInstance;
-  footer?: React.ReactNode;
-  formProps?: FormProps;
+  formItems: FormItemConfig[]
+  onFinish?: (values: any) => Promise<void>
+  onFinishFailed?: (errorInfo: any) => Promise<void>
+  initialValues?: Record<string, any>
+  form?: FormInstance
+  footer?: React.ReactNode
+  formProps?: FormProps
 }
 
 // BasicForm组件
@@ -34,37 +34,37 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
   initialValues,
   form,
   footer,
-  formProps
+  formProps,
 }, ref) => {
-  const [formInstance] = Form.useForm(form);
+  const [formInstance] = Form.useForm(form)
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
-};
+  }
 
-  React.useImperativeHandle(ref, () => formInstance);
+  React.useImperativeHandle(ref, () => formInstance)
 
   // 渲染表单项
   const renderFormItem = (item: FormItemConfig) => {
     switch (item.type) {
       case 'input':
-        return <Input placeholder={item.placeholder} />;
+        return <Input placeholder={item.placeholder} />
       case 'select':
         return (
           <Select placeholder={item.placeholder}>
-            {item.options?.map((option) => (
+            {item.options?.map(option => (
               <Select.Option key={option.value} value={option.value}>
                 {option.label}
               </Select.Option>
             ))}
           </Select>
-        );
+        )
       case 'datePicker':
-        return <DatePicker style={{ width: '100%' }} />;
+        return <DatePicker style={{ width: '100%' }} />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <Form
@@ -78,27 +78,29 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
       {...layout}
       {...formProps}
     >
-      {formItems.map((item) => (
+      {formItems.map(item => (
         <Form.Item
           key={item.name}
           name={item.name.split('.')}
-          label={<span className='font-semibold'>{item.label}</span>}
+          label={<span className="font-semibold">{item.label}</span>}
           rules={item.rules}
         >
           {renderFormItem(item)}
         </Form.Item>
       ))}
 
-      {footer ? (
-        <Form.Item>
-          <Space>
-            <Button type="primary" htmlType="submit">
-              提交
-            </Button>
-            <Button onClick={() => formInstance.resetFields()}>重置</Button>
-          </Space>
-        </Form.Item>
-      ) : null}
+      {footer
+        ? (
+            <Form.Item>
+              <Space>
+                <Button type="primary" htmlType="submit">
+                  提交
+                </Button>
+                <Button onClick={() => formInstance.resetFields()}>重置</Button>
+              </Space>
+            </Form.Item>
+          )
+        : null}
     </Form>
-  );
-});
+  )
+})
