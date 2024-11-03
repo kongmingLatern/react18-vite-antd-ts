@@ -4,8 +4,8 @@ import { formatDate, getNestedValue } from '@react18-vite-antd-ts/utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createColumns, createExtensibleColumns } from '../helpers/columns'
 
+import { COLUMNTYPE } from '../helpers/const'
 import { renderTimeColumns } from '../helpers/render'
-import { COLUMNTYPE } from '../types'
 
 vi.mock('@react18-vite-antd-ts/utils', () => ({
   formatDate: vi.fn((date, format) => `Formatted: ${date}, ${format}`),

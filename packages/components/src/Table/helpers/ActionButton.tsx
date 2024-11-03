@@ -241,7 +241,11 @@ export function ActionButton({
   return (
     <>
       <Space align="center" size={5}>
-        {visibleActions.map((action, index) => renderAction(action, record, index, false, customRenderButton))}
+        {visibleActions.map((action, index) => (
+          <React.Fragment key={action.key}>
+            {renderAction(action, record, index, false, customRenderButton)}
+          </React.Fragment>
+        ))}
       </Space>
       {hiddenActions.length > 0 && (
         <Dropdown menu={{ items: dropdownItems }}>
