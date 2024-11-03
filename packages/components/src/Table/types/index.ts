@@ -1,13 +1,6 @@
 import type { ColumnProps } from 'antd/es/table'
+import type { COLUMNTYPE } from '../helpers/const'
 import type { BaseActionConfig, DefaultActionConfig } from './action'
-
-export enum COLUMNTYPE {
-  TIME = 'time',
-  CUSTOM = 'custom',
-  CURRENCY = 'CURRENCY',
-  ACTION = 'ACTION',
-  INDEX = 'INDEX',
-}
 
 export interface ColumnPropsWithFormat extends ColumnProps<any> {
   type?: COLUMNTYPE

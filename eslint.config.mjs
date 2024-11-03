@@ -7,4 +7,5 @@ export default antfu({
   react: true,
   jsx: true,
   typescript: true,
+  
 })

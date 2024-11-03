@@ -1,8 +1,8 @@
 import type { CommonTableProps } from '../CommonTable'
 import type { ColumnPropsWithFormat, EnhanceColumnProps } from '../types'
 import { getNestedValue } from '@react18-vite-antd-ts/utils'
-import { COLUMNTYPE } from '../types'
 import { ActionButton } from './ActionButton'
+import { COLUMNTYPE } from './const'
 import { renderCurrencyColumn, renderNestedColumn, renderTimeColumns } from './render'
 
 function isNestedKey(key: string) {

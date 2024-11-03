@@ -20,6 +20,7 @@ export type DefaultActionType = 'view' | 'edit' | 'delete'
 // 定义默认操作配置接口
 export interface DefaultActionConfig extends BaseActionConfig {
   key?: DefaultActionType
+  // formCfg: {}
 }
 
 export interface ActionButtonDefaultConfig {

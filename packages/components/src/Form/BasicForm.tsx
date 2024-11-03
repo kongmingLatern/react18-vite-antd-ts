@@ -1,35 +1,28 @@
 import type { FormInstance, FormProps } from 'antd/es/form'
+import type { ReactNode } from 'react'
+import type { EnhanceFormItemConfig } from './types'
 import { Button, DatePicker, Form, Input, Select, Space } from 'antd'
-import React from 'react'
+import { forwardRef, useImperativeHandle } from 'react'
 
 // 定义表单项类型
-export type FormItemType = 'input' | 'select' | 'datePicker'
-
-// 定义表单项配置接口
-export interface FormItemConfig {
-  name: string
-  label: string
-  type: FormItemType
-  rules?: any[]
-  options?: { value: string | number, label: string }[]
-  placeholder?: string
-}
 
 // 定义BasicForm组件的props接口
-interface BasicFormProps {
-  formItems: FormItemConfig[]
+export interface BasicFormProps {
+  formItems: EnhanceFormItemConfig[]
   onFinish?: (values: any) => Promise<void>
   onFinishFailed?: (errorInfo: any) => Promise<void>
+  onReset?: (formInstance: FormInstance) => void
   initialValues?: Record<string, any>
   form?: FormInstance
-  footer?: React.ReactNode
+  footer?: ReactNode | boolean
   formProps?: FormProps
 }
 
 // BasicForm组件
-export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
+export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
   formItems,
   onFinish,
+  onReset,
   onFinishFailed,
   initialValues,
   form,
@@ -42,10 +35,10 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
     wrapperCol: { span: 20 },
   }
 
-  React.useImperativeHandle(ref, () => formInstance)
+  useImperativeHandle(ref, () => formInstance)
 
   // 渲染表单项
-  const renderFormItem = (item: FormItemConfig) => {
+  const renderFormItem = (item: EnhanceFormItemConfig) => {
     switch (item.type) {
       case 'input':
         return <Input placeholder={item.placeholder} />
@@ -66,6 +59,14 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
     }
   }
 
+  function reset() {
+    if (onReset) {
+      onReset && onReset(formInstance)
+      return
+    }
+    formInstance.resetFields()
+  }
+
   return (
     <Form
       ref={ref}
@@ -84,6 +85,7 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
           name={item.name.split('.')}
           label={<span className="font-semibold">{item.label}</span>}
           rules={item.rules}
+          {...item.formOptions}
         >
           {renderFormItem(item)}
         </Form.Item>
@@ -96,7 +98,7 @@ export const BasicForm = React.forwardRef<FormInstance, BasicFormProps>(({
                 <Button type="primary" htmlType="submit">
                   提交
                 </Button>
-                <Button onClick={() => formInstance.resetFields()}>重置</Button>
+                <Button onClick={reset}>重置</Button>
               </Space>
             </Form.Item>
           )
