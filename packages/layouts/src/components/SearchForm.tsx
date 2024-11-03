@@ -1,6 +1,6 @@
 import type { EnhanceFormItemConfig } from '@react18-vite-antd-ts/components/src/Form/types'
 import { BasicForm, type BasicFormProps } from '@react18-vite-antd-ts/components'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 interface SearchFormProps extends Pick<BasicFormProps, 'footer' | 'formProps'> {
   /**
