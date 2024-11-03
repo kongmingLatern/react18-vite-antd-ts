@@ -59,7 +59,6 @@ const columnProcessors: Record<string, ColumnProcessor> = {
     render: (_, record, index) => {
       return (
         <ActionButton
-        // actions={column.actions}
           {...column}
           index={index}
           record={record}
