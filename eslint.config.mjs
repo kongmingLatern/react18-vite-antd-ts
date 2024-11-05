@@ -7,5 +7,9 @@ export default antfu({
   react: true,
   jsx: true,
   typescript: true,
-  
+
+  rules: {
+    'react/no-array-index-key': 'off',
+  },
+
 })

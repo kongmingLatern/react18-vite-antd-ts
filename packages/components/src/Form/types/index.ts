@@ -47,6 +47,11 @@ export interface EnhanceFormItemConfig extends FormItemProps {
     value: string
   }[]
 
+  /**
+   * 表单项列配置
+   */
+  colProps?: Record<string, any>
+
   // 表单项注入项（用于扩展或覆盖）
   formOptions?: FormItemProps
 }

@@ -242,7 +242,7 @@ export function ActionButton({
     <>
       <Space align="center" size={5}>
         {visibleActions.map((action, index) => (
-          <React.Fragment key={action.key}>
+          <React.Fragment key={index}>
             {renderAction(action, record, index, false, customRenderButton)}
           </React.Fragment>
         ))}

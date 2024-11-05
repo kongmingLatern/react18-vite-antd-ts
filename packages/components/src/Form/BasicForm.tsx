@@ -1,21 +1,37 @@
+import type { ColProps } from 'antd'
 import type { FormInstance, FormProps } from 'antd/es/form'
 import type { ReactNode } from 'react'
 import type { EnhanceFormItemConfig } from './types'
-import { Button, DatePicker, Form, Input, Select, Space } from 'antd'
+import { Button, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd'
 import { forwardRef, useImperativeHandle } from 'react'
 
 // 定义表单项类型
 
 // 定义BasicForm组件的props接口
 export interface BasicFormProps {
-  formItems: EnhanceFormItemConfig[]
-  onFinish?: (values: any) => Promise<void>
-  onFinishFailed?: (errorInfo: any) => Promise<void>
-  onReset?: (formInstance: FormInstance) => void
+  /** 表单初始值 */
   initialValues?: Record<string, any>
+  /** 表单项配置数组 */
+  formItems: EnhanceFormItemConfig[]
+  /** antd Form实例 */
   form?: FormInstance
+
+  /** 是否显示底部按钮，或自定义底部内容 */
   footer?: ReactNode | boolean
+
+  /** 是否启用栅格布局 */
+  grid?: boolean
+  /** 栅格列配置, 默认为 span: 6 */
+  colProps?: ColProps
+  /** antd Form组件props */
   formProps?: FormProps
+
+  /** 表单提交成功回调 */
+  onFinish?: (values: any) => Promise<void>
+  /** 表单提交失败回调 */
+  onFinishFailed?: (errorInfo: any) => Promise<void>
+  /** 重置表单回调 */
+  onReset?: (formInstance: FormInstance) => void
 }
 
 // BasicForm组件
@@ -28,8 +44,10 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
   form,
   footer,
   formProps,
+  colProps,
 }, ref) => {
   const [formInstance] = Form.useForm(form)
+  const colSpan = colProps?.span || 6
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
@@ -79,17 +97,20 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
       {...layout}
       {...formProps}
     >
-      {formItems.map(item => (
-        <Form.Item
-          key={item.name}
-          name={item.name.split('.')}
-          label={<span className="font-semibold">{item.label}</span>}
-          rules={item.rules}
-          {...item.formOptions}
-        >
-          {renderFormItem(item)}
-        </Form.Item>
-      ))}
+      <Row gutter={24}>
+        {formItems.map((item, index) => (
+          <Col key={index} span={colSpan} {...(item.colProps || colProps)}>
+            <Form.Item
+              name={item.name.split('.')}
+              label={<span className="font-semibold">{item.label}</span>}
+              rules={item.rules}
+              {...item.formOptions}
+            >
+              {renderFormItem(item)}
+            </Form.Item>
+          </Col>
+        ))}
+      </Row>
 
       {footer
         ? (
