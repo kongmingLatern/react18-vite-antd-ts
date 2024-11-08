@@ -1,17 +1,12 @@
-import type { EnhanceFormItemConfig } from '@react18-vite-antd-ts/components/src/Form/types'
+import type { FormInstance } from 'antd'
 import { BasicForm, type BasicFormProps } from '@react18-vite-antd-ts/components'
-import { useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
-interface SearchFormProps extends Pick<BasicFormProps, 'footer' | 'formProps'> {
+interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
   /**
    * 请求查询默认地址
    */
   searchUrl?: string
-
-  /**
-   * 表单配置项
-   */
-  formItems: EnhanceFormItemConfig[]
 
   /**
    * 搜索回调
@@ -21,7 +16,7 @@ interface SearchFormProps extends Pick<BasicFormProps, 'footer' | 'formProps'> {
   /**
    * 搜索完成后回调
    */
-  onAfterSearch?: (res: Record<string, any>) => Promise<void>
+  onAfterSearch?: (res: Record<string, any>) => Promise<any>
 
   /**
    * 重置回调
@@ -30,9 +25,19 @@ interface SearchFormProps extends Pick<BasicFormProps, 'footer' | 'formProps'> {
 
 }
 
-export function SearchForm(props: SearchFormProps) {
+export interface SearchFormRef {
+  formInstance: FormInstance
+  getFormData: () => Record<string, any>
+}
+
+export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   const { onSearch, onAfterSearch } = props
-  const formInstance = useRef(null)
+  const formInstance = useRef<FormInstance>(null)
+
+  useImperativeHandle(ref, () => ({
+    formInstance,
+    getFormData: () => formInstance.current?.getFieldsValue(),
+  }))
 
   async function handleSearch(values: Record<string, any>) {
     return onSearch && await onSearch(values)
@@ -43,11 +48,16 @@ export function SearchForm(props: SearchFormProps) {
     onAfterSearch && await onAfterSearch(res)
   }
 
+  function onFinishFailed(errorInfo: any) {
+    console.log('onFinishFailed', errorInfo)
+  }
+
   return (
     <BasicForm
       ref={formInstance}
       onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
       {...props}
     />
   )
-}
+})

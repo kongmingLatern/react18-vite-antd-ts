@@ -16,8 +16,14 @@ export interface BasicFormProps {
   /** antd Form实例 */
   form?: FormInstance
 
-  /** 是否显示底部按钮，或自定义底部内容 */
-  footer?: ReactNode | boolean
+  /**
+   * 操作区域配置
+   * - true: 显示默认操作区域
+   * - false: 不显示操作区域
+   * - ReactNode: 自定义操作区域内容
+   * - (form: FormInstance, reset: () => void) => ReactNode: 自定义操作区域渲染函数
+   */
+  footer?: boolean | ReactNode | ((form: FormInstance, reset: () => void) => ReactNode)
 
   /** 是否启用栅格布局 */
   grid?: boolean
@@ -27,9 +33,9 @@ export interface BasicFormProps {
   formProps?: FormProps
 
   /** 表单提交成功回调 */
-  onFinish?: (values: any) => Promise<void>
+  onFinish?: (values: any) => any
   /** 表单提交失败回调 */
-  onFinishFailed?: (errorInfo: any) => Promise<void>
+  onFinishFailed?: (errorInfo: any) => any
   /** 重置表单回调 */
   onReset?: (formInstance: FormInstance) => void
 }
@@ -42,7 +48,7 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
   onFinishFailed,
   initialValues,
   form,
-  footer,
+  footer = true,
   formProps,
   colProps,
 }, ref) => {
@@ -85,6 +91,31 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
     formInstance.resetFields()
   }
 
+  // 渲染操作区域
+  const renderFooter = () => {
+    if (footer === false || footer === null)
+      return null
+
+    if (footer === true) {
+      return (
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              提交
+            </Button>
+            <Button onClick={reset}>重置</Button>
+          </Space>
+        </Form.Item>
+      )
+    }
+
+    if (typeof footer === 'function') {
+      return footer(formInstance, reset)
+    }
+
+    return footer
+  }
+
   return (
     <Form
       ref={ref}
@@ -112,18 +143,7 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
         ))}
       </Row>
 
-      {footer
-        ? (
-            <Form.Item>
-              <Space>
-                <Button type="primary" htmlType="submit">
-                  提交
-                </Button>
-                <Button onClick={reset}>重置</Button>
-              </Space>
-            </Form.Item>
-          )
-        : null}
+      {renderFooter()}
     </Form>
   )
 })
