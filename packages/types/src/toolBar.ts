@@ -1,12 +1,20 @@
 import type { CommonTableRef } from '@react18-vite-antd-ts/components'
 import type { SearchFormProps } from '@react18-vite-antd-ts/layouts'
 import type { SearchFormRef } from '@react18-vite-antd-ts/layouts/src/components/SearchForm'
+import type { DrawerProps, ModalProps } from 'antd'
 
-export interface ActionButtonItemType {
+export interface DefaultActionType {
+  component_type?: 'modal' | 'drawer'
+  modalProps?: ModalProps
+  drawerProps?: DrawerProps
+}
+
+export interface ActionButtonItemType extends DefaultActionType {
+  key: string
   text: string
   hidden?: boolean | (() => boolean)
-  onClick: () => void
-  render: () => React.ReactNode
+  onClick?: () => void
+  render?: () => React.ReactNode
 }
 
 export interface ToolBarProps {
@@ -46,8 +54,8 @@ export interface ToolBarProps {
 
   actionButtonCfg?: {
     defaultActions: {
-      add: ActionButtonItemType
-      export: ActionButtonItemType
+      add?: ActionButtonItemType
+      export?: ActionButtonItemType
     }
     extraActions: ActionButtonItemType[]
   }

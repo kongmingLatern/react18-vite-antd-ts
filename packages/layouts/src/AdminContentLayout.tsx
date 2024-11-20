@@ -9,6 +9,7 @@ import { SearchForm } from './components/SearchForm'
 
 export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, ref) => {
   const { toolCfg = {} as ToolBarProps, dataCfg = {} as CommonTableProps['dataCfg'] } = props || {}
+  const { actionButtonCfg = {} as ToolBarProps['actionButtonCfg'] } = toolCfg || {}
   const searchFormRef = useRef<SearchFormRef>(null)
   const tableRef = useRef<CommonTableRef>(null)
   const [searchLoading, setSearchLoading] = useState(false)
@@ -69,7 +70,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
         resetBtnProps={{ loading }}
         {...toolCfg?.searchFormCfg?.searchFormProps}
       />
-      <ActionButtons />
+      <ActionButtons actionButtonCfg={actionButtonCfg} />
       <CommonTable ref={tableRef} dataCfg={dataCfg} />
     </>
   )

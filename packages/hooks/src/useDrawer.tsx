@@ -10,9 +10,9 @@ interface UseDrawerProps {
 }
 
 interface DrawerState {
-  title: string
+  title?: ReactNode
   visible: boolean
-  content: ReactNode | null
+  content?: ReactNode | null
   onFinish?: () => Promise<void>
   showFooter?: boolean
 }
@@ -32,6 +32,7 @@ export function useDrawer({
   const [loading, setLoading] = useState(false)
 
   const showDrawer = (options?: Omit<DrawerState, 'visible'>) => {
+    setLoading(false)
     setDrawerState(prevState => ({ ...prevState, visible: true, ...options }))
   }
 

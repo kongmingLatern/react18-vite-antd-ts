@@ -53,6 +53,29 @@ const UserManagement: React.FC = () => {
         return searchFormValues
       },
     },
+    actionButtonCfg: {
+      defaultActions: {
+        add: {
+          text: '添加用户',
+          key: 'add',
+          component_type: 'modal',
+          render: () => {
+            return <div>12123</div>
+          },
+        },
+      },
+      extraActions: [
+        {
+          key: 'custom',
+          text: '自定义',
+          component_type: 'drawer',
+          render: () => {
+            console.log('123123')
+            return <div>自定义内容</div>
+          },
+        },
+      ],
+    },
   }
 
   // Define your table columns and data here
