@@ -1,6 +1,6 @@
 import type { FormInstance } from 'antd'
 import { BasicForm, type BasicFormProps } from '@react18-vite-antd-ts/components'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 
 export interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
   /**
@@ -34,12 +34,16 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   }))
 
   async function handleSearch(values: Record<string, any>) {
-    return onSearch && await onSearch(values)
+    const result = onSearch ? await onSearch(values) : null
+    return Promise.resolve(result)
   }
 
   async function onFinish(values: Record<string, any>) {
     const res = await handleSearch(values)
-    onAfterSearch && await onAfterSearch(res)
+    if (onAfterSearch) {
+      await onAfterSearch(res)
+    }
+    return Promise.resolve(res)
   }
 
   function handleReset() {
@@ -56,6 +60,7 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
       ref={formInstance}
       onFinish={onFinish}
       onReset={handleReset}
+
       {...props}
     />
   )

@@ -79,3 +79,9 @@ class HttpClient {
 }
 
 export const http = new HttpClient()
+
+export const httpGet = http.get
+export const httpPost = http.post
+export const httpPut = http.put
+export const httpDelete = http.delete
+export const httpPatch = http.patch

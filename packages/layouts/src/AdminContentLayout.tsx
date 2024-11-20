@@ -49,6 +49,50 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
         { label: '女', value: 'female' },
       ],
     },
+    {
+      type: 'input',
+      name: 'name',
+      label: '姓名',
+      placeholder: '请输入姓名',
+    },
+    {
+      type: 'number',
+      name: 'age',
+      label: '年龄',
+      placeholder: '请输入年龄',
+    },
+    {
+      type: 'select',
+      name: 'sex',
+      label: '性别',
+      placeholder: '请选择性别',
+      options: [
+        { label: '男', value: 'male' },
+        { label: '女', value: 'female' },
+      ],
+    },
+    {
+      type: 'input',
+      name: 'name',
+      label: '姓名',
+      placeholder: '请输入姓名',
+    },
+    {
+      type: 'number',
+      name: 'age',
+      label: '年龄',
+      placeholder: '请输入年龄',
+    },
+    {
+      type: 'select',
+      name: 'sex',
+      label: '性别',
+      placeholder: '请选择性别',
+      options: [
+        { label: '男', value: 'male' },
+        { label: '女', value: 'female' },
+      ],
+    },
   ]
 
   async function onSearch(values: Record<string, any>) {
@@ -79,7 +123,13 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
 
   return (
     <>
-      <SearchForm ref={searchFormRef} formItems={formItems} footer onSearch={onSearch} onReset={onReset} />
+      <SearchForm
+        ref={searchFormRef}
+        formItems={formItems}
+        onSearch={onSearch}
+        onReset={onReset}
+        submitText="搜索"
+      />
       <ActionButtons />
       <CommonTable ref={tableRef} dataCfg={dataCfg} />
     </>

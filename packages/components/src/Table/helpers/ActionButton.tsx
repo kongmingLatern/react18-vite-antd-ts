@@ -168,14 +168,19 @@ export function ActionButton({
           showFooter: true,
           content: (
             <BasicForm
+              url=""
               ref={formRef}
               initialValues={record}
+              colProps={{
+                span: 24,
+              }}
               formItems={[
                 { name: 'name', label: '姓名', type: 'input', placeholder: '请输入姓名' },
                 { name: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名' },
                 { name: 'password', label: '密码', type: 'input', placeholder: '请输入密码' },
                 { name: 'address.street', label: '地址', type: 'input', placeholder: '请输入地址' },
               ]}
+              footer={false}
             />
           ),
           onFinish: async () => {
