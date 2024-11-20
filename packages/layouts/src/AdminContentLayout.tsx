@@ -28,78 +28,9 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     getTableRef: () => tableRef.current,
   }))
 
-  const formItems: EnhanceFormItemConfig[] = [
-    {
-      type: 'input',
-      name: 'name',
-      label: '姓名',
-      placeholder: '请输入姓名',
-    },
-    {
-      type: 'number',
-      name: 'age',
-      label: '年龄',
-      placeholder: '请输入年龄',
-    },
-    {
-      type: 'select',
-      name: 'sex',
-      label: '性别',
-      placeholder: '请选择性别',
-      options: [
-        { label: '男', value: 'male' },
-        { label: '女', value: 'female' },
-      ],
-    },
-    {
-      type: 'input',
-      name: 'name',
-      label: '姓名',
-      placeholder: '请输入姓名',
-    },
-    {
-      type: 'number',
-      name: 'age',
-      label: '年龄',
-      placeholder: '请输入年龄',
-    },
-    {
-      type: 'select',
-      name: 'sex',
-      label: '性别',
-      placeholder: '请选择性别',
-      options: [
-        { label: '男', value: 'male' },
-        { label: '女', value: 'female' },
-      ],
-    },
-    {
-      type: 'input',
-      name: 'name',
-      label: '姓名',
-      placeholder: '请输入姓名',
-    },
-    {
-      type: 'number',
-      name: 'age',
-      label: '年龄',
-      placeholder: '请输入年龄',
-    },
-    {
-      type: 'select',
-      name: 'sex',
-      label: '性别',
-      placeholder: '请选择性别',
-      options: [
-        { label: '男', value: 'male' },
-        { label: '女', value: 'female' },
-      ],
-    },
-  ]
-
   async function onSearch(values: Record<string, any>) {
-    if (toolCfg.onSearch) {
-      return toolCfg.onSearch(values)
+    if (toolCfg?.searchFormCfg?.onSearch) {
+      return toolCfg.searchFormCfg.onSearch(values)
     }
 
     const formData = searchFormRef.current?.getFormData()
@@ -115,8 +46,8 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
   }
 
   function onReset(formInstance: FormInstance | null) {
-    if (toolCfg.onReset) {
-      return toolCfg.onReset(searchFormRef.current?.getFormData() || {}, {
+    if (toolCfg?.searchFormCfg?.onReset) {
+      return toolCfg.searchFormCfg.onReset(searchFormRef.current?.getFormData() || {}, {
         searchFormRef: searchFormRef.current,
         tableRef: tableRef.current,
       })
