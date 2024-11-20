@@ -63,7 +63,7 @@ export function useDrawer({
                   <Button color="default" variant="outlined" onClick={closeDrawer}>
                     关闭
                   </Button>
-                  <Button type="primary" onClick={handleSave}>
+                  <Button loading={loading} type="primary" onClick={handleSave}>
                     保存
                   </Button>
                 </Space>
