@@ -2,12 +2,7 @@ import type { FormInstance } from 'antd'
 import { BasicForm, type BasicFormProps } from '@react18-vite-antd-ts/components'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
-interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
-  /**
-   * 请求查询默认地址
-   */
-  searchUrl?: string
-
+export interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
   /**
    * 搜索回调
    */
@@ -22,7 +17,6 @@ interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
    * 重置回调
    */
   onReset?: () => void
-
 }
 
 export interface SearchFormRef {
@@ -35,7 +29,7 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   const formInstance = useRef<FormInstance>(null)
 
   useImperativeHandle(ref, () => ({
-    formInstance,
+    formInstance: formInstance.current,
     getFormData: () => formInstance.current?.getFieldsValue(),
   }))
 
@@ -48,15 +42,10 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
     onAfterSearch && await onAfterSearch(res)
   }
 
-  function onFinishFailed(errorInfo: any) {
-    console.log('onFinishFailed', errorInfo)
-  }
-
   return (
     <BasicForm
       ref={formInstance}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       {...props}
     />
   )

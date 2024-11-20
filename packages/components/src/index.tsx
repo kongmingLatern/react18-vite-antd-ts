@@ -5,7 +5,7 @@ export { BasicForm } from './Form/BasicForm'
 export type { BasicFormProps } from './Form/BasicForm'
 
 export { ReadonlyForm } from './Form/ReadonlyForm'
-export type { CommonTableProps } from './Table/CommonTable'
+export type { CommonTableProps, CommonTableRef } from './Table/CommonTable'
 
 export { CommonTable } from './Table/CommonTable'
 

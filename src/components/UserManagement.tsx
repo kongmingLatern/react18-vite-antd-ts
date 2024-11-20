@@ -1,9 +1,11 @@
 import type { CommonTableProps } from '@react18-vite-antd-ts/components'
+import type { AdminContentLayoutRef } from '@react18-vite-antd-ts/layouts/src/AdminContentLayout'
 import { COLUMNTYPE } from '@react18-vite-antd-ts/components'
 import { AdminContentLayout } from '@react18-vite-antd-ts/layouts'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 const UserManagement: React.FC = () => {
+  const adminContentLayoutRef = useRef<AdminContentLayoutRef>(null)
   // Define your table columns and data here
   const dataCfg: CommonTableProps['dataCfg'] = {
     getUrl: 'https://jsonplaceholder.typicode.com/users',
@@ -73,7 +75,11 @@ const UserManagement: React.FC = () => {
     ],
   }
 
-  return <AdminContentLayout dataCfg={dataCfg} />
+  useEffect(() => {
+    console.log('adminContentLayoutRef', adminContentLayoutRef.current?.getSearchFormRef())
+  }, [])
+
+  return <AdminContentLayout ref={adminContentLayoutRef} dataCfg={dataCfg} />
 }
 
 export default UserManagement

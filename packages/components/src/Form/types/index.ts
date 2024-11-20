@@ -3,6 +3,7 @@ import type { Rule } from 'antd/es/form'
 
 export type FormItemType =
   | 'input'
+  | 'number'
   | 'select'
   | 'datePicker'
   | 'time'

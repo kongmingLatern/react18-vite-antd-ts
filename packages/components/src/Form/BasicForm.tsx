@@ -2,7 +2,7 @@ import type { ColProps } from 'antd'
 import type { FormInstance, FormProps } from 'antd/es/form'
 import type { ReactNode } from 'react'
 import type { EnhanceFormItemConfig } from './types'
-import { Button, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd'
+import { Button, Col, DatePicker, Form, Input, InputNumber, Row, Select, Space } from 'antd'
 import { forwardRef, useImperativeHandle } from 'react'
 
 // 定义表单项类型
@@ -66,6 +66,8 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
     switch (item.type) {
       case 'input':
         return <Input placeholder={item.placeholder} />
+      case 'number':
+        return <InputNumber placeholder={item.placeholder} />
       case 'select':
         return (
           <Select placeholder={item.placeholder}>
