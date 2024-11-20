@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd/es/form'
-import type { FormItemConfig } from './BasicForm'
+import type { EnhanceFormItemConfig } from './types'
 import { DatePicker, Form, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 
@@ -9,7 +9,7 @@ interface ReadonlyFormProps {
   form?: FormInstance
 }
 
-interface ReadonlyFormItemConfig extends FormItemConfig {
+interface ReadonlyFormItemConfig extends EnhanceFormItemConfig {
   loadOptions?: () => Promise<any[]>
 }
 

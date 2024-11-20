@@ -30,6 +30,11 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
   // 删除操作的回调函数
   onDelete?: (record: any) => void
 
+  /**
+   * 使用默认提交前数据处理
+   */
+  onBeforeSubmit?: (record: any) => any
+
   defaultActionCfg?: Partial<{
     hiddenBtn?: ('view' | 'edit' | 'delete')[]
     viewCfg: DefaultActionConfig

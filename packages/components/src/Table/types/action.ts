@@ -1,4 +1,5 @@
 import type { ButtonProps } from 'antd'
+import type { EnhanceColumnProps } from '.'
 
 // 定义基础操作配置接口
 export interface BaseActionConfig {
@@ -31,14 +32,9 @@ export interface ActionButtonDefaultConfig {
 }
 
 // 定义操作按钮属性接口
-export interface ActionButtonProps {
-  actions?: BaseActionConfig[]
+export interface ActionButtonProps extends EnhanceColumnProps {
   record: any
   index: number
-  maxVisible?: number | ((record: any, mergedActions: number) => number)
-  onView?: (record: any) => void
-  onEdit?: (record: any) => void
-  onDelete?: (record: any) => void
   renderButton?: (
     action: BaseActionConfig,
     record: Record<string, any>,
@@ -49,5 +45,4 @@ export interface ActionButtonProps {
     record: Record<string, any>,
     index: number,
   ) => React.ReactNode
-  defaultActionCfg?: Partial<ActionButtonDefaultConfig>
 }
