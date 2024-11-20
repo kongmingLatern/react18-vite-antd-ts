@@ -57,6 +57,9 @@ importers:
       '@react18-vite-antd-ts/layouts':
         specifier: workspace:*
         version: link:packages/layouts
+      '@react18-vite-antd-ts/types':
+        specifier: workspace:*
+        version: link:packages/types
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.0
@@ -130,6 +133,15 @@ importers:
       '@react18-vite-antd-ts/hooks':
         specifier: workspace:*
         version: link:../hooks
+      '@react18-vite-antd-ts/types':
+        specifier: workspace:*
+        version: link:../types
+
+  packages/types:
+    dependencies:
+      '@react18-vite-antd-ts/components':
+        specifier: workspace:*
+        version: link:../components
 
   packages/utils: {}
 

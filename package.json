@@ -33,6 +33,7 @@
     "@eslint/js": "^9.11.1",
     "@react18-vite-antd-ts/components": "workspace:*",
     "@react18-vite-antd-ts/layouts": "workspace:*",
+    "@react18-vite-antd-ts/types": "workspace:*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@types/node": "^22.7.5",

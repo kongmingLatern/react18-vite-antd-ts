@@ -1,20 +1,11 @@
-import type { EnhanceFormItemConfig } from '@react18-vite-antd-ts/components/src/Form/types'
-import type { CommonTableRef, ToolBarProps } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
+import type { CommonTableRef } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
+import type { AdminContentLayoutProps, ToolBarProps } from '@react18-vite-antd-ts/types'
 import type { FormInstance } from 'antd'
 import type { SearchFormRef } from './components/SearchForm'
 import { CommonTable, type CommonTableProps } from '@react18-vite-antd-ts/components'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { ActionButtons } from './components/ActionButton'
 import { SearchForm } from './components/SearchForm'
-
-interface AdminContentLayoutProps {
-  toolCfg?: ToolBarProps
-  dataCfg?: CommonTableProps['dataCfg']
-}
-
-export interface AdminContentLayoutRef {
-  getSearchFormRef: () => SearchFormRef
-}
 
 export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, ref) => {
   const { toolCfg = {} as ToolBarProps, dataCfg = {} as CommonTableProps['dataCfg'] } = props || {}
@@ -37,7 +28,13 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
 
     setSearchLoading(true)
     tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
-      return { ...params, ...formData }
+      const combineParams = toolCfg?.searchFormCfg?.onBeforeSearch
+        ? toolCfg.searchFormCfg.onBeforeSearch({
+          ...params,
+          ...formData,
+        })
+        : { ...params, ...formData }
+      return combineParams
     }).finally(() => {
       setSearchLoading(false)
     })
@@ -65,7 +62,6 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
       <SearchForm
         url=""
         ref={searchFormRef}
-        formItems={toolCfg?.searchFormCfg?.formItems || []}
         onSearch={onSearch}
         onReset={onReset}
         submitText="搜索"

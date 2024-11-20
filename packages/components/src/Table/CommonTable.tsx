@@ -8,32 +8,6 @@ import { Table } from 'antd'
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { createExtensibleColumns } from './helpers/columns'
 
-export interface ToolBarProps {
-
-  searchFormCfg: SearchFormProps & {
-    /**
-     * onSearch
-     */
-    onSearch?: (values: any) => void
-
-    /**
-     * onReset
-     */
-    onReset?: (searchFormValues: Record<string, any>, {
-      tableRef,
-      searchFormRef,
-    }: {
-      tableRef: CommonTableRef | null
-      searchFormRef: SearchFormRef | null
-    }) => void
-    /**
-     * 搜索表单配置
-     */
-    searchFormProps?: SearchFormProps
-  }
-
-}
-
 interface PaginationType {
   pageSize?: number
   current?: number

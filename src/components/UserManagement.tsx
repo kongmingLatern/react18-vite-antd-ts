@@ -1,12 +1,60 @@
 import type { CommonTableProps } from '@react18-vite-antd-ts/components'
-import type { AdminContentLayoutRef } from '@react18-vite-antd-ts/layouts/src/AdminContentLayout'
+import type { AdminContentLayoutRef, ToolBarProps } from '@react18-vite-antd-ts/types'
 import { COLUMNTYPE } from '@react18-vite-antd-ts/components'
-import { ToolBarProps } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
 import { AdminContentLayout } from '@react18-vite-antd-ts/layouts'
 import React, { useEffect, useRef } from 'react'
 
 const UserManagement: React.FC = () => {
   const adminContentLayoutRef = useRef<AdminContentLayoutRef>(null)
+
+  const toolCfg: ToolBarProps = {
+    searchFormCfg: {
+      searchFormProps: {
+        url: '',
+        formItems: [
+          {
+            type: 'input',
+            name: 'name',
+            label: '名字',
+            placeholder: '请输入名字',
+          },
+          {
+            type: 'number',
+            name: 'age',
+            label: '年龄',
+            placeholder: '请输入年龄',
+          },
+          {
+            type: 'input',
+            name: 'address',
+            label: '地址',
+            placeholder: '请输入地址',
+          },
+          {
+            type: 'select',
+            name: 'company',
+            label: '公司',
+            placeholder: '请选择公司',
+            options: [
+              {
+                label: '公司1',
+                value: '1',
+              },
+            ],
+          },
+        ],
+        initialValues: {
+          age: 12,
+        },
+      },
+
+      onBeforeSearch(searchFormValues) {
+        console.log('searchFormValues', searchFormValues)
+        return searchFormValues
+      },
+    },
+  }
+
   // Define your table columns and data here
   const dataCfg: CommonTableProps['dataCfg'] = {
     getUrl: 'https://jsonplaceholder.typicode.com/users',
@@ -90,7 +138,7 @@ const UserManagement: React.FC = () => {
     console.log('adminContentLayoutRef', adminContentLayoutRef.current?.getSearchFormRef())
   }, [])
 
-  return <AdminContentLayout ref={adminContentLayoutRef} dataCfg={dataCfg} />
+  return <AdminContentLayout ref={adminContentLayoutRef} dataCfg={dataCfg} toolCfg={toolCfg} />
 }
 
 export default UserManagement

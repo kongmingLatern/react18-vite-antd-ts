@@ -1,7 +1,7 @@
 {
-  "name": "@react18-vite-antd-ts/layouts",
+  "name": "@react18-vite-antd-ts/types",
   "version": "1.0.0",
-  "description": "react18-vite-antd-ts layouts",
+  "description": "",
   "author": "",
   "license": "ISC",
   "keywords": [],
@@ -10,7 +10,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@react18-vite-antd-ts/hooks": "workspace:*",
-    "@react18-vite-antd-ts/types": "workspace:*"
+    "@react18-vite-antd-ts/components": "workspace:*"
   }
 }

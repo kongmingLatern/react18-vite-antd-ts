@@ -1,23 +1,7 @@
+import type { SearchFormProps } from '@react18-vite-antd-ts/types'
 import type { FormInstance } from 'antd'
-import { BasicForm, type BasicFormProps } from '@react18-vite-antd-ts/components'
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
-
-export interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
-  /**
-   * 搜索回调
-   */
-  onSearch?: (values: any) => Promise<any>
-
-  /**
-   * 搜索完成后回调
-   */
-  onAfterSearch?: (res: Record<string, any>) => Promise<any>
-
-  /**
-   * 重置回调
-   */
-  onReset?: (formInstance: FormInstance | null) => void
-}
+import { BasicForm } from '@react18-vite-antd-ts/components'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 export interface SearchFormRef {
   formInstance: FormInstance
@@ -60,7 +44,6 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
       ref={formInstance}
       onFinish={onFinish}
       onReset={handleReset}
-
       {...props}
     />
   )

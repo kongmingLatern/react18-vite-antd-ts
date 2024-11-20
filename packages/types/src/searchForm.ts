@@ -1,6 +1,6 @@
 import type { FormItemProps } from 'antd'
 import type { Rule } from 'antd/es/form'
-import type { ColProps } from 'antd/lib'
+import type { ColProps, FormInstance } from 'antd/lib'
 
 export type FormItemType =
   | 'input'
@@ -66,11 +66,28 @@ export interface BasicFormProps {
   method: 'post' | 'put' | 'patch' | 'delete' | 'get'
 
   // 表单项配置
-  formItems?: EnhanceFormItemConfig[]
+  formItems: EnhanceFormItemConfig[]
 
   // 表单提交前参数处理
   beforeSubmit?: (formValue: Record<string, any>) => Record<string, any>
 
   // 自定义表单提交函数
   onSubmit?: (url: string, formValue: Record<string, any>) => void
+}
+
+export interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
+  /**
+   * 搜索回调
+   */
+  onSearch?: (values: any) => Promise<any>
+
+  /**
+   * 搜索完成后回调
+   */
+  onAfterSearch?: (res: Record<string, any>) => Promise<any>
+
+  /**
+   * 重置回调
+   */
+  onReset?: (formInstance: FormInstance | null) => void
 }

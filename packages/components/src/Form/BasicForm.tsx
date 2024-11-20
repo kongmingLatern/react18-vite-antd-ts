@@ -50,8 +50,6 @@ export interface BasicFormProps {
    */
   footer?: boolean | ReactNode | ((form: FormInstance, reset: () => void) => ReactNode)
 
-  /** 是否启用栅格布局 */
-  grid?: boolean
   /** 栅格列配置, 默认为 span: 6 */
   colProps?: ColProps
   /** antd Form组件props */
