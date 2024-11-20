@@ -51,10 +51,20 @@ const UserManagement: React.FC = () => {
             text: (record, index) => {
               return `编辑${record.id}${index + 3}`
             },
+            onBeforeSubmit(record) {
+              return {
+                ...record,
+              }
+            },
           },
           deleteCfg: {
             text: (record, index) => {
               return `删除${record.id}${index}`
+            },
+            onBeforeSubmit(record) {
+              return {
+                ...record,
+              }
             },
           },
         },

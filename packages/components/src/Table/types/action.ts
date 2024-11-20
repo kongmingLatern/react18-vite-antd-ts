@@ -13,6 +13,7 @@ export interface BaseActionConfig {
   index?: number
   render?: (action: BaseActionConfig, record: any) => React.ReactNode
   hidden?: ((record: any) => boolean) | boolean
+  onBeforeSubmit?: (record: any) => any
 }
 
 // 定义默认操作类型

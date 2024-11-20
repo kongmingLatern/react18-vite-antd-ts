@@ -118,7 +118,6 @@ export function ActionButton({
   renderButton: customRenderButton,
   renderTextLink: customRenderTextLink,
   defaultActionCfg = defaultActionConfig,
-  onBeforeSubmit,
 }: ActionButtonProps) {
   const formRef = useRef<FormInstance<any> | null>(null)
   const { showDrawer, DrawerComponent } = useDrawer()
@@ -188,8 +187,8 @@ export function ActionButton({
             const form = formRef.current
             if (form) {
               let values = await form.validateFields()
-              if (onBeforeSubmit) {
-                values = onBeforeSubmit(values)
+              if (actionCfg.editCfg.onBeforeSubmit) {
+                values = actionCfg.editCfg.onBeforeSubmit(values)
               }
               message.success(`保存成功: ${JSON.stringify(values)}`)
               form.resetFields()
@@ -205,9 +204,11 @@ export function ActionButton({
           onDelete(record)
           return
         }
-        if (onBeforeSubmit) {
-          record = onBeforeSubmit(record)
+
+        if (actionCfg.deleteCfg.onBeforeSubmit) {
+          record = actionCfg.deleteCfg.onBeforeSubmit(record)
         }
+
         message.success(`删除成功: ${JSON.stringify(record)}`)
       },
     },
