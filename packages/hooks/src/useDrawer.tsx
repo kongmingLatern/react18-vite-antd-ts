@@ -31,7 +31,7 @@ export function useDrawer({
 
   const [loading, setLoading] = useState(false)
 
-  const showDrawer = (options: Omit<DrawerState, 'visible'>) => {
+  const showDrawer = (options?: Omit<DrawerState, 'visible'>) => {
     setDrawerState(prevState => ({ ...prevState, visible: true, ...options }))
   }
 

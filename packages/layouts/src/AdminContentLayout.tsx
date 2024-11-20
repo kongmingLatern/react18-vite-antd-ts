@@ -134,12 +134,13 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
       <SearchForm
         url=""
         ref={searchFormRef}
-        formItems={formItems}
+        formItems={toolCfg?.searchFormCfg?.formItems || []}
         onSearch={onSearch}
         onReset={onReset}
         submitText="搜索"
         submitBtnProps={{ loading: searchLoading }}
         resetBtnProps={{ loading }}
+        {...toolCfg?.searchFormCfg?.searchFormProps}
       />
       <ActionButtons />
       <CommonTable ref={tableRef} dataCfg={dataCfg} />

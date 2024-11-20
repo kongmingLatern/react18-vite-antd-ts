@@ -9,36 +9,29 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { createExtensibleColumns } from './helpers/columns'
 
 export interface ToolBarProps {
-  /**
-   * 是否显示搜索框，默认为 false
-   */
-  showSearch?: boolean
 
-  /**
-   * onSearch
-   */
-  onSearch?: (values: any) => void
+  searchFormCfg: SearchFormProps & {
+    /**
+     * onSearch
+     */
+    onSearch?: (values: any) => void
 
-  /**
-   * onReset
-   */
-  onReset?: (searchFormValues: Record<string, any>, {
-    tableRef,
-    searchFormRef,
-  }: {
-    tableRef: CommonTableRef | null
-    searchFormRef: SearchFormRef | null
-  }) => void
+    /**
+     * onReset
+     */
+    onReset?: (searchFormValues: Record<string, any>, {
+      tableRef,
+      searchFormRef,
+    }: {
+      tableRef: CommonTableRef | null
+      searchFormRef: SearchFormRef | null
+    }) => void
+    /**
+     * 搜索表单配置
+     */
+    searchFormProps?: SearchFormProps
+  }
 
-  /**
-   * 是否显示操作列，默认为 false
-   */
-  showAction?: boolean
-
-  /**
-   * 搜索表单配置
-   */
-  searchFormProps?: SearchFormProps
 }
 
 interface PaginationType {
