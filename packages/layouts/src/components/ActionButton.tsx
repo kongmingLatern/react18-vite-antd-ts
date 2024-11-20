@@ -27,7 +27,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         let modalContent: React.ReactNode = null
 
         if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          modalContent = <BasicForm {...(action as DefaultActionItemType).formProps} />
+          modalContent = <BasicForm footer={false} colProps={{ span: 24 }} {...(action as DefaultActionItemType).formProps} />
         }
         else if (action.render) {
           modalContent = action.render()
@@ -35,6 +35,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         else {
           throw new Error('未定义modal内容，使用formProps或render均可')
         }
+        console.log(modalContent)
 
         showModal({ ...action?.modalProps, children: modalContent })
       }
@@ -43,7 +44,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         let drawerContent: React.ReactNode = null
 
         if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          drawerContent = <BasicForm {...(action as DefaultActionItemType).formProps} />
+          drawerContent = <BasicForm footer={false} colProps={{ span: 24 }} {...(action as DefaultActionItemType).formProps} />
         }
         else if (action.render) {
           drawerContent = action.render()

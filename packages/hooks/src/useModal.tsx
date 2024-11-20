@@ -12,13 +12,15 @@ interface UseModalReturnType {
 export function useModal(): UseModalReturnType {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalProps, setModalProps] = useState<ModalProps>({})
+  const [children, setChildren] = useState<React.ReactNode>(null)
 
   const showModal = (props: ModalProps) => {
+    setChildren(props.children)
     setModalProps(props)
     setIsModalOpen(true)
   }
 
-  const ModalComponent = ({ children, ...props }: ModalProps) => {
+  const ModalComponent = (props: ModalProps) => {
     return (
       <Modal
         {...modalProps}

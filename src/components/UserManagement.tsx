@@ -59,8 +59,22 @@ const UserManagement: React.FC = () => {
           text: '添加用户',
           key: 'add',
           component_type: 'modal',
-          render: () => {
-            return <div>12123</div>
+          formProps: {
+            url: '',
+            formItems: [
+              {
+                type: 'input',
+                name: 'name',
+                label: '名字',
+                placeholder: '请输入名字',
+              },
+              {
+                type: 'number',
+                name: 'age',
+                label: '年龄',
+                placeholder: '请输入年龄',
+              },
+            ],
           },
         },
       },
