@@ -16,7 +16,7 @@ export interface SearchFormProps extends Omit<BasicFormProps, 'onFinish'> {
   /**
    * 重置回调
    */
-  onReset?: () => void
+  onReset?: (formInstance: FormInstance | null) => void
 }
 
 export interface SearchFormRef {
@@ -25,7 +25,7 @@ export interface SearchFormRef {
 }
 
 export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
-  const { onSearch, onAfterSearch } = props
+  const { onSearch, onAfterSearch, onReset } = props
   const formInstance = useRef<FormInstance>(null)
 
   useImperativeHandle(ref, () => ({
@@ -42,10 +42,20 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
     onAfterSearch && await onAfterSearch(res)
   }
 
+  function handleReset() {
+    if (onReset) {
+      onReset(formInstance.current)
+    }
+    else {
+      formInstance.current?.resetFields()
+    }
+  }
+
   return (
     <BasicForm
       ref={formInstance}
       onFinish={onFinish}
+      onReset={handleReset}
       {...props}
     />
   )

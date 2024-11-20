@@ -1,5 +1,6 @@
 import type { EnhanceFormItemConfig } from '@react18-vite-antd-ts/components/src/Form/types'
 import type { CommonTableRef, ToolBarProps } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
+import type { FormInstance } from 'antd'
 import type { SearchFormRef } from './components/SearchForm'
 import { CommonTable, type CommonTableProps } from '@react18-vite-antd-ts/components'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
@@ -7,8 +8,8 @@ import { ActionButtons } from './components/ActionButton'
 import { SearchForm } from './components/SearchForm'
 
 interface AdminContentLayoutProps {
-  toolCfg: ToolBarProps
-  dataCfg: CommonTableProps['dataCfg']
+  toolCfg?: ToolBarProps
+  dataCfg?: CommonTableProps['dataCfg']
 }
 
 export interface AdminContentLayoutRef {
@@ -64,9 +65,21 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     return Promise.resolve(values)
   }
 
+  function onReset(formInstance: FormInstance | null) {
+    if (toolCfg.onReset) {
+      return toolCfg.onReset(searchFormRef.current?.getFormData() || {}, {
+        searchFormRef: searchFormRef.current,
+        tableRef: tableRef.current,
+      })
+    }
+
+    formInstance?.resetFields()
+    tableRef.current?.fetchData(dataCfg.getUrl)
+  }
+
   return (
     <>
-      <SearchForm ref={searchFormRef} formItems={formItems} footer onSearch={onSearch} />
+      <SearchForm ref={searchFormRef} formItems={formItems} footer onSearch={onSearch} onReset={onReset} />
       <ActionButtons />
       <CommonTable ref={tableRef} dataCfg={dataCfg} />
     </>

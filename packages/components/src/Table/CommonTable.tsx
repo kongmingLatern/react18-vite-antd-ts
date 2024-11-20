@@ -1,4 +1,5 @@
 import type { SearchFormProps } from '@react18-vite-antd-ts/layouts'
+import type { SearchFormRef } from '@react18-vite-antd-ts/layouts/src/components/SearchForm'
 import type { ColumnProps, TableProps } from 'antd/es/table'
 import type { ColumnPropsWithCustomRender, ColumnPropsWithFormat } from './types'
 import { http } from '@react18-vite-antd-ts/axios'
@@ -17,6 +18,17 @@ export interface ToolBarProps {
    * onSearch
    */
   onSearch?: (values: any) => void
+
+  /**
+   * onReset
+   */
+  onReset?: (searchFormValues: Record<string, any>, {
+    tableRef,
+    searchFormRef,
+  }: {
+    tableRef: CommonTableRef | null
+    searchFormRef: SearchFormRef | null
+  }) => void
 
   /**
    * 是否显示操作列，默认为 false

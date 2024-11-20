@@ -1,6 +1,7 @@
 import type { CommonTableProps } from '@react18-vite-antd-ts/components'
 import type { AdminContentLayoutRef } from '@react18-vite-antd-ts/layouts/src/AdminContentLayout'
 import { COLUMNTYPE } from '@react18-vite-antd-ts/components'
+import { ToolBarProps } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
 import { AdminContentLayout } from '@react18-vite-antd-ts/layouts'
 import React, { useEffect, useRef } from 'react'
 
