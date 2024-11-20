@@ -29,6 +29,8 @@ export function useDrawer({
     showFooter: true,
   })
 
+  const [loading, setLoading] = useState(false)
+
   const showDrawer = (options: Omit<DrawerState, 'visible'>) => {
     setDrawerState(prevState => ({ ...prevState, visible: true, ...options }))
   }
@@ -39,7 +41,10 @@ export function useDrawer({
 
   const DrawerComponent = () => {
     async function handleSave() {
-      await drawerState.onFinish?.()
+      setLoading(true)
+      await drawerState.onFinish?.().finally(() => {
+        setLoading(false)
+      })
       closeDrawer()
     }
 

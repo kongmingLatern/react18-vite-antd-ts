@@ -3,7 +3,7 @@ import type { CommonTableRef, ToolBarProps } from '@react18-vite-antd-ts/compone
 import type { FormInstance } from 'antd'
 import type { SearchFormRef } from './components/SearchForm'
 import { CommonTable, type CommonTableProps } from '@react18-vite-antd-ts/components'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { ActionButtons } from './components/ActionButton'
 import { SearchForm } from './components/SearchForm'
 
@@ -20,6 +20,8 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
   const { toolCfg = {} as ToolBarProps, dataCfg = {} as CommonTableProps['dataCfg'] } = props || {}
   const searchFormRef = useRef<SearchFormRef>(null)
   const tableRef = useRef<CommonTableRef>(null)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useImperativeHandle(ref, () => ({
     getSearchFormRef: () => searchFormRef.current,
@@ -102,8 +104,11 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
 
     const formData = searchFormRef.current?.getFormData()
 
+    setSearchLoading(true)
     tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
       return { ...params, ...formData }
+    }).finally(() => {
+      setSearchLoading(false)
     })
 
     return Promise.resolve(values)
@@ -118,17 +123,23 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     }
 
     formInstance?.resetFields()
-    tableRef.current?.fetchData(dataCfg.getUrl)
+    setLoading(true)
+    tableRef.current?.fetchData(dataCfg.getUrl).finally(() => {
+      setLoading(false)
+    })
   }
 
   return (
     <>
       <SearchForm
+        url=""
         ref={searchFormRef}
         formItems={formItems}
         onSearch={onSearch}
         onReset={onReset}
         submitText="搜索"
+        submitBtnProps={{ loading: searchLoading }}
+        resetBtnProps={{ loading }}
       />
       <ActionButtons />
       <CommonTable ref={tableRef} dataCfg={dataCfg} />

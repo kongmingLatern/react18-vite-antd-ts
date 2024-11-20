@@ -18,9 +18,7 @@ export function useAsync(asyncFunction: (...args: any[]) => Promise<any>) {
       throw err
     }
     finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 500)
+      setLoading(false)
     }
   }, [asyncFunction])
 

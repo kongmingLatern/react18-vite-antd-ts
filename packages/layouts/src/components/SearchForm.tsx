@@ -35,7 +35,7 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
 
   async function handleSearch(values: Record<string, any>) {
     const result = onSearch ? await onSearch(values) : null
-    return Promise.resolve(result)
+    return result
   }
 
   async function onFinish(values: Record<string, any>) {
@@ -43,7 +43,7 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
     if (onAfterSearch) {
       await onAfterSearch(res)
     }
-    return Promise.resolve(res)
+    return res
   }
 
   function handleReset() {
