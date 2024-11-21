@@ -1,7 +1,7 @@
 import type { BasicFormProps, CommonTableRef } from '@react18-vite-antd-ts/components'
 import type { SearchFormProps } from '@react18-vite-antd-ts/layouts'
 import type { SearchFormRef } from '@react18-vite-antd-ts/layouts/src/components/SearchForm'
-import type { DrawerProps, ModalProps } from 'antd'
+import type { ButtonProps, DrawerProps, ModalProps, UploadProps } from 'antd'
 
 export interface DefaultActionType {
   component_type?: 'modal' | 'drawer'
@@ -18,7 +18,11 @@ export interface ActionButtonItemType extends DefaultActionType {
 }
 
 export interface DefaultActionItemType extends ActionButtonItemType {
-  formProps: BasicFormProps
+  formProps?: BasicFormProps
+  requestUrl: string
+  requestData?: Record<string, any>
+  uploadProps?: UploadProps
+  buttonProps?: ButtonProps
 }
 
 export interface ToolBarProps {
@@ -59,8 +63,9 @@ export interface ToolBarProps {
   actionButtonCfg?: {
     defaultActions: {
       add?: DefaultActionItemType
-      export?: DefaultActionItemType
+      export?: Omit<DefaultActionItemType, 'formProps'>
+      upload?: Omit<DefaultActionItemType, 'formProps'>
     }
-    extraActions: ActionButtonItemType[]
+    extraActions: DefaultActionItemType[]
   }
 }

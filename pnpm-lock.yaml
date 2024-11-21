@@ -130,6 +130,9 @@ importers:
 
   packages/layouts:
     dependencies:
+      '@react18-vite-antd-ts/axios':
+        specifier: workspace:*
+        version: link:../axios
       '@react18-vite-antd-ts/hooks':
         specifier: workspace:*
         version: link:../hooks

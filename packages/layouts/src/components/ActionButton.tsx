@@ -1,7 +1,10 @@
 import type { ActionButtonItemType, DefaultActionItemType, ToolBarProps } from '@react18-vite-antd-ts/types'
+import type { UploadProps } from 'antd'
+import { UploadOutlined } from '@ant-design/icons'
+import { http, httpExport } from '@react18-vite-antd-ts/axios'
 import { BasicForm } from '@react18-vite-antd-ts/components'
 import { useDrawer, useModal } from '@react18-vite-antd-ts/hooks'
-import { Button, Space } from 'antd'
+import { Button, Space, Upload } from 'antd'
 import React, { useState } from 'react'
 
 interface ActionButtonsProps {
@@ -15,46 +18,48 @@ export function ActionButtons(props: ActionButtonsProps) {
   const { defaultActions, extraActions } = actionButtonCfg || {}
   const [clickAction, setClickAction] = useState<ActionButtonItemType | null>(null)
 
-  const handleClick = (key: string, isDefaultAction: boolean = true) => {
-    const action = isDefaultAction ? defaultActions?.[key as keyof typeof defaultActions] : extraActions?.find(action => action.key === key) as ActionButtonItemType
-    if (action) {
-      setClickAction(action!)
-      if (action?.onClick) {
-        action.onClick()
-        return
+  const handleClick = async (action: DefaultActionItemType, isDefaultAction: boolean = true) => {
+    setClickAction(action)
+    if (action?.onClick) {
+      action.onClick()
+      return
+    }
+
+    // 针对于action做不同的处理
+    if (action.key === 'export') {
+      // 请求导出
+      await httpExport(action.requestUrl, action.requestData)
+    }
+
+    if (action?.component_type === 'modal') {
+      let modalContent: React.ReactNode = null
+
+      if (isDefaultAction && action.formProps) {
+        modalContent = <BasicForm footer={false} {...action.formProps} />
       }
-      if (action?.component_type === 'modal') {
-        let modalContent: React.ReactNode = null
-
-        if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          modalContent = <BasicForm footer={false} {...(action as DefaultActionItemType).formProps} />
-        }
-        else if (action.render) {
-          modalContent = action.render()
-        }
-        else {
-          throw new Error('未定义modal内容，使用formProps或render均可')
-        }
-        console.log(modalContent)
-
-        showModal({ ...action?.modalProps, children: modalContent })
+      else if (action.render) {
+        modalContent = action.render()
       }
-      else if (action?.component_type === 'drawer') {
-        // const drawerContent = action.render?.()
-        let drawerContent: React.ReactNode = null
-
-        if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          drawerContent = <BasicForm footer={false} {...(action as DefaultActionItemType).formProps} />
-        }
-        else if (action.render) {
-          drawerContent = action.render()
-        }
-        else {
-          throw new Error('未定义drawer内容，使用formProps或render均可')
-        }
-
-        showDrawer({ ...action?.drawerProps, content: drawerContent })
+      else {
+        throw new Error('未定义modal内容，使用formProps或render均可')
       }
+
+      showModal({ ...action.modalProps, children: modalContent })
+    }
+    else if (action?.component_type === 'drawer') {
+      let drawerContent: React.ReactNode = null
+
+      if (isDefaultAction && action.formProps) {
+        drawerContent = <BasicForm footer={false} {...action.formProps} />
+      }
+      else if (action.render) {
+        drawerContent = action.render()
+      }
+      else {
+        throw new Error('未定义drawer内容，使用formProps或render均可')
+      }
+
+      showDrawer({ ...action.drawerProps, content: drawerContent })
     }
   }
 
@@ -62,16 +67,36 @@ export function ActionButtons(props: ActionButtonsProps) {
   const renderButtons = () => {
     const buttons: React.ReactNode[] = []
 
+    const renderActionButton = (key: string, action: DefaultActionItemType) => {
+      if (key === 'upload') {
+        const defaultUploadProps: UploadProps = {
+          name: 'file',
+          action: action.requestUrl,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          showUploadList: false,
+        }
+        return (
+          <Upload key={action.text + key} {...defaultUploadProps} {...action.uploadProps}>
+            <Button icon={<UploadOutlined />} {...action.buttonProps}>{action.text}</Button>
+          </Upload>
+        )
+      }
+      else {
+        return (
+          <Button key={action.text + key} type="primary" onClick={() => handleClick(action, true)} {...action.buttonProps}>
+            {action.text}
+          </Button>
+        )
+      }
+    }
+
     // 默认操作按钮
     if (defaultActions) {
-      Object.keys(defaultActions).forEach((key) => {
-        const action = defaultActions[key as keyof typeof defaultActions]
-        if (!action?.hidden) {
-          buttons.push(
-            <Button key={key} type="primary" onClick={() => handleClick(key, true)}>
-              {action?.text}
-            </Button>,
-          )
+      Object.entries(defaultActions).forEach(([key, action]) => {
+        if (!action.hidden) {
+          buttons.push(renderActionButton(key, action))
         }
       })
     }
@@ -79,11 +104,9 @@ export function ActionButtons(props: ActionButtonsProps) {
     // 额外操作按钮
     if (extraActions) {
       extraActions.forEach((action) => {
-        if (!action?.hidden) {
+        if (!action.hidden) {
           buttons.push(
-            <Button key={action.key} onClick={() => handleClick(action.key, false)}>
-              {action?.text}
-            </Button>,
+            renderActionButton(action.key, action),
           )
         }
       })

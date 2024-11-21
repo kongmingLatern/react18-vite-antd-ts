@@ -59,6 +59,8 @@ const UserManagement: React.FC = () => {
           text: '添加用户',
           key: 'add',
           component_type: 'modal',
+          requestUrl: '',
+          requestData: {},
           formProps: {
             url: '',
             formItems: [
@@ -77,10 +79,20 @@ const UserManagement: React.FC = () => {
             ],
           },
         },
+        upload: {
+          key: 'upload',
+          text: '上传',
+          requestUrl: '/api/upload',
+        },
+        export: {
+          key: 'export',
+          text: '导出',
+          requestUrl: '/api/export',
+        },
       },
       extraActions: [
         {
-          key: 'custom',
+          key: 'upload',
           text: '自定义',
           component_type: 'drawer',
           render: () => {

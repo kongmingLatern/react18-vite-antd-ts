@@ -76,12 +76,23 @@ class HttpClient {
   public patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH', url, data })
   }
+
+  public export<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET', url, responseType: 'blob', params: data })
+  }
+
+  public upload<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST', url, data, responseType: 'blob' })
+  }
 }
 
-export const http = new HttpClient()
+const http = new HttpClient()
+export { http }
 
-export const httpGet = http.get
-export const httpPost = http.post
-export const httpPut = http.put
-export const httpDelete = http.delete
-export const httpPatch = http.patch
+export const httpGet = http.get.bind(http)
+export const httpPost = http.post.bind(http)
+export const httpPut = http.put.bind(http)
+export const httpDelete = http.delete.bind(http)
+export const httpPatch = http.patch.bind(http)
+export const httpExport = http.export.bind(http)
+export const httpUpload = http.upload.bind(http)
