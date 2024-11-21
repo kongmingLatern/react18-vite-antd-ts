@@ -92,9 +92,35 @@ const UserManagement: React.FC = () => {
       },
       extraActions: [
         {
+          key: 'custom',
+          component_type: 'drawer',
+          text: '自定义',
+          requestUrl: '',
+          requestData: {},
+          formProps: {
+            url: '',
+            formItems: [
+              {
+                type: 'input',
+                name: 'name',
+                label: '名字',
+                placeholder: '请输入名字',
+              },
+              {
+                type: 'number',
+                name: 'age',
+                label: '年龄',
+                placeholder: '请输入年龄',
+              },
+            ],
+          },
+        },
+        {
           key: 'upload',
           text: '自定义',
           component_type: 'drawer',
+          requestUrl: '',
+          requestData: {},
           render: () => {
             console.log('123123')
             return <div>自定义内容</div>

@@ -20,6 +20,14 @@ export function useModal(): UseModalReturnType {
     setIsModalOpen(true)
   }
 
+  const handleOk = (props: ModalProps, e: React.MouseEvent<HTMLButtonElement>) => {
+    const { onOk } = props
+    if (onOk) {
+      onOk(e)
+    }
+    // setIsModalOpen(false)
+  }
+
   const ModalComponent = (props: ModalProps) => {
     return (
       <Modal
@@ -27,7 +35,7 @@ export function useModal(): UseModalReturnType {
         {...props}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        onOk={() => setIsModalOpen(false)}
+        onOk={e => handleOk(props, e)}
       >
         {children}
       </Modal>

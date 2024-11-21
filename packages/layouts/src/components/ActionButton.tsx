@@ -1,11 +1,11 @@
 import type { ActionButtonItemType, DefaultActionItemType, ToolBarProps } from '@react18-vite-antd-ts/types'
-import type { UploadProps } from 'antd'
+import type { FormInstance, UploadProps } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import { http, httpExport } from '@react18-vite-antd-ts/axios'
 import { BasicForm } from '@react18-vite-antd-ts/components'
 import { useDrawer, useModal } from '@react18-vite-antd-ts/hooks'
 import { Button, Space, Upload } from 'antd'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 interface ActionButtonsProps {
   actionButtonCfg: ToolBarProps['actionButtonCfg']
@@ -17,6 +17,17 @@ export function ActionButtons(props: ActionButtonsProps) {
   const { actionButtonCfg } = props || {}
   const { defaultActions, extraActions } = actionButtonCfg || {}
   const [clickAction, setClickAction] = useState<ActionButtonItemType | null>(null)
+  const basicFormRef = useRef<FormInstance>(null)
+
+  async function handleOk(action: DefaultActionItemType) {
+    if (action.formProps) {
+      console.log(basicFormRef.current?.getFieldsValue())
+      setIsModalOpen(false)
+      setTimeout(() => {
+        basicFormRef.current?.resetFields()
+      }, 100)
+    }
+  }
 
   const handleClick = async (action: DefaultActionItemType, isDefaultAction: boolean = true) => {
     setClickAction(action)
@@ -35,7 +46,7 @@ export function ActionButtons(props: ActionButtonsProps) {
       let modalContent: React.ReactNode = null
 
       if (isDefaultAction && action.formProps) {
-        modalContent = <BasicForm footer={false} {...action.formProps} />
+        modalContent = <BasicForm ref={basicFormRef} footer={false} {...action.formProps} />
       }
       else if (action.render) {
         modalContent = action.render()
@@ -44,13 +55,13 @@ export function ActionButtons(props: ActionButtonsProps) {
         throw new Error('未定义modal内容，使用formProps或render均可')
       }
 
-      showModal({ ...action.modalProps, children: modalContent })
+      showModal({ onOk: () => handleOk(action), ...action.modalProps, children: modalContent })
     }
     else if (action?.component_type === 'drawer') {
       let drawerContent: React.ReactNode = null
 
       if (isDefaultAction && action.formProps) {
-        drawerContent = <BasicForm footer={false} {...action.formProps} />
+        drawerContent = <BasicForm ref={basicFormRef} footer={false} {...action.formProps} />
       }
       else if (action.render) {
         drawerContent = action.render()
@@ -59,7 +70,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         throw new Error('未定义drawer内容，使用formProps或render均可')
       }
 
-      showDrawer({ ...action.drawerProps, content: drawerContent })
+      showDrawer({ onFinish: () => handleOk(action), ...action.drawerProps, content: drawerContent })
     }
   }
 
@@ -124,7 +135,7 @@ export function ActionButtons(props: ActionButtonsProps) {
       {ModalComponent({
         title: clickAction?.modalProps?.title || clickAction?.text,
         children: clickAction?.render?.(),
-        onOk: () => setIsModalOpen(false),
+        onOk: e => handleOk(clickAction, e),
         onCancel: () => setIsModalOpen(false),
         ...clickAction?.modalProps,
       })}
