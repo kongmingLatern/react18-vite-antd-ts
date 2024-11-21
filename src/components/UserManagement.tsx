@@ -94,7 +94,7 @@ const UserManagement: React.FC = () => {
         {
           key: 'custom',
           component_type: 'drawer',
-          text: '自定义',
+          text: '抽屉自定义',
           requestUrl: '',
           requestData: {},
           formProps: {
@@ -117,14 +117,21 @@ const UserManagement: React.FC = () => {
         },
         {
           key: 'upload',
-          text: '自定义',
-          component_type: 'drawer',
+          text: '模态表单',
+          component_type: 'modal',
           requestUrl: '',
           requestData: {},
-          render: () => {
-            console.log('123123')
-            return <div>自定义内容</div>
+          formProps: {
+            url: '',
+            formItems: [
+              {
+                type: 'input',
+                name: 'name',
+                label: '名字',
+              },
+            ],
           },
+
         },
       ],
     },

@@ -19,25 +19,53 @@ export function ActionButtons(props: ActionButtonsProps) {
   const [clickAction, setClickAction] = useState<ActionButtonItemType | null>(null)
   const basicFormRef = useRef<FormInstance>(null)
 
+  // 抽离表单处理逻辑
+  const handleFormSubmit = async (action: DefaultActionItemType, values: any) => {
+    if (action.formProps?.onBeforeSubmit) {
+      values = action.formProps?.onBeforeSubmit(values)
+    }
+    if (action.formProps?.onFinish) {
+      action.formProps?.onFinish(values)
+    }
+    else {
+      await http.post(action.requestUrl, values)
+    }
+  }
+
   async function handleOk(action: DefaultActionItemType) {
     if (action.formProps) {
       const isValid = await basicFormRef.current?.validateFields()
       if (isValid) {
-        let values = basicFormRef.current?.getFieldsValue()
-        if (action.formProps.onBeforeSubmit) {
-          values = action.formProps.onBeforeSubmit(values)
-        }
-        if (action.formProps.onFinish) {
-          action.formProps.onFinish(values)
-        }
-        else {
-          await http.post(action.requestUrl, values)
-        }
+        const values = basicFormRef.current?.getFieldsValue()
+        await handleFormSubmit(action, values)
       }
       setIsModalOpen(false)
       setTimeout(() => {
         basicFormRef.current?.resetFields()
       }, 100)
+    }
+  }
+
+  // 抽离内容渲染逻辑
+  const renderContent = (action: DefaultActionItemType, isDefaultAction: boolean): React.ReactNode => {
+    if (action.formProps) {
+      return <BasicForm ref={basicFormRef} footer={false} {...action.formProps} />
+    }
+    if (action.render) {
+      return action.render()
+    }
+    throw new Error('未定义内容，使用formProps或render均可')
+  }
+
+  // 处理不同类型的组件显示
+  const handleComponentDisplay = (action: DefaultActionItemType, isDefaultAction: boolean) => {
+    const content = renderContent(action, isDefaultAction)
+
+    if (action?.component_type === 'modal') {
+      showModal({ onOk: () => handleOk(action), ...action.modalProps, children: content })
+    }
+    else if (action?.component_type === 'drawer') {
+      showDrawer({ onFinish: () => handleOk(action), ...action.drawerProps, content })
     }
   }
 
@@ -48,74 +76,46 @@ export function ActionButtons(props: ActionButtonsProps) {
       return
     }
 
-    // 针对于action做不同的处理
     if (action.key === 'export') {
-      // 请求导出
       await httpExport(action.requestUrl, action.requestData)
+      return
     }
 
-    if (action?.component_type === 'modal') {
-      let modalContent: React.ReactNode = null
-
-      if (isDefaultAction && action.formProps) {
-        modalContent = <BasicForm ref={basicFormRef} footer={false} {...action.formProps} />
-      }
-      else if (action.render) {
-        modalContent = action.render()
-      }
-      else {
-        throw new Error('未定义modal内容，使用formProps或render均可')
-      }
-
-      showModal({ onOk: () => handleOk(action), ...action.modalProps, children: modalContent })
-    }
-    else if (action?.component_type === 'drawer') {
-      let drawerContent: React.ReactNode = null
-
-      if (isDefaultAction && action.formProps) {
-        drawerContent = <BasicForm ref={basicFormRef} footer={false} {...action.formProps} />
-      }
-      else if (action.render) {
-        drawerContent = action.render()
-      }
-      else {
-        throw new Error('未定义drawer内容，使用formProps或render均可')
-      }
-
-      showDrawer({ onFinish: () => handleOk(action), ...action.drawerProps, content: drawerContent })
-    }
+    handleComponentDisplay(action, isDefaultAction)
   }
 
-  // 动态生成按钮组件
+  // 抽离按钮渲染逻辑
+  const renderActionButton = (key: string, action: DefaultActionItemType) => {
+    if (key === 'upload') {
+      const defaultUploadProps: UploadProps = {
+        name: 'file',
+        action: action.requestUrl,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        showUploadList: false,
+      }
+      return (
+        <Upload key={action.text + key} {...defaultUploadProps} {...action.uploadProps}>
+          <Button icon={<UploadOutlined />} {...action.buttonProps}>{action.text}</Button>
+        </Upload>
+      )
+    }
+    return (
+      <Button
+        key={action.text + key}
+        type="primary"
+        onClick={() => handleClick(action, true)}
+        {...action.buttonProps}
+      >
+        {action.text}
+      </Button>
+    )
+  }
+
   const renderButtons = () => {
     const buttons: React.ReactNode[] = []
 
-    const renderActionButton = (key: string, action: DefaultActionItemType) => {
-      if (key === 'upload') {
-        const defaultUploadProps: UploadProps = {
-          name: 'file',
-          action: action.requestUrl,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          showUploadList: false,
-        }
-        return (
-          <Upload key={action.text + key} {...defaultUploadProps} {...action.uploadProps}>
-            <Button icon={<UploadOutlined />} {...action.buttonProps}>{action.text}</Button>
-          </Upload>
-        )
-      }
-      else {
-        return (
-          <Button key={action.text + key} type="primary" onClick={() => handleClick(action, true)} {...action.buttonProps}>
-            {action.text}
-          </Button>
-        )
-      }
-    }
-
-    // 默认操作按钮
     if (defaultActions) {
       Object.entries(defaultActions).forEach(([key, action]) => {
         if (!action.hidden) {
@@ -124,13 +124,10 @@ export function ActionButtons(props: ActionButtonsProps) {
       })
     }
 
-    // 额外操作按钮
     if (extraActions) {
       extraActions.forEach((action) => {
         if (!action.hidden) {
-          buttons.push(
-            renderActionButton(action.type as string, action),
-          )
+          buttons.push(renderActionButton(action.type as string, action))
         }
       })
     }
@@ -147,7 +144,7 @@ export function ActionButtons(props: ActionButtonsProps) {
       {ModalComponent({
         title: clickAction?.modalProps?.title || clickAction?.text,
         children: clickAction?.render?.(),
-        onOk: e => handleOk(clickAction, e),
+        onOk: () => handleOk(clickAction as DefaultActionItemType),
         onCancel: () => setIsModalOpen(false),
         ...clickAction?.modalProps,
       })}

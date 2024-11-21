@@ -1,4 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { message } from 'antd'
 import axios from 'axios'
 
 interface HttpClientConfig extends AxiosRequestConfig {
@@ -24,6 +25,24 @@ class HttpClient {
     this.setupInterceptors()
   }
 
+  private handleResponseError(status: number, error: any) {
+    switch (status) {
+      case 401:
+        message.error('权限不足')
+        break
+      case 403:
+        message.error('禁止访问')
+        break
+      case 404:
+        message.error(`请求的资源不存在,地址: ${error.config.url}`)
+        break
+      default:
+        message.error('请求失败')
+        break
+    }
+    return Promise.reject(error)
+  }
+
   private setupInterceptors(): void {
     this.instance.interceptors.request.use(
       (config) => {
@@ -41,8 +60,7 @@ class HttpClient {
         return response
       },
       (error) => {
-        // Handle errors (e.g., refresh token, redirect to login)
-        return Promise.reject(error)
+        return this.handleResponseError(error.response?.status, error)
       },
     )
   }
