@@ -42,6 +42,7 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   return (
     <BasicForm
       ref={formInstance}
+      colProps={{ span: 6 }}
       onFinish={onFinish}
       onReset={handleReset}
       {...props}

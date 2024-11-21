@@ -1,4 +1,4 @@
-import type { ActionButtonItemType, DefaultActionItemType, DefaultActionType, ToolBarProps } from '@react18-vite-antd-ts/types'
+import type { ActionButtonItemType, DefaultActionItemType, ToolBarProps } from '@react18-vite-antd-ts/types'
 import { BasicForm } from '@react18-vite-antd-ts/components'
 import { useDrawer, useModal } from '@react18-vite-antd-ts/hooks'
 import { Button, Space } from 'antd'
@@ -27,7 +27,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         let modalContent: React.ReactNode = null
 
         if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          modalContent = <BasicForm footer={false} colProps={{ span: 24 }} {...(action as DefaultActionItemType).formProps} />
+          modalContent = <BasicForm footer={false} {...(action as DefaultActionItemType).formProps} />
         }
         else if (action.render) {
           modalContent = action.render()
@@ -44,7 +44,7 @@ export function ActionButtons(props: ActionButtonsProps) {
         let drawerContent: React.ReactNode = null
 
         if (isDefaultAction && (action as DefaultActionItemType).formProps) {
-          drawerContent = <BasicForm footer={false} colProps={{ span: 24 }} {...(action as DefaultActionItemType).formProps} />
+          drawerContent = <BasicForm footer={false} {...(action as DefaultActionItemType).formProps} />
         }
         else if (action.render) {
           drawerContent = action.render()
@@ -66,10 +66,10 @@ export function ActionButtons(props: ActionButtonsProps) {
     if (defaultActions) {
       Object.keys(defaultActions).forEach((key) => {
         const action = defaultActions[key as keyof typeof defaultActions]
-        if (!action.hidden) {
+        if (!action?.hidden) {
           buttons.push(
             <Button key={key} type="primary" onClick={() => handleClick(key, true)}>
-              {action.text}
+              {action?.text}
             </Button>,
           )
         }
@@ -79,10 +79,10 @@ export function ActionButtons(props: ActionButtonsProps) {
     // 额外操作按钮
     if (extraActions) {
       extraActions.forEach((action) => {
-        if (!action.hidden) {
+        if (!action?.hidden) {
           buttons.push(
             <Button key={action.key} onClick={() => handleClick(action.key, false)}>
-              {action.text}
+              {action?.text}
             </Button>,
           )
         }

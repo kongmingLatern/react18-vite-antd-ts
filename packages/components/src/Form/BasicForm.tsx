@@ -97,7 +97,7 @@ export const BasicForm = forwardRef<FormInstance, BasicFormProps>(({
   const [expanded, setExpanded] = useState(false)
   const { execute, loading } = useAsync(handleFinish)
 
-  const colSpan = colProps?.span || 6
+  const colSpan = colProps?.span || 24
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
