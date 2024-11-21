@@ -21,7 +21,19 @@ export function ActionButtons(props: ActionButtonsProps) {
 
   async function handleOk(action: DefaultActionItemType) {
     if (action.formProps) {
-      console.log(basicFormRef.current?.getFieldsValue())
+      const isValid = await basicFormRef.current?.validateFields()
+      if (isValid) {
+        let values = basicFormRef.current?.getFieldsValue()
+        if (action.formProps.onBeforeSubmit) {
+          values = action.formProps.onBeforeSubmit(values)
+        }
+        if (action.formProps.onFinish) {
+          action.formProps.onFinish(values)
+        }
+        else {
+          await http.post(action.requestUrl, values)
+        }
+      }
       setIsModalOpen(false)
       setTimeout(() => {
         basicFormRef.current?.resetFields()
@@ -117,7 +129,7 @@ export function ActionButtons(props: ActionButtonsProps) {
       extraActions.forEach((action) => {
         if (!action.hidden) {
           buttons.push(
-            renderActionButton(action.key, action),
+            renderActionButton(action.type as string, action),
           )
         }
       })

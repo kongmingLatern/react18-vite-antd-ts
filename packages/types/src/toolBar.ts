@@ -24,6 +24,9 @@ export interface DefaultActionItemType extends ActionButtonItemType {
   uploadProps?: UploadProps
   buttonProps?: ButtonProps
 }
+export interface ActionItemType extends DefaultActionItemType {
+  type?: 'export' | 'upload' | string
+}
 
 export interface ToolBarProps {
 
@@ -66,6 +69,6 @@ export interface ToolBarProps {
       export?: Omit<DefaultActionItemType, 'formProps'>
       upload?: Omit<DefaultActionItemType, 'formProps'>
     }
-    extraActions: DefaultActionItemType[]
+    extraActions: ActionItemType[]
   }
 }
