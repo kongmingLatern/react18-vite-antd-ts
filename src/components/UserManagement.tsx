@@ -176,10 +176,43 @@ const UserManagement: React.FC = () => {
             text: (record) => {
               return `查看${record.id}`
             },
+            formProps: {
+              formItems: [
+                {
+                  type: 'input',
+                  name: 'name',
+                  label: '名字',
+                  placeholder: '请输入名字',
+                },
+                {
+                  type: 'input',
+                  name: 'address.street',
+                  label: '地址',
+                  placeholder: '请输入地址',
+                },
+              ],
+            },
           },
           editCfg: {
             text: (record, index) => {
               return `编辑${record.id}${index + 3}`
+            },
+            formProps: {
+              url: '',
+              formItems: [
+                {
+                  type: 'input',
+                  name: 'name',
+                  label: '名字',
+                  placeholder: '请输入名字',
+                },
+                {
+                  type: 'input',
+                  name: 'address.street',
+                  label: '地址',
+                  placeholder: '请输入地址',
+                },
+              ],
             },
             onBeforeSubmit(record) {
               return {
