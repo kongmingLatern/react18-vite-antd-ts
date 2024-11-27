@@ -63,7 +63,7 @@ export interface BasicFormProps {
   url: string
 
   // 表单提交的方法
-  method: 'post' | 'put' | 'patch' | 'delete' | 'get'
+  method?: 'post' | 'put' | 'patch' | 'delete' | 'get'
 
   // 表单项配置
   formItems: EnhanceFormItemConfig[]

@@ -3,6 +3,8 @@ import type {
   MenuProps,
 } from 'antd'
 import type { MenuItemType } from 'antd/es/menu/interface'
+import type { BasicFormProps } from '../../Form/BasicForm'
+import type { ReadonlyFormProps } from '../../Form/ReadonlyForm'
 import type { ActionButtonDefaultConfig, ActionButtonProps, BaseActionConfig, DefaultActionConfig, DefaultActionType } from '../types/action'
 import { DownOutlined } from '@ant-design/icons'
 import { useDrawer } from '@react18-vite-antd-ts/hooks'
@@ -20,8 +22,8 @@ import { ReadonlyForm } from '../../Form/ReadonlyForm'
 // 默认操作配置
 const defaultActionConfig: ActionButtonDefaultConfig = {
   hiddenBtn: [],
-  viewCfg: { key: 'view', text: '查看', index: 1000 },
-  editCfg: { key: 'edit', text: '编辑', index: 1001 },
+  viewCfg: { key: 'view', text: '查看', index: 1000, formProps: {} as ReadonlyFormProps },
+  editCfg: { key: 'edit', text: '编辑', index: 1001, formProps: { method: 'post', url: '', formItems: [] } as BasicFormProps },
   deleteCfg: {
     key: 'delete',
     text: '删除',
@@ -145,12 +147,7 @@ export function ActionButton({
           content: (
             <ReadonlyForm
               initialValues={record}
-              formItems={[
-                { name: 'name', label: '姓名', type: 'input', placeholder: '请输入姓名' },
-                { name: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名' },
-                { name: 'password', label: '密码', type: 'input', placeholder: '请输入密码' },
-                { name: 'address.street', label: 'a long text demo', type: 'input', placeholder: '请输入地址' },
-              ]}
+              {...actionCfg.viewCfg.formProps}
             />
           ),
         })
@@ -168,18 +165,12 @@ export function ActionButton({
           showFooter: true,
           content: (
             <BasicForm
-              url=""
               ref={formRef}
               initialValues={record}
               colProps={{
                 span: 24,
               }}
-              formItems={[
-                { name: 'name', label: '姓名', type: 'input', placeholder: '请输入姓名' },
-                { name: 'username', label: '用户名', type: 'input', placeholder: '请输入用户名' },
-                { name: 'password', label: '密码', type: 'input', placeholder: '请输入密码' },
-                { name: 'address.street', label: '地址', type: 'input', placeholder: '请输入地址' },
-              ]}
+              {...actionCfg.editCfg.formProps}
               footer={false}
             />
           ),

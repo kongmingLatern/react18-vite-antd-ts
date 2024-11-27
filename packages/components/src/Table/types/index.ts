@@ -1,6 +1,6 @@
 import type { ColumnProps } from 'antd/es/table'
 import type { COLUMNTYPE } from '../helpers/const'
-import type { BaseActionConfig, DefaultActionConfig } from './action'
+import type { BaseActionConfig, DefaultActionConfig, DefaultDeleteActionConfig, DefaultViewActionConfig } from './action'
 
 export interface ColumnPropsWithFormat extends ColumnProps<any> {
   type?: COLUMNTYPE
@@ -37,9 +37,9 @@ export interface ColumnPropsWithCustomRender extends ColumnProps<any> {
 
   defaultActionCfg?: Partial<{
     hiddenBtn?: ('view' | 'edit' | 'delete')[]
-    viewCfg: DefaultActionConfig
+    viewCfg: DefaultViewActionConfig
     editCfg: DefaultActionConfig
-    deleteCfg: DefaultActionConfig
+    deleteCfg: DefaultDeleteActionConfig
   }>
 }
 

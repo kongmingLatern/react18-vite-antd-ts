@@ -3,7 +3,7 @@ import type { EnhanceFormItemConfig } from './types'
 import { DatePicker, Form, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 
-interface ReadonlyFormProps {
+export interface ReadonlyFormProps {
   formItems: ReadonlyFormItemConfig[]
   initialValues?: Record<string, any>
   form?: FormInstance
