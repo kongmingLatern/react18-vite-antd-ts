@@ -45,7 +45,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
         <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>
           header
         </Header>
-        <Content style={{ margin: '24px 16px 0', background: colorBgContainer, padding: '15px' }}>
+        <Content style={{ margin: '24px 16px 0' }}>
           <Outlet />
         </Content>
         <Footer style={{ textAlign: 'center', color: '#999' }}>
