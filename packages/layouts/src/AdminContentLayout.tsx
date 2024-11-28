@@ -100,7 +100,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
         {...toolCfg?.searchFormCfg?.searchFormProps}
       />
       <ActionButtons actionButtonCfg={actionButtonCfg} />
-      <CommonTable ref={tableRef} dataCfg={dataCfg} onPaginationChange={onPaginationChange} onFirstFetch={onFirstFetch} />
+      <CommonTable ref={tableRef} dataCfg={dataCfg} onPaginationChange={onPaginationChange} onFirstFetch={onFirstFetch} {...dataCfg?.tableProps} />
     </>
   )
 })

@@ -90,8 +90,9 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
   const fetchData = async (url: string, additionalParams: ParamsType = {}) => {
     try {
       setLoading(true)
+      const baseParams = await (typeof getParams === 'function' ? getParams(pagination) : {})
       const initialParams = {
-        ...getParams?.(pagination),
+        ...baseParams,
         ...(isPageQuery ? { page: pagination.current, pageSize: pagination.pageSize } : {}),
       }
 
@@ -105,14 +106,12 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
       })
 
       setData(dataCfg.formatData?.(result) || result)
-      setPagination((prev) => {
-        return {
-          ...prev,
-          total: result.total,
-          current: newPaginationParams.page || prev.current,
-          pageSize: newPaginationParams.pageSize || prev.pageSize,
-        }
-      })
+      setPagination(prev => ({
+        ...prev,
+        total: result.total,
+        current: newPaginationParams.page || prev.current,
+        pageSize: newPaginationParams.pageSize || prev.pageSize,
+      }))
 
       setTableColumns(createExtensibleColumns({ columns, dataCfg, pagination: newPaginationParams }))
     }
