@@ -1,5 +1,6 @@
 import type { MenuProps } from 'antd'
 import type { ReactNode } from 'react'
+import type { AdminMenuItem } from './AdminMenu'
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -10,9 +11,10 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
-import { Layout, Menu, theme } from 'antd'
+import { Layout, theme } from 'antd'
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import AdminMenu from './AdminMenu'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -27,20 +29,17 @@ const siderStyle: React.CSSProperties = {
   scrollbarColor: 'unset',
 }
 
-const items: MenuProps['items'] = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}))
+const items: AdminMenuItem[] = [{
+  key: '1',
+  icon: <UserOutlined />,
+  label: '用户管理',
+  path: '/user-management',
+}, {
+  key: '2',
+  icon: <VideoCameraOutlined />,
+  label: '视频管理',
+  path: '/video-management',
+}]
 
 interface AdminLayoutProps {
   searchForm?: ReactNode
@@ -63,7 +62,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
     <Layout hasSider>
       <Sider collapsible style={siderStyle} collapsed={collapsed} onCollapse={value => handleCollapse(value)}>
         <div className="text-white p-15px text-center">123123</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+        <AdminMenu items={items} />
       </Sider>
       <Layout style={{ marginLeft, transition: 'margin-left 0.3s' }}>
         <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>
