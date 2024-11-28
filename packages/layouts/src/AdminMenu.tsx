@@ -20,7 +20,7 @@ const items = [
     ],
   },
   {
-    key: '3',
+    key: '/error',
     icon: <WarningOutlined />,
     label: '异常页',
     // path: '/error',
@@ -30,27 +30,27 @@ const items = [
     ],
   },
   {
-    key: '4',
+    key: '/multi-level',
     icon: <MenuFoldOutlined />,
     label: '多级菜单',
     // path: '/multi-level',
     children: [
-      { key: '4-1', icon: <FileTextOutlined />, label: '一级菜单', path: '/multi-level/first' },
-      { key: '4-2', icon: <UserOutlined />, label: '二级菜单', path: '/multi-level/second' },
-      { key: '4-3', icon: <LockOutlined />, label: '三级菜单', path: '/multi-level/third' },
+      { key: '/multi-level/first', icon: <FileTextOutlined />, label: '一级菜单', path: '/multi-level/first' },
+      { key: '/multi-level/second', icon: <UserOutlined />, label: '二级菜单', path: '/multi-level/second' },
+      { key: '/multi-level/third', icon: <LockOutlined />, label: '三级菜单', path: '/multi-level/third' },
     ],
   },
   {
-    key: '5',
+    key: '/management',
     icon: <CloudServerOutlined />,
     label: '系统管理',
     // path: '/management',
     children: [
-      { key: '5-1', icon: <UserOutlined />, label: '用户管理', path: '/management/user' },
-      { key: '5-2', icon: <LockOutlined />, label: '角色管理', path: '/management/role' },
+      { key: '/management/user', icon: <UserOutlined />, label: '用户管理', path: '/management/user' },
+      { key: '/management/role', icon: <LockOutlined />, label: '角色管理', path: '/management/role' },
     ],
   },
-  { key: '6', icon: <InfoCircleOutlined />, label: '关于', path: '/about' },
+  { key: '/about', icon: <InfoCircleOutlined />, label: '关于', path: '/about' },
 ]
 
 function AdminMenu() {

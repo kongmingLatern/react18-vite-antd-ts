@@ -1,3 +1,9 @@
+/**
+ * 这里是一段对该页面的描述
+ *
+ * @author 风之兮原
+ * @description 用户管理
+ */
 import type { CommonTableProps } from '@react18-vite-antd-ts/components'
 import type { AdminContentLayoutRef, ToolBarProps } from '@react18-vite-antd-ts/types'
 import { COLUMNTYPE } from '@react18-vite-antd-ts/components'

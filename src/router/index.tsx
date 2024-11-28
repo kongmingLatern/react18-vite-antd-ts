@@ -1,9 +1,9 @@
 import { AdminLayout } from '@react18-vite-antd-ts/layouts'
 // 初始化路由
 import { createHashRouter, Navigate } from 'react-router-dom'
-import TabPage from '../modules/Index/TabPage'
-import UserManagement from '../modules/Index/UserManagement'
 import Login from '../modules/Login'
+import UserManagement from '../modules/System/UserManagement'
+import TabPage from '../modules/SystemFunction/TabPage'
 
 export const router = createHashRouter([
   {
