@@ -142,6 +142,9 @@ const UserManagement: React.FC = () => {
     getUrl: 'https://jsonplaceholder.typicode.com/users',
     columns: [
       {
+        type: COLUMNTYPE.INDEX,
+      },
+      {
         title: 'id',
         key: 'id',
       },

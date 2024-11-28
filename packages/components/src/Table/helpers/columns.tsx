@@ -1,3 +1,4 @@
+import type { PaginationType } from 'antd/es/transfer/interface'
 import type { CommonTableProps } from '../CommonTable'
 import type { ColumnPropsWithFormat, EnhanceColumnProps } from '../types'
 import { getNestedValue } from '@react18-vite-antd-ts/utils'
@@ -36,13 +37,13 @@ export function createColumns(props: {
   })
 }
 
-type ColumnProcessor = (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
+type ColumnProcessor = (column: EnhanceColumnProps, pagination: { page: number, pageSize: number }) => Partial<EnhanceColumnProps>
 
 const columnProcessors: Record<string, ColumnProcessor> = {
-  [COLUMNTYPE.INDEX]: column => ({
+  [COLUMNTYPE.INDEX]: (column, pagination) => ({
     title: '序号',
     key: COLUMNTYPE.INDEX,
-    render: (_, __, index) => index + 1,
+    render: (_, __, index) => pagination ? index + 1 + (pagination.page - 1) * pagination.pageSize : index + 1,
     ...column,
   }),
   [COLUMNTYPE.TIME]: column => ({
@@ -71,12 +72,13 @@ const columnProcessors: Record<string, ColumnProcessor> = {
 }
 
 export function createExtensibleColumns(props: {
+  pagination?: { page: number, pageSize: number }
   columns: EnhanceColumnProps[]
   dataCfg?: CommonTableProps['dataCfg']
   customProcessors?: Record<string, ColumnProcessor>
   customRender?: (column: EnhanceColumnProps) => Partial<EnhanceColumnProps>
 }) {
-  const { columns, customProcessors = {}, dataCfg, customRender } = props
+  const { pagination, columns, customProcessors = {}, dataCfg, customRender } = props
   const { showAction = true } = dataCfg || {}
   const allProcessors = { ...columnProcessors, ...customProcessors }
 
@@ -103,7 +105,9 @@ export function createExtensibleColumns(props: {
 
     // 如果设置了type，则使用对应的processor
     if (column.type && allProcessors[column.type]) {
-      processedColumn = { ...processedColumn, ...allProcessors[column.type](column) }
+      console.log('pagination', pagination)
+
+      processedColumn = { ...processedColumn, ...allProcessors[column.type](column, pagination) }
     }
 
     return processedColumn

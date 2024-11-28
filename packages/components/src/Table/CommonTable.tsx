@@ -83,7 +83,7 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [pagination, setPagination] = useState<PaginationType>({
     current: paginationCfg?.current || 1,
-    pageSize: paginationCfg?.pageSize || 1,
+    pageSize: paginationCfg?.pageSize || 2,
     total: paginationCfg?.total || 0,
   })
 
@@ -99,14 +99,13 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
         ? additionalParams(initialParams)
         : additionalParams
 
+      const newPaginationParams = { ...initialParams, ...resolvedParams }
       const result = await http.get(url, {
-        params: { ...initialParams, ...resolvedParams },
+        params: newPaginationParams,
       })
 
       setData(dataCfg.formatData?.(result) || result)
-      setTableColumns(createExtensibleColumns({ columns, dataCfg }))
       setPagination((prev) => {
-        const newPaginationParams = { ...initialParams, ...resolvedParams }
         return {
           ...prev,
           total: result.total,
@@ -114,6 +113,8 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
           pageSize: newPaginationParams.pageSize || prev.pageSize,
         }
       })
+
+      setTableColumns(createExtensibleColumns({ columns, dataCfg, pagination: newPaginationParams }))
     }
     catch (error) {
       console.error('Failed to fetch data:', error)
