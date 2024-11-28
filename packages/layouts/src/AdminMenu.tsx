@@ -15,8 +15,8 @@ const items = [
     // path: '/system',
     children: [
       { key: '/system/tabs', icon: <FileTextOutlined />, label: '标签页', path: '/system/tabs' },
-      { key: '/system/hide', icon: <LockOutlined />, label: '隐藏子菜单', path: '/system/hide' },
-      { key: '/system/params', icon: <UserOutlined />, label: '请求参数', path: '/system/params' },
+      // { key: '/system/hide', icon: <LockOutlined />, label: '隐藏子菜单', path: '/system/hide' },
+      // { key: '/system/params', icon: <UserOutlined />, label: '请求参数', path: '/system/params' },
     ],
   },
   {
@@ -25,8 +25,9 @@ const items = [
     label: '异常页',
     // path: '/error',
     children: [
-      { key: '/error/404', icon: <FileTextOutlined />, label: '404', path: '/error/404' },
       { key: '/error/403', icon: <LockOutlined />, label: '403', path: '/error/403' },
+      { key: '/error/404', icon: <FileTextOutlined />, label: '404', path: '/error/404' },
+      { key: '/error/500', icon: <FileTextOutlined />, label: '500', path: '/error/500' },
     ],
   },
   {
@@ -36,8 +37,20 @@ const items = [
     // path: '/multi-level',
     children: [
       { key: '/multi-level/first', icon: <FileTextOutlined />, label: '一级菜单', path: '/multi-level/first' },
-      { key: '/multi-level/second', icon: <UserOutlined />, label: '二级菜单', path: '/multi-level/second' },
-      { key: '/multi-level/third', icon: <LockOutlined />, label: '三级菜单', path: '/multi-level/third' },
+      {
+        key: '/multi-level/second',
+        icon: <UserOutlined />,
+        label: '二级父菜单',
+        path: '/multi-level/second',
+        children: [
+          {
+            key: '/multi-level/second/sub',
+            icon: <LockOutlined />,
+            label: '二级子菜单',
+            path: '/multi-level/second/sub',
+          },
+        ],
+      },
     ],
   },
   {
@@ -47,10 +60,10 @@ const items = [
     // path: '/management',
     children: [
       { key: '/management/user', icon: <UserOutlined />, label: '用户管理', path: '/management/user' },
-      { key: '/management/role', icon: <LockOutlined />, label: '角色管理', path: '/management/role' },
+      // { key: '/management/role', icon: <LockOutlined />, label: '角色管理', path: '/management/role' },
     ],
   },
-  { key: '/about', icon: <InfoCircleOutlined />, label: '关于', path: '/about' },
+  // { key: '/about', icon: <InfoCircleOutlined />, label: '关于', path: '/about' },
 ]
 
 function AdminMenu() {

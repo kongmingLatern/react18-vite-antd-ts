@@ -1,3 +1,6 @@
+import Error403 from '@/components/403'
+import Error404 from '@/components/404'
+import Error500 from '@/components/500'
 import { AdminLayout } from '@react18-vite-antd-ts/layouts'
 // 初始化路由
 import { createHashRouter, Navigate } from 'react-router-dom'
@@ -21,23 +24,35 @@ export const router = createHashRouter([
         element: <Index />,
       },
       {
-        path: 'system',
-        element: <UserManagement />,
+        path: 'multi-level/first',
+        element: <div>一级菜单</div>,
+      },
+      {
+        path: 'multi-level/second',
+        element: <div>二级父菜单</div>,
+      },
+      {
+        path: 'multi-level/second/sub',
+        element: <div>二级子菜单</div>,
       },
       {
         path: 'system/tabs',
         element: <TabPage />,
       },
       {
-        path: 'error',
-        element: <UserManagement />,
+        path: 'error/403',
+        element: <Error403 />,
       },
       {
-        path: 'multi-level',
-        element: <UserManagement />,
+        path: 'error/404',
+        element: <Error404 />,
       },
       {
-        path: 'management',
+        path: 'error/500',
+        element: <Error500 />,
+      },
+      {
+        path: 'management/user',
         element: <UserManagement />,
       },
       {
