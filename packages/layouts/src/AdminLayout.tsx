@@ -15,6 +15,7 @@ const siderStyle: React.CSSProperties = {
   bottom: 0,
   scrollbarWidth: 'thin',
   scrollbarColor: 'unset',
+  backgroundColor: '#fff',
 }
 
 interface AdminLayoutProps {
@@ -36,11 +37,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
 
   return (
     <Layout hasSider>
-      <Sider collapsible style={siderStyle} collapsed={collapsed} onCollapse={value => handleCollapse(value)}>
-        <div className="text-white p-15px text-center">123123</div>
+      <Sider style={siderStyle} collapsed={collapsed} onCollapse={value => handleCollapse(value)}>
+        <div className="p-15px text-center">123123</div>
         <AdminMenu />
       </Sider>
-      <Layout style={{ marginLeft, transition: 'margin-left 0.3s' }}>
+      <Layout style={{ marginLeft, transition: 'margin-left 0.3s', minHeight: '100vh' }}>
         <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>
           header
         </Header>

@@ -1,7 +1,8 @@
 import { AdminLayout } from '@react18-vite-antd-ts/layouts'
 // 初始化路由
 import { createHashRouter, Navigate } from 'react-router-dom'
-import UserManagement from '../components/UserManagement'
+import TabPage from '../modules/Index/TabPage'
+import UserManagement from '../modules/Index/UserManagement'
 import Login from '../modules/Login'
 
 export const router = createHashRouter([
@@ -12,10 +13,34 @@ export const router = createHashRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/user-management" replace />,
+        element: <Navigate to="/index" replace />,
       },
       {
-        path: 'user-management',
+        path: 'index',
+        element: <UserManagement />,
+      },
+      {
+        path: 'system',
+        element: <UserManagement />,
+      },
+      {
+        path: 'system/tabs',
+        element: <TabPage />,
+      },
+      {
+        path: 'error',
+        element: <UserManagement />,
+      },
+      {
+        path: 'multi-level',
+        element: <UserManagement />,
+      },
+      {
+        path: 'management',
+        element: <UserManagement />,
+      },
+      {
+        path: 'about',
         element: <UserManagement />,
       },
     ],
