@@ -28,7 +28,6 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     const formData = searchFormRef.current?.getFormData()
 
     setSearchLoading(true)
-    setIsSearch(true)
     tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
       const combineParams = toolCfg?.searchFormCfg?.onBeforeSearch
         ? toolCfg.searchFormCfg.onBeforeSearch({

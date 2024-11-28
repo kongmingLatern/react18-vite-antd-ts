@@ -1,0 +1,13 @@
+{
+  "name": "@react18-vite-antd-ts/theme",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "dependencies": {
+    "antd": "^5.0.0"
+  }
+}

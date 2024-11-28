@@ -57,6 +57,9 @@ importers:
       '@react18-vite-antd-ts/layouts':
         specifier: workspace:*
         version: link:packages/layouts
+      '@react18-vite-antd-ts/theme':
+        specifier: workspace:*
+        version: link:packages/theme
       '@react18-vite-antd-ts/types':
         specifier: workspace:*
         version: link:packages/types
@@ -78,6 +81,9 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
         version: 3.7.1(vite@5.4.9(@types/node@22.7.5)(sass@1.79.5))
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       eslint:
         specifier: ^9.12.0
         version: 9.12.0(jiti@1.21.6)
@@ -139,6 +145,18 @@ importers:
       '@react18-vite-antd-ts/types':
         specifier: workspace:*
         version: link:../types
+
+  packages/theme:
+    dependencies:
+      antd:
+        specifier: ^5.0.0
+        version: 5.21.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: '>=16.9.0'
+        version: 18.3.1
+      react-dom:
+        specifier: '>=16.9.0'
+        version: 18.3.1(react@18.3.1)
 
   packages/types:
     dependencies:
