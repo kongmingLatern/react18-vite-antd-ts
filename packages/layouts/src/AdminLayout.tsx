@@ -1,16 +1,4 @@
-import type { MenuProps } from 'antd'
 import type { ReactNode } from 'react'
-import type { AdminMenuItem } from './AdminMenu'
-import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons'
 import { Layout, theme } from 'antd'
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
@@ -28,18 +16,6 @@ const siderStyle: React.CSSProperties = {
   scrollbarWidth: 'thin',
   scrollbarColor: 'unset',
 }
-
-const items: AdminMenuItem[] = [{
-  key: '1',
-  icon: <UserOutlined />,
-  label: '用户管理',
-  path: '/user-management',
-}, {
-  key: '2',
-  icon: <VideoCameraOutlined />,
-  label: '视频管理',
-  path: '/video-management',
-}]
 
 interface AdminLayoutProps {
   searchForm?: ReactNode
@@ -62,7 +38,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
     <Layout hasSider>
       <Sider collapsible style={siderStyle} collapsed={collapsed} onCollapse={value => handleCollapse(value)}>
         <div className="text-white p-15px text-center">123123</div>
-        <AdminMenu items={items} />
+        <AdminMenu />
       </Sider>
       <Layout style={{ marginLeft, transition: 'margin-left 0.3s' }}>
         <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>

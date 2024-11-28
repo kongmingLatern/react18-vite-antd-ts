@@ -1,49 +1,19 @@
-import { Menu } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { AppstoreOutlined, BarChartOutlined, CloudOutlined, ShopOutlined, TeamOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
+import { CommonMenu } from '@react18-vite-antd-ts/components'
 
-export interface AdminMenuItem {
-  key: string
-  icon: React.ReactNode
-  label: string
-  path?: string
-}
+const items = [
+  { key: '1', icon: <UserOutlined />, label: 'User', path: '/user-management' },
+  { key: '2', icon: <VideoCameraOutlined />, label: 'Video', path: '/video' },
+  { key: '3', icon: <UploadOutlined />, label: 'Upload', path: '/upload' },
+  { key: '4', icon: <BarChartOutlined />, label: 'Bar Chart', path: '/bar-chart' },
+  { key: '5', icon: <CloudOutlined />, label: 'Cloud', path: '/cloud' },
+  { key: '6', icon: <AppstoreOutlined />, label: 'App Store', path: '/app-store' },
+  { key: '7', icon: <TeamOutlined />, label: 'Team', path: '/team' },
+  { key: '8', icon: <ShopOutlined />, label: 'Shop', path: '/shop' },
+]
 
-interface AdminMenuProps {
-  items: AdminMenuItem[]
-  mode?: 'vertical' | 'horizontal' | 'inline'
-  theme?: 'light' | 'dark'
-}
-
-const AdminMenu: React.FC<AdminMenuProps> = ({
-  items,
-  mode = 'inline',
-  theme = 'dark',
-}) => {
-  const location = useLocation()
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
-
-  useEffect(() => {
-    const currentPath = items.find(item => item.path === location.pathname)?.key
-    if (currentPath) {
-      setSelectedKeys([currentPath])
-    }
-  }, [location, items])
-
-  const menuItems = items.map(item => ({
-    key: item.key,
-    icon: item.icon,
-    label: item.path ? <Link to={item.path}>{item.label}</Link> : item.label,
-  }))
-
-  return (
-    <Menu
-      items={menuItems}
-      selectedKeys={selectedKeys}
-      mode={mode}
-      theme={theme}
-    />
-  )
+function AdminMenu() {
+  return <CommonMenu items={items} mode="inline" theme="dark" />
 }
 
 export default AdminMenu
