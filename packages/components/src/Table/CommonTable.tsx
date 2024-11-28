@@ -28,7 +28,7 @@ export interface CommonTableProps {
     /**
      * getParams，默认携带的参数
      */
-    getParams?: (pagination: PaginationType) => Record<string, any>
+    getParams?: (pagination: PaginationType) => Record<string, any> | Promise<Record<string, any>>
 
     /**
      * 是否分页查询，默认为 true
