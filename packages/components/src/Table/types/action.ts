@@ -29,12 +29,12 @@ export interface DefaultActionConfig extends BaseActionConfig {
 }
 
 export interface DefaultViewActionConfig extends BaseActionConfig {
-  key: 'view'
+  key?: 'view'
   formProps: ReadonlyFormProps
 }
 
 export interface DefaultDeleteActionConfig extends BaseActionConfig {
-  key: 'delete'
+  key?: 'delete'
 }
 
 export interface ActionButtonDefaultConfig {

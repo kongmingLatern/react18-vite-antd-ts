@@ -1,5 +1,4 @@
-import type { SearchFormProps } from '@react18-vite-antd-ts/layouts'
-import type { SearchFormRef } from '@react18-vite-antd-ts/layouts/src/components/SearchForm'
+import type { ToolBarProps } from '@react18-vite-antd-ts/types'
 import type { ColumnProps, TableProps } from 'antd/es/table'
 import type { ColumnPropsWithCustomRender, ColumnPropsWithFormat } from './types'
 import { http } from '@react18-vite-antd-ts/axios'
@@ -58,6 +57,15 @@ export interface CommonTableProps {
      */
     tableProps?: TableProps<any>
   }
+  onPaginationChange?: (current: number, pageSize: number, args: {
+    filters: any
+    sorter: any
+    extra: {
+      currentDataSource: any[]
+      action: 'paginate' | 'sort' | 'filter'
+    }
+  }) => void
+  onFirstFetch?: (params: Record<string, any>) => Record<string, any>
 }
 
 type ParamsType = Record<string, any> | ((params: Record<string, any>) => Record<string, any>)
@@ -67,7 +75,7 @@ export interface CommonTableRef {
 }
 
 export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
-  const { dataCfg } = props
+  const { dataCfg, onPaginationChange, onFirstFetch } = props
   const { columns, getParams, rowKey = 'id', isPageQuery = true, pagination: paginationCfg } = dataCfg
 
   const [tableColumns, setTableColumns] = useState<ColumnProps<any>[]>([])
@@ -75,7 +83,7 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [pagination, setPagination] = useState<PaginationType>({
     current: paginationCfg?.current || 1,
-    pageSize: paginationCfg?.pageSize || 10,
+    pageSize: paginationCfg?.pageSize || 1,
     total: paginationCfg?.total || 0,
   })
 
@@ -97,7 +105,15 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
 
       setData(dataCfg.formatData?.(result) || result)
       setTableColumns(createExtensibleColumns({ columns, dataCfg }))
-      setPagination(prev => ({ ...prev, total: result.total }))
+      setPagination((prev) => {
+        const newPaginationParams = { ...initialParams, ...resolvedParams }
+        return {
+          ...prev,
+          total: result.total,
+          current: newPaginationParams.page || prev.current,
+          pageSize: newPaginationParams.pageSize || prev.pageSize,
+        }
+      })
     }
     catch (error) {
       console.error('Failed to fetch data:', error)
@@ -108,7 +124,15 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
   }
 
   const { run: refreshData } = useRequest(
-    () => fetchData(dataCfg.getUrl),
+    () => fetchData(dataCfg.getUrl, (params) => {
+      const formData = onFirstFetch && onFirstFetch(params)
+      return {
+        ...params,
+        ...formData,
+        page: pagination.current,
+        pageSize: pagination.pageSize,
+      }
+    }),
     {
       refreshDeps: [pagination.current, pagination.pageSize],
       manual: true,
@@ -117,19 +141,24 @@ export const CommonTable = forwardRef((props: CommonTableProps, ref) => {
 
   useEffect(() => {
     refreshData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.current, pagination.pageSize, refreshData])
+  }, [refreshData])
 
   useImperativeHandle(ref, () => ({
     fetchData,
   }))
 
-  const handleTableChange = (newPagination: any) => {
+  const handleTableChange = (newPagination: any, filters: any, sorter: any, extra: { currentDataSource: any[], action: 'paginate' | 'sort' | 'filter' }) => {
+    const { action } = extra
+
+    if (action === 'paginate') {
+      onPaginationChange && onPaginationChange(newPagination.current, newPagination.pageSize, { filters, sorter, extra })
+    }
     setPagination(prev => ({
       ...prev,
       current: newPagination.current,
       pageSize: newPagination.pageSize,
     }))
+
     dataCfg.pagination?.onChange?.(
       newPagination.current,
       newPagination.pageSize,

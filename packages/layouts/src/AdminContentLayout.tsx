@@ -28,6 +28,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     const formData = searchFormRef.current?.getFormData()
 
     setSearchLoading(true)
+    setIsSearch(true)
     tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
       const combineParams = toolCfg?.searchFormCfg?.onBeforeSearch
         ? toolCfg.searchFormCfg.onBeforeSearch({
@@ -53,15 +54,44 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
 
     formInstance?.resetFields()
     setLoading(true)
-    tableRef.current?.fetchData(dataCfg.getUrl).finally(() => {
+    tableRef.current?.fetchData(dataCfg.getUrl, (params) => {
+      const formData = searchFormRef.current?.getFormData() || {}
+      return {
+        ...params,
+        ...formData,
+        page: 1,
+      }
+    }).finally(() => {
       setLoading(false)
     })
+  }
+
+  function onPaginationChange(current: number, pageSize: number, args: { filters: any, sorter: any, extra: { currentDataSource: any[], action: 'paginate' | 'sort' | 'filter' } }) {
+    tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
+      const formData = searchFormRef.current?.getFormData() || {}
+      const combineParams = toolCfg?.searchFormCfg?.onBeforeSearch
+        ? toolCfg.searchFormCfg.onBeforeSearch({
+          ...params,
+          ...formData,
+          page: current,
+          pageSize,
+        })
+        : { ...params, ...formData, page: current, pageSize }
+      return combineParams
+    })
+  }
+
+  function onFirstFetch(params: Record<string, any>) {
+    const formData = searchFormRef.current?.getFormData() || {}
+    return {
+      ...params,
+      ...formData,
+    }
   }
 
   return (
     <>
       <SearchForm
-        url=""
         ref={searchFormRef}
         onSearch={onSearch}
         onReset={onReset}
@@ -71,7 +101,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
         {...toolCfg?.searchFormCfg?.searchFormProps}
       />
       <ActionButtons actionButtonCfg={actionButtonCfg} />
-      <CommonTable ref={tableRef} dataCfg={dataCfg} />
+      <CommonTable ref={tableRef} dataCfg={dataCfg} onPaginationChange={onPaginationChange} onFirstFetch={onFirstFetch} />
     </>
   )
 })
