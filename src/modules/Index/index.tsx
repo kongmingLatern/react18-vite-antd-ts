@@ -35,9 +35,9 @@ function Dashboard() {
       <Card style={{ marginBottom: '20px', padding: '15px' }}>
         <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Space align="center">
-            <Avatar src="https://soybeanjs.cn/assets/soybean-JC38yUrs.jpg" size={70} />
+            <Avatar src="https://avatars.githubusercontent.com/u/88939906?v=4" size={70} />
             <Space direction="vertical">
-              <Text className="font-semibold text-18px">早安, Soybean, 今天又是充满活力的一天!</Text>
+              <Text className="font-semibold text-18px">早安, 风之兮原, 今天又是充满活力的一天!</Text>
               <Text type="secondary" style={{ fontSize: '14px' }}>今天多云转晴, 20°C - 25°C!</Text>
             </Space>
           </Space>
@@ -104,7 +104,7 @@ function Dashboard() {
           <Card title="任务完成率" style={{ height: '100%' }}>
             <PieChart width={200} height={250}>
               <Pie data={pieData} cx={100} cy={100} innerRadius={60} outerRadius={80} fill="#8884d8" dataKey="value" label>
-                {pieData.map((entry, index) => (
+                {pieData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -121,23 +121,23 @@ function Dashboard() {
               itemLayout="horizontal"
               dataSource={[
                 {
-                  title: 'Soybean 创建了开源项目 soybean-admin!',
-                  avatar: 'https://soybeanjs.cn/assets/soybean-JC38yUrs.jpg',
+                  title: '风之兮原 创建了开源项目 react18-vite-antd-ts-admin!',
+                  avatar: 'https://avatars.githubusercontent.com/u/88939906?v=4',
                   datetime: '2021-05-28 22:22:22',
                 },
                 {
-                  title: 'Yanbowe 向 soybean-admin 提交了一个bug，多标签栏不会自适应。',
-                  avatar: 'https://soybeanjs.cn/assets/soybean-JC38yUrs.jpg',
+                  title: 'Yanbowe 向 react18-vite-antd-ts-admin 提交了一个bug，多标签栏不会自适应。',
+                  avatar: 'https://avatars.githubusercontent.com/u/88939906?v=4',
                   datetime: '2021-10-27 10:24:54',
                 },
                 {
-                  title: 'Soybean 准备为 soybean-admin 的发布做充分的准备工作！',
-                  avatar: 'https://soybeanjs.cn/assets/soybean-JC38yUrs.jpg',
+                  title: '风之兮原 准备为 react18-vite-antd-ts-admin 的发布做充分的准备工作！',
+                  avatar: 'https://avatars.githubusercontent.com/u/88939906?v=4',
                   datetime: '2021-10-31 22:43:12',
                 },
                 {
-                  title: 'Soybean 正在忙于为soybean-admin写项目说明文档！',
-                  avatar: 'https://soybeanjs.cn/assets/soybean-JC38yUrs.jpg',
+                  title: '风之兮原 正在忙于为react18-vite-antd-ts-admin写项目说明文档！',
+                  avatar: 'https://avatars.githubusercontent.com/u/88939906?v=4',
                   datetime: '2021-11-03 20:33:31',
                 },
 
