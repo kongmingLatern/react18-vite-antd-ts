@@ -82,7 +82,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
 
   const breadcrumbItems = breadcrumbHistory.map((item, index) => (
     <Breadcrumb.Item key={item.path}>
-      <div className={`min-w-80px justify-center h-40px transition inline-flex items-center px-3 py-1 rounded hover:text-purple-500 hover:bg-purple-50 ${location.pathname === item.path ? 'bg-purple-50 text-purple-700' : 'bg-white'}`}>
+      <div className={`min-w-90px text-gray-400 justify-center h-40px transition inline-flex items-center px-3 py-1 hover:text-purple-500 hover:bg-purple-50 ${location.pathname === item.path ? 'bg-purple-50 text-purple-700 rounded-tl-md rounded-tr-md' : 'bg-white rounded'}`}>
         <span
           className="cursor-pointer"
           onClick={() => navigate(item.path)}
@@ -96,6 +96,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
           />
         )}
       </div>
+      {index !== breadcrumbHistory.length - 1 && (
+        <span className="mx-2 text-gray-300 select-none">|</span>
+      )}
     </Breadcrumb.Item>
   ))
 
@@ -106,12 +109,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
         <AdminMenu />
       </Sider>
       <Layout style={{ marginLeft, transition: 'margin-left 0.3s', minHeight: '100vh' }}>
-        <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20 }}>
+        <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20, borderBottom: '1px solid #e8e8e8' }}>
           <span className="cursor-pointer" onClick={() => handleCollapse(!collapsed)}>{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}</span>
         </Header>
-        <Content style={{ margin: '0 16px 0' }}>
+        <Content>
           <div className="w-full bg-white">
-            <Breadcrumb style={{ margin: '16px 0', height: '40px' }} separator="">
+            <Breadcrumb className="flex items-end w-full" style={{ margin: '0', height: '50px', paddingLeft: '20px' }} separator="">
               {breadcrumbItems}
             </Breadcrumb>
           </div>

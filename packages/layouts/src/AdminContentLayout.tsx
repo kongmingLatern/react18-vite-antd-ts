@@ -89,7 +89,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
   }
 
   return (
-    <>
+    <div className="box-border m-16px p-1rem bg-white overflow-hidden">
       <SearchForm
         ref={searchFormRef}
         onSearch={onSearch}
@@ -101,6 +101,6 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
       />
       <ActionButtons actionButtonCfg={actionButtonCfg} />
       <CommonTable ref={tableRef} dataCfg={dataCfg} onPaginationChange={onPaginationChange} onFirstFetch={onFirstFetch} {...dataCfg?.tableProps} />
-    </>
+    </div>
   )
 })
