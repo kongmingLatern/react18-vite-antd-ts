@@ -31,7 +31,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
 function Dashboard() {
   return (
-    <div>
+    <div className="p-1rem">
       <Card style={{ marginBottom: '20px', padding: '15px' }}>
         <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
           <Space align="center">
