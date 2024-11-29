@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react'
 import { CloseOutlined, HomeOutlined, InfoCircleOutlined, MenuOutlined, TagsOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
 import { Breadcrumb } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 interface BreadcrumbItem {
@@ -21,6 +23,83 @@ export const menuMap = {
   '/multi-level/second/sub': { label: '二级子菜单', icon: <MenuOutlined /> },
   '/management/user': { label: '用户管理', icon: <UserOutlined /> },
   '/about': { label: '关于', icon: <InfoCircleOutlined /> },
+}
+
+interface DraggableBreadcrumbItemProps {
+  item: BreadcrumbItem
+  index: number
+  breadcrumbHistory: BreadcrumbItem[]
+  moveItem: (dragIndex: number, hoverIndex: number) => void
+  currentPath: string
+  onNavigate: (path: string) => void
+  onClose: (path: string, index: number) => void
+}
+
+const DraggableBreadcrumbItem: React.FC<DraggableBreadcrumbItemProps> = ({
+  breadcrumbHistory,
+  item,
+  index,
+  moveItem,
+  currentPath,
+  onNavigate,
+  onClose,
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [{ isDragging }, drag] = useDrag({
+    type: 'breadcrumb',
+    item: { index },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+  })
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'breadcrumb',
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+    }),
+    hover(draggedItem: { index: number }) {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index)
+        draggedItem.index = index
+      }
+    },
+  })
+
+  drag(drop(ref))
+
+  return (
+    <div
+      ref={ref}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      className={`min-w-90px text-gray-400 justify-center h-40px cursor-pointer transition inline-flex items-center px-3 py-1 hover:text-purple-500 hover:bg-purple-50 relative ${
+        currentPath === item.path ? 'bg-purple-50 text-purple-700 rounded-tl-md rounded-tr-md' : 'bg-white rounded'
+      }`}
+      onClick={() => onNavigate(item.path)}
+    >
+      {item.icon && <span className="mr-1rem">{item.icon}</span>}
+      <span>{item.label}</span>
+      {breadcrumbHistory.length > 1 && (
+        <CloseOutlined
+          className="ml-2 cursor-pointer text-gray-400 hover:text-purple-500"
+          onClick={(e) => {
+            e.stopPropagation()
+            onClose(item.path, index)
+          }}
+        />
+      )}
+      {isOver && (
+        <div
+          className="absolute h-full w-1 bg-purple-500"
+          style={{
+            left: '-2px',
+            top: 0,
+            opacity: 0.5,
+          }}
+        />
+      )}
+    </div>
+  )
 }
 
 const AdminBreadcrumb: React.FC = () => {
@@ -44,44 +123,46 @@ const AdminBreadcrumb: React.FC = () => {
       setBreadcrumbHistory(newHistory)
 
       if (location.pathname === path) {
-        // Navigate to the previous path if closing current page
         const lastItem = newHistory[newHistory.length - 1]
         navigate(lastItem.path)
       }
     }
   }
 
+  const moveItem = (dragIndex: number, hoverIndex: number) => {
+    const dragItem = breadcrumbHistory[dragIndex]
+    setBreadcrumbHistory((prevItems) => {
+      const newItems = [...prevItems]
+      newItems.splice(dragIndex, 1)
+      newItems.splice(hoverIndex, 0, dragItem)
+      return newItems
+    })
+  }
+
   return (
-    <div className="w-full bg-white">
-      <Breadcrumb
-        className="flex items-end w-full"
-        style={{ margin: '0', height: '50px', paddingLeft: '20px' }}
-        separator={<span className="text-gray-300 h-full select-none flex items-center">|</span>}
-      >
-        {breadcrumbHistory.map((item, index) => (
-          <Breadcrumb.Item key={item.path}>
-            <div
-              className={`min-w-90px text-gray-400 justify-center h-40px cursor-pointer transition inline-flex items-center px-3 py-1 hover:text-purple-500 hover:bg-purple-50 ${
-                location.pathname === item.path ? 'bg-purple-50 text-purple-700 rounded-tl-md rounded-tr-md' : 'bg-white rounded'
-              }`}
-              onClick={() => navigate(item.path)}
-            >
-              {item.icon && <span className="mr-1rem">{item.icon}</span>}
-              <span>{item.label}</span>
-              {breadcrumbHistory.length > 1 && (
-                <CloseOutlined
-                  className="ml-2 cursor-pointer text-gray-400 hover:text-purple-500"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleCloseBreadcrumb(item.path, index)
-                  }}
-                />
-              )}
-            </div>
-          </Breadcrumb.Item>
-        ))}
-      </Breadcrumb>
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="w-full bg-white">
+        <Breadcrumb
+          className="flex items-end w-full"
+          style={{ margin: '0', height: '50px', paddingLeft: '20px' }}
+          separator={<span className="text-gray-300 h-full select-none flex items-center">|</span>}
+        >
+          {breadcrumbHistory.map((item, index) => (
+            <Breadcrumb.Item key={item.path}>
+              <DraggableBreadcrumbItem
+                breadcrumbHistory={breadcrumbHistory}
+                item={item}
+                index={index}
+                moveItem={moveItem}
+                currentPath={location.pathname}
+                onNavigate={navigate}
+                onClose={handleCloseBreadcrumb}
+              />
+            </Breadcrumb.Item>
+          ))}
+        </Breadcrumb>
+      </div>
+    </DndProvider>
   )
 }
 

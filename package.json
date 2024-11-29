@@ -50,6 +50,8 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "jsdom": "^25.0.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "unocss": "^0.63.4",
