@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Layout, theme } from 'antd'
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import AdminBreadcrumb from './AdminBreadcrumb'
+import AdminHeader from './AdminHeader'
 import AdminMenu from './AdminMenu'
 
 const { Header, Content, Footer, Sider } = Layout
@@ -45,9 +45,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
       </Sider>
       <Layout style={{ marginLeft, transition: 'margin-left 0.3s', minHeight: '100vh' }}>
         <Header style={{ padding: 0, background: colorBgContainer, paddingLeft: 20, fontWeight: 600, fontSize: 20, borderBottom: '1px solid #e8e8e8' }}>
-          <span className="cursor-pointer" onClick={() => handleCollapse(!collapsed)}>
-            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          </span>
+          <AdminHeader collapsed={collapsed} onCollapse={handleCollapse} />
         </Header>
         <Content>
           <AdminBreadcrumb />
