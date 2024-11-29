@@ -71,7 +71,11 @@ const DraggableBreadcrumbItem: React.FC<DraggableBreadcrumbItemProps> = ({
   return (
     <div
       ref={ref}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        transition: 'all .3s',
+        // transition: isDragging ? 'none' : 'all 0.3s ease',
+      }}
       className={`min-w-90px text-gray-400 justify-center h-40px cursor-pointer transition inline-flex items-center px-3 py-1 hover:text-purple-500 hover:bg-purple-50 relative ${
         currentPath === item.path ? 'bg-purple-50 text-purple-700 rounded-tl-md rounded-tr-md' : 'bg-white rounded'
       }`}

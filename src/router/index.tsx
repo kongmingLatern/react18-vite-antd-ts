@@ -1,7 +1,7 @@
-import Error403 from '@/components/403'
-import Error404 from '@/components/404'
-import Error500 from '@/components/500'
 import { AdminLayout } from '@react18-vite-antd-ts/layouts'
+import { Error403 } from '../modules/Error/Error403'
+import { Error404 } from '../modules/Error/Error404'
+import { Error500 } from '../modules/Error/Error500'
 // 初始化路由
 import { createHashRouter, Navigate } from 'react-router-dom'
 import Index from '../modules/Index/index'
