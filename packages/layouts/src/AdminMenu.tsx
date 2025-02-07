@@ -9,6 +9,12 @@ const items = [
     path: '/index',
   },
   {
+    key: '/deepseek',
+    icon: <HomeOutlined />,
+    label: 'Deepseek',
+    path: '/deepseek',
+  },
+  {
     key: '/system',
     icon: <SettingOutlined />,
     label: '系统功能',

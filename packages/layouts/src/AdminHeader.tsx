@@ -1,5 +1,6 @@
 import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Badge, Dropdown, Space, Switch, theme, Tooltip } from 'antd'
+import { useTheme } from '@react18-vite-antd-ts/theme'
+import { Avatar, Badge, Button, Dropdown, Space, Switch, theme, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { menuMap } from './AdminBreadcrumb'
@@ -20,7 +21,7 @@ export default function AdminHeader(props: AdminHeaderProps) {
   const location = useLocation()
   const navigate = useNavigate()
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([])
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const { isDarkMode, toggleTheme } = useTheme()
   const { token } = theme.useToken()
 
   useEffect(() => {
@@ -45,11 +46,6 @@ export default function AdminHeader(props: AdminHeaderProps) {
       setBreadcrumbs(newBreadcrumbs)
     }
   }, [location.pathname])
-
-  const handleThemeChange = (checked: boolean) => {
-    setIsDarkMode(checked)
-    // 这里可以添加切换主题的逻辑
-  }
 
   const userMenuItems = [
     {
@@ -95,13 +91,9 @@ export default function AdminHeader(props: AdminHeaderProps) {
 
       <Space size={16} className="items-center">
         <Tooltip title={isDarkMode ? '切换亮色模式' : '切换暗色模式'}>
-          <Switch
-            checkedChildren={<MoonOutlined />}
-            unCheckedChildren={<SunOutlined />}
-            checked={isDarkMode}
-            onChange={handleThemeChange}
-            className="bg-gray-300"
-          />
+          <span className="text-18px cursor-pointer" onClick={() => toggleTheme()}>
+            {isDarkMode ? <SunOutlined /> : <MoonOutlined />}
+          </span>
         </Tooltip>
 
         <Tooltip title="消息通知">
@@ -121,7 +113,7 @@ export default function AdminHeader(props: AdminHeaderProps) {
           placement="bottomRight"
           arrow
         >
-          <Space className="cursor-pointer">
+          <Space className="cursor-pointer items-center">
             <Avatar
               icon={<UserOutlined />}
               style={{
@@ -129,7 +121,7 @@ export default function AdminHeader(props: AdminHeaderProps) {
                 cursor: 'pointer',
               }}
             />
-            <span className="hidden sm:inline">Admin</span>
+            <span className="hidden sm:inline text-15px">Admin</span>
           </Space>
         </Dropdown>
       </Space>

@@ -4,6 +4,7 @@ import { Error404 } from '../modules/Error/Error404'
 import { Error500 } from '../modules/Error/Error500'
 // 初始化路由
 import { createHashRouter, Navigate } from 'react-router-dom'
+import Deepseek from '../modules/Deepseek'
 import Index from '../modules/Index/index'
 import Login from '../modules/Login'
 import UserManagement from '../modules/System/UserManagement'
@@ -22,6 +23,10 @@ export const router = createHashRouter([
       {
         path: 'index',
         element: <Index />,
+      },
+      {
+        path: 'deepseek',
+        element: <Deepseek />,
       },
       {
         path: 'multi-level/first',

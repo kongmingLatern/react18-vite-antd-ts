@@ -16,6 +16,15 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       globals: true,
       environment: 'jsdom',
     },
+    server: {
+      proxy: {
+        '^/api': {
+          target: env.VITE_APP_API_URL, // 将要代理的目标地址
+          changeOrigin: true, // 是否改变源地址
+          rewrite: path => path.replace('/api', ''),
+        },
+      },
+    },
     plugins: [
       react(),
       Unocss({

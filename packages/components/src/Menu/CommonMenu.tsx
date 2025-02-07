@@ -71,6 +71,9 @@ export const CommonMenu: React.FC<CommonMenuProps> = ({
       mode={mode}
       theme={theme}
       onOpenChange={keys => setOpenKeys(keys)}
+      style={{
+        height: '100%',
+      }}
     />
   )
 }

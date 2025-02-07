@@ -14,7 +14,7 @@ class HttpClient {
   constructor(config: HttpClientConfig = {}) {
     this.instance = axios.create({
       baseURL: config.baseURL || '',
-      timeout: config.timeout || 10000,
+      timeout: config.timeout || 1000000,
       headers: {
         'Content-Type': 'application/json',
         ...config.headers,
@@ -104,7 +104,9 @@ class HttpClient {
   }
 }
 
-const http = new HttpClient()
+const http = new HttpClient({
+  baseURL: '/api',
+})
 export { http }
 
 export const httpGet = http.get.bind(http)

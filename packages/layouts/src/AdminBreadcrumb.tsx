@@ -14,6 +14,7 @@ interface BreadcrumbItem {
 
 export const menuMap = {
   '/index': { label: '首页', icon: <HomeOutlined /> },
+  '/deepseek': { label: 'Deepseek', icon: <HomeOutlined /> },
   '/system/tabs': { label: '标签页', icon: <TagsOutlined /> },
   '/error/403': { label: '403', icon: <WarningOutlined /> },
   '/error/404': { label: '404', icon: <WarningOutlined /> },

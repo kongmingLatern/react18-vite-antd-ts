@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { Layout, theme } from 'antd'
 import React, { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import AdminBreadcrumb from './AdminBreadcrumb'
 import AdminHeader from './AdminHeader'
 import AdminMenu from './AdminMenu'
@@ -31,6 +32,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
   } = theme.useToken()
   const [collapsed, setCollapsed] = useState(false)
   const [marginLeft, setMarginLeft] = useState(200)
+  const location = useLocation()
 
   const handleCollapse = (value: boolean) => {
     setCollapsed(value)
@@ -49,7 +51,18 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
         </Header>
         <Content>
           <AdminBreadcrumb />
-          <Outlet />
+          <div className="fade-transition">
+            <SwitchTransition mode="out-in">
+              <CSSTransition
+                key={location.pathname}
+                timeout={300}
+                classNames="fade"
+                unmountOnExit
+              >
+                <Outlet />
+              </CSSTransition>
+            </SwitchTransition>
+          </div>
         </Content>
         <Footer style={{ textAlign: 'center', color: '#999' }}>
           &copy; 风之兮原 KongmingLatern 2024 版权所有
