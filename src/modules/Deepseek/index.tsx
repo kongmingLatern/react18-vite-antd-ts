@@ -12,16 +12,11 @@ interface Message {
   content: string
   isUser: boolean
   loading?: boolean
+  role: 'user' | 'assistant'
 }
 
 export default function Deepseek() {
-  const [messages, setMessages] = useState<Message[]>([{
-    content: '这是一个模拟的AI回复消息。',
-    isUser: false,
-  }, {
-    content: '这是一个模拟的用户消息。',
-    isUser: true,
-  }])
+  const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
 
   const handleSend = async () => {
@@ -41,19 +36,27 @@ export default function Deepseek() {
     setMessages(prev => [...prev, {
       content: '...',
       isUser: false,
+      role: 'assistant',
       loading: true,
     }])
 
+    console.log(import.meta.env)
+
     // Simulate AI response
     const res = await httpPost('/deepseek/chat', {
-      messages: [{
-        role: 'user',
-        content: inputValue,
-      }],
+      messages: [
+        ...messages.filter(msg => msg.isUser).map(msg => ({ role: 'user', content: msg.content })),
+        {
+          role: 'user',
+          content: inputValue,
+        },
+      ],
     }, {
       headers: {
-        'x-api-key': import.meta.env.DEEPSEEK_API_KEY,
+        'x-api-key': import.meta.env.VITE_DEEPSEEK_API_KEY,
       },
+    }).finally(() => {
+      setMessages(prev => prev.slice(0, prev.length - 1))
     })
 
     // Remove loading message and add AI response
@@ -62,6 +65,7 @@ export default function Deepseek() {
         const newMessages = prev.filter(msg => !msg.loading)
         return [...newMessages, {
           isUser: false,
+          role: 'assistant',
           content: res.data.content,
         }]
       })
@@ -85,7 +89,7 @@ export default function Deepseek() {
                 <div className={`flex items-center w-full ${message.isUser ? 'flex-row-reverse' : 'flex-row'}`}>
                   <Avatar
                     className="mx-2"
-                    src={message.isUser ? '/user-avatar.png' : '/ai-avatar.png'}
+                    src={message.isUser ? 'https://avatars.githubusercontent.com/u/88939906?v=4' : 'https://chat.deepseek.com/favicon.svg'}
                   />
                   <div className={`p-3 rounded-lg ${message.isUser ? 'bg-blue-500 ' : 'bg-gray-100'}`}>
                     {message.isUser
@@ -134,6 +138,7 @@ export default function Deepseek() {
             className="ml-20px"
             type="primary"
             icon={<SendOutlined />}
+            loading={messages[messages.length - 1]?.loading}
             onClick={handleSend}
           >
             发送
