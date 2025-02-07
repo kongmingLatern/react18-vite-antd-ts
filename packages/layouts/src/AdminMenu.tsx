@@ -67,7 +67,7 @@ const items = [
 ]
 
 function AdminMenu() {
-  return <CommonMenu items={items} mode="inline" theme="light" />
+  return <CommonMenu items={items} />
 }
 
 export default AdminMenu

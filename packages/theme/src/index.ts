@@ -1,3 +1,4 @@
+export * from './ThemeContext'
 export * from './themes'
 
 // 默认导出默认主题

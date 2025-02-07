@@ -1,7 +1,8 @@
-import type { ThemeConfig } from 'antd'
+import { theme, type ThemeConfig } from 'antd'
 
 // 默认主题 - 蓝色科技风格
 export const defaultTheme: ThemeConfig = {
+  algorithm: theme.defaultAlgorithm,
   token: {
     // 品牌主色
     colorPrimary: '#1677ff', // Daybreak Blue 拂晓蓝
@@ -25,6 +26,7 @@ export const defaultTheme: ThemeConfig = {
 
 // 暗色主题
 export const darkTheme: ThemeConfig = {
+  algorithm: theme.darkAlgorithm,
   token: {
     colorPrimary: '#1668dc',
     colorBgBase: '#000000',
@@ -35,6 +37,7 @@ export const darkTheme: ThemeConfig = {
 
 // 科技蓝主题
 export const techBlueTheme: ThemeConfig = {
+  algorithm: theme.defaultAlgorithm,
   token: {
     colorPrimary: '#1890ff',
     colorSuccess: '#52c41a',
@@ -46,6 +49,7 @@ export const techBlueTheme: ThemeConfig = {
 
 // 商务绿主题
 export const businessGreenTheme: ThemeConfig = {
+  algorithm: theme.defaultAlgorithm,
   token: {
     colorPrimary: '#52c41a',
     colorSuccess: '#52c41a',

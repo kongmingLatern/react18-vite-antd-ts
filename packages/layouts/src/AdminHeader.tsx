@@ -1,5 +1,5 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Space } from 'antd'
+import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
+import { Avatar, Badge, Dropdown, Space, Switch, theme, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { menuMap } from './AdminBreadcrumb'
@@ -20,6 +20,8 @@ export default function AdminHeader(props: AdminHeaderProps) {
   const location = useLocation()
   const navigate = useNavigate()
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([])
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const { token } = theme.useToken()
 
   useEffect(() => {
     const paths = location.pathname.split('/').filter(Boolean)
@@ -28,8 +30,6 @@ export default function AdminHeader(props: AdminHeaderProps) {
 
     if (currentMenu) {
       const newBreadcrumbs: BreadcrumbItem[] = []
-
-      // Build up breadcrumbs starting from first level
       let currentBuildPath = ''
       for (let i = 0; i < paths.length; i++) {
         currentBuildPath += `/${paths[i]}`
@@ -42,13 +42,35 @@ export default function AdminHeader(props: AdminHeaderProps) {
           })
         }
       }
-
       setBreadcrumbs(newBreadcrumbs)
     }
   }, [location.pathname])
 
+  const handleThemeChange = (checked: boolean) => {
+    setIsDarkMode(checked)
+    // 这里可以添加切换主题的逻辑
+  }
+
+  const userMenuItems = [
+    {
+      key: 'profile',
+      label: '个人信息',
+    },
+    {
+      key: 'settings',
+      label: '设置',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      label: '退出登录',
+    },
+  ]
+
   return (
-    <Space>
+    <div className="flex justify-between items-center w-full px-5">
       <Space size={30}>
         <span className="cursor-pointer text-14px" onClick={() => onCollapse(!collapsed)}>
           {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -70,6 +92,47 @@ export default function AdminHeader(props: AdminHeaderProps) {
           ))}
         </span>
       </Space>
-    </Space>
+
+      <Space size={16} className="items-center">
+        <Tooltip title={isDarkMode ? '切换亮色模式' : '切换暗色模式'}>
+          <Switch
+            checkedChildren={<MoonOutlined />}
+            unCheckedChildren={<SunOutlined />}
+            checked={isDarkMode}
+            onChange={handleThemeChange}
+            className="bg-gray-300"
+          />
+        </Tooltip>
+
+        <Tooltip title="消息通知">
+          <Badge count={5} size="small">
+            <BellOutlined
+              style={{
+                fontSize: '18px',
+                cursor: 'pointer',
+                color: token.colorTextSecondary,
+              }}
+            />
+          </Badge>
+        </Tooltip>
+
+        <Dropdown
+          menu={{ items: userMenuItems }}
+          placement="bottomRight"
+          arrow
+        >
+          <Space className="cursor-pointer">
+            <Avatar
+              icon={<UserOutlined />}
+              style={{
+                backgroundColor: token.colorPrimary,
+                cursor: 'pointer',
+              }}
+            />
+            <span className="hidden sm:inline">Admin</span>
+          </Space>
+        </Dropdown>
+      </Space>
+    </div>
   )
 }
