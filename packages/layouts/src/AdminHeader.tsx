@@ -91,7 +91,10 @@ export default function AdminHeader(props: AdminHeaderProps) {
 
       <Space size={16} className="items-center">
         <Tooltip title={isDarkMode ? '切换亮色模式' : '切换暗色模式'}>
-          <span className="text-18px cursor-pointer" onClick={() => toggleTheme()}>
+          <span
+            className="text-18px cursor-pointer"
+            onClick={toggleTheme}
+          >
             {isDarkMode ? <SunOutlined /> : <MoonOutlined />}
           </span>
         </Tooltip>

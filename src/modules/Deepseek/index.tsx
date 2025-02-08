@@ -17,7 +17,15 @@ interface Message {
 }
 
 export default function Deepseek() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>([{
+    content: '你好, 请问有什么可以帮助您的?',
+    isUser: false,
+    role: 'assistant',
+  }, {
+    content: '我想了解一下深度搜索的产品',
+    isUser: true,
+    role: 'user',
+  }])
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -146,7 +154,7 @@ export default function Deepseek() {
     <Layout
       className="relative overflow-hidden bg-white pt-10px box-border"
       style={{
-        height: '350px',
+        height: 'calc(100vh - 200px)',
       }}
     >
       <Content className="p-4 flex flex-col">

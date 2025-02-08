@@ -8,21 +8,24 @@ import 'uno.css'
 import './index.scss'
 
 function App() {
-  const { currentTheme } = useTheme()
-  console.log('currentTheme', currentTheme)
+  const { theme } = useTheme()
 
   return (
+    <ConfigProvider
+      locale={zhCN}
+      theme={theme}
+    >
+      <RouterProvider router={router} />
+    </ConfigProvider>
+  )
+}
+
+function Root() {
+  return (
     <ThemeProvider>
-      <ConfigProvider
-        locale={zhCN}
-        theme={{
-          algorithm: currentTheme.algorithm,
-        }}
-      >
-        <RouterProvider router={router} />
-      </ConfigProvider>
+      <App />
     </ThemeProvider>
   )
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+ReactDOM.createRoot(document.getElementById('root')!).render(<Root />)
