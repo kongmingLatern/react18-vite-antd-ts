@@ -1,6 +1,6 @@
 import type { SearchFormProps } from '@react18-vite-antd-ts/types'
 import { BasicForm } from '@react18-vite-antd-ts/components'
-import { Collapse, type FormInstance } from 'antd'
+import { Collapse, type FormInstance, theme } from 'antd'
 import classNames from 'classnames'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 
@@ -11,6 +11,7 @@ export interface SearchFormRef {
 
 export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   const { onSearch, onAfterSearch, onReset } = props
+  const { token } = theme.useToken()
   const formInstance = useRef<FormInstance>(null)
 
   useImperativeHandle(ref, () => ({
@@ -43,7 +44,8 @@ export const SearchForm = forwardRef((props: SearchFormProps, ref) => {
   return (
     <Collapse
       // defaultActiveKey={['1']}
-      className={classNames('mb-15px', 'bg-#fff')}
+      className={classNames('mb-15px')}
+      style={{ backgroundColor: token.colorBgContainer }}
       items={[
         {
           key: '1',
