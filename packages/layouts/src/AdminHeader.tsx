@@ -1,6 +1,7 @@
-import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
-import { useTheme } from '@react18-vite-antd-ts/theme'
-import { Avatar, Badge, Button, Dropdown, Space, Switch, theme, Tooltip } from 'antd'
+import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SkinOutlined, UserOutlined } from '@ant-design/icons'
+import { themes, useTheme } from '@react18-vite-antd-ts/theme'
+
+import { Avatar, Badge, Dropdown, Space, theme, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { menuMap } from './AdminBreadcrumb'
@@ -21,8 +22,16 @@ export default function AdminHeader(props: AdminHeaderProps) {
   const location = useLocation()
   const navigate = useNavigate()
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([])
-  const { isDarkMode, toggleTheme } = useTheme()
+  const { toggleTheme, theme: currentTheme } = useTheme()
   const { token } = theme.useToken()
+
+  // 从localStorage读取保存的主题
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) {
+      toggleTheme(savedTheme)
+    }
+  }, [])
 
   useEffect(() => {
     const paths = location.pathname.split('/').filter(Boolean)
@@ -90,14 +99,29 @@ export default function AdminHeader(props: AdminHeaderProps) {
       </Space>
 
       <Space size={16} className="items-center">
-        <Tooltip title={isDarkMode ? '切换亮色模式' : '切换暗色模式'}>
-          <span
-            className="text-18px cursor-pointer"
-            onClick={toggleTheme}
-          >
-            {isDarkMode ? <SunOutlined /> : <MoonOutlined />}
-          </span>
-        </Tooltip>
+        <Dropdown
+          trigger={['click']}
+          menu={{
+            selectable: true,
+            selectedKeys: [Object.values(themes).find(t => t.theme === currentTheme)!.key],
+            items: Object.values(themes).map(theme => ({
+              key: theme.key,
+              label: theme.label,
+              icon: theme.icon,
+            })),
+            onClick: ({ key }) => {
+              toggleTheme(key)
+              // 保存主题到localStorage
+              localStorage.setItem('theme', key)
+            },
+          }}
+          placement="bottomRight"
+          arrow
+        >
+          <Tooltip title="切换主题" placement="top">
+            <SkinOutlined className="text-18px cursor-pointer" />
+          </Tooltip>
+        </Dropdown>
 
         <Tooltip title="消息通知">
           <Badge count={5} size="small">
