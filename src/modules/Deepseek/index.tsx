@@ -1,6 +1,7 @@
 import { SendOutlined } from '@ant-design/icons'
 import { http, httpPost } from '@react18-vite-antd-ts/axios'
 import { Avatar, Button, Input, Layout, List, Typography } from 'antd'
+import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
@@ -43,33 +44,90 @@ export default function Deepseek() {
     console.log(import.meta.env)
 
     // Simulate AI response
-    const res = await httpPost('/deepseek/chat', {
-      messages: [
-        ...messages.filter(msg => msg.isUser).map(msg => ({ role: 'user', content: msg.content })),
-        {
-          role: 'user',
-          content: inputValue,
-        },
-      ],
-    }, {
+    // const res = await httpPost('/deepseek/chat', {
+    //   messages: [
+    //     ...messages.filter(msg => msg.isUser).map(msg => ({ role: 'user', content: msg.content })),
+    //     {
+    //       role: 'user',
+    //       content: inputValue,
+    //     },
+    //   ],
+    // }, {
+    //   headers: {
+    //     'x-api-key': import.meta.env.VITE_DEEPSEEK_API_KEY,
+    //   },
+    // }).finally(() => {
+    //   setMessages(prev => prev.slice(0, prev.length - 1))
+    // })
+
+    // sse
+    const message = [
+      ...messages.filter(msg => msg.isUser).map(msg => ({ role: 'user', content: msg.content })),
+      {
+        role: 'user',
+        content: inputValue,
+      },
+    ]
+    const es = new EventSourcePolyfill(`/api/deepseek/chat/stream?messages=${JSON.stringify(message)}`, {
       headers: {
         'x-api-key': import.meta.env.VITE_DEEPSEEK_API_KEY,
       },
-    }).finally(() => {
-      setMessages(prev => prev.slice(0, prev.length - 1))
+    })
+
+    console.log('es', es)
+
+    es.addEventListener('message', (event) => {
+      if (event.data) {
+        const { data } = event
+        if (data === '[DONE]') {
+          es.close()
+          return
+        }
+
+        const content = JSON.parse(data).choices[0]?.delta?.content
+        // 注意,这里要拼接内容,即反复更新最后一个消息
+        setMessages((prev) => {
+          const lastMessage = prev[prev.length - 1]
+          if (lastMessage?.loading) {
+            // Replace loading message with first chunk
+            return [...prev.slice(0, -1), {
+              content: content || '',
+              isUser: false,
+              role: 'assistant',
+              loading: false,
+            }]
+          }
+          else {
+            // Append content to last message
+            return [...prev.slice(0, -1), {
+              ...prev[prev.length - 1],
+              content: prev[prev.length - 1].content + (content || ''),
+            }]
+          }
+        })
+      }
+      console.log('message', event)
+    })
+
+    es.addEventListener('open', (event) => {
+      console.log('open', event)
+    })
+
+    es.addEventListener('error', (event) => {
+      console.log('error', event)
     })
 
     // Remove loading message and add AI response
-    if (res) {
-      setMessages((prev) => {
-        const newMessages = prev.filter(msg => !msg.loading)
-        return [...newMessages, {
-          isUser: false,
-          role: 'assistant',
-          content: res.data.content,
-        }]
-      })
-    }
+    // if (res) {
+    //   setMessages((prev) => {
+    //     const newMessages = prev.filter(msg => !msg.loading)
+    //     return [...newMessages, {
+    //       isUser: false,
+    //       role: 'assistant',
+    //       content: res.data.content,
+    //     }]
+    //   })
+    // }
   }
 
   return (
