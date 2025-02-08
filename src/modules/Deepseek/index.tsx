@@ -1,6 +1,6 @@
 import { SendOutlined } from '@ant-design/icons'
 import { http, httpPost } from '@react18-vite-antd-ts/axios'
-import { message as AntdMessage, Avatar, Button, Input, Layout, List, Typography } from 'antd'
+import { message as AntdMessage, Avatar, Button, Input, Layout, List, theme, Typography } from 'antd'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -17,6 +17,10 @@ interface Message {
 }
 
 export default function Deepseek() {
+  const { useToken } = theme
+  const { token } = useToken()
+  console.log('token', token)
+
   const [messages, setMessages] = useState<Message[]>([{
     content: '你好, 请问有什么可以帮助您的?',
     isUser: false,
@@ -152,8 +156,9 @@ export default function Deepseek() {
 
   return (
     <Layout
-      className="relative overflow-hidden bg-white pt-10px box-border"
+      className="relative overflow-hidden pt-10px box-border"
       style={{
+        backgroundColor: token.colorBgContainer,
         height: 'calc(100vh - 200px)',
       }}
     >

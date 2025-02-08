@@ -28,7 +28,7 @@ interface AdminLayoutProps {
 
 export const AdminLayout: React.FC<AdminLayoutProps> = () => {
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorText },
   } = theme.useToken()
   const [collapsed, setCollapsed] = useState(false)
   const [marginLeft, setMarginLeft] = useState(200)
@@ -42,7 +42,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
   return (
     <Layout hasSider>
       <Sider style={siderStyle} collapsed={collapsed} onCollapse={value => handleCollapse(value)}>
-        <div className="p-15px text-center">123123</div>
+        <div className="p-15px text-center" style={{ color: colorText, backgroundColor: colorBgContainer }}>
+          123123
+        </div>
         <AdminMenu />
       </Sider>
       <Layout style={{ marginLeft, transition: 'margin-left 0.3s', minHeight: '100vh' }}>

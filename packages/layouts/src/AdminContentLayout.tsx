@@ -1,8 +1,8 @@
 import type { CommonTableRef } from '@react18-vite-antd-ts/components/src/Table/CommonTable'
 import type { AdminContentLayoutProps, ToolBarProps } from '@react18-vite-antd-ts/types'
-import type { FormInstance } from 'antd'
 import type { SearchFormRef } from './components/SearchForm'
 import { CommonTable, type CommonTableProps } from '@react18-vite-antd-ts/components'
+import { type FormInstance, theme } from 'antd'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { ActionButtons } from './components/ActionButton'
 import { SearchForm } from './components/SearchForm'
@@ -10,6 +10,7 @@ import { SearchForm } from './components/SearchForm'
 export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, ref) => {
   const { toolCfg = {} as ToolBarProps, dataCfg = {} as CommonTableProps['dataCfg'] } = props || {}
   const { actionButtonCfg = {} as ToolBarProps['actionButtonCfg'] } = toolCfg || {}
+  const { token } = theme.useToken()
   const searchFormRef = useRef<SearchFormRef>(null)
   const tableRef = useRef<CommonTableRef>(null)
   const [searchLoading, setSearchLoading] = useState(false)
@@ -89,7 +90,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
   }
 
   return (
-    <div className="box-border m-16px p-1rem bg-white overflow-hidden">
+    <div className="box-border m-16px p-1rem overflow-hidden" style={{ backgroundColor: token.colorBgContainer }}>
       <SearchForm
         ref={searchFormRef}
         onSearch={onSearch}

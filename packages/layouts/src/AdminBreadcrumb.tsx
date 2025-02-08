@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { CloseOutlined, HomeOutlined, InfoCircleOutlined, MenuOutlined, TagsOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons'
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, theme } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -45,6 +45,7 @@ const DraggableBreadcrumbItem: React.FC<DraggableBreadcrumbItemProps> = ({
   onNavigate,
   onClose,
 }) => {
+  const { token } = theme.useToken()
   const ref = useRef<HTMLDivElement>(null)
   const [{ isDragging }, drag] = useDrag({
     type: 'breadcrumb',
@@ -76,9 +77,11 @@ const DraggableBreadcrumbItem: React.FC<DraggableBreadcrumbItemProps> = ({
         opacity: isDragging ? 0.5 : 1,
         transition: 'all .3s',
         // transition: isDragging ? 'none' : 'all 0.3s ease',
+        color: token.colorTextSecondary,
+        backgroundColor: currentPath === item.path ? token.colorPrimaryBg : token.colorBgContainer,
       }}
-      className={`min-w-90px text-gray-400 justify-center h-40px cursor-pointer transition inline-flex items-center px-3 py-1 hover:text-purple-500 hover:bg-purple-50 relative ${
-        currentPath === item.path ? 'bg-purple-50 text-purple-700 rounded-tl-md rounded-tr-md' : 'bg-white rounded'
+      className={`min-w-90px justify-center h-40px cursor-pointer transition inline-flex items-center px-3 py-1 relative ${
+        currentPath === item.path ? 'rounded-tl-md rounded-tr-md' : 'rounded'
       }`}
       onClick={() => onNavigate(item.path)}
     >
@@ -111,6 +114,7 @@ const AdminBreadcrumb: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [breadcrumbHistory, setBreadcrumbHistory] = useState<BreadcrumbItem[]>([])
+  const { token } = theme.useToken()
 
   useEffect(() => {
     const paths = location.pathname.split('/').filter(Boolean)
@@ -146,7 +150,7 @@ const AdminBreadcrumb: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="w-full bg-white">
+      <div className="w-full" style={{ backgroundColor: token.colorBgContainer }}>
         <Breadcrumb
           className="flex items-end w-full"
           style={{ margin: '0', height: '50px', paddingLeft: '20px' }}
