@@ -1,8 +1,8 @@
 import { SendOutlined } from '@ant-design/icons'
 import { http, httpPost } from '@react18-vite-antd-ts/axios'
-import { Avatar, Button, Input, Layout, List, Typography } from 'antd'
+import { message as AntdMessage, Avatar, Button, Input, Layout, List, Typography } from 'antd'
 import { EventSourcePolyfill } from 'event-source-polyfill'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 const { Content } = Layout
@@ -19,6 +19,15 @@ interface Message {
 export default function Deepseek() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const handleSend = async () => {
     if (!inputValue.trim())
@@ -28,6 +37,7 @@ export default function Deepseek() {
     const userMessage: Message = {
       content: inputValue,
       isUser: true,
+      role: 'user',
     }
 
     setMessages([...messages, userMessage])
@@ -114,7 +124,9 @@ export default function Deepseek() {
     })
 
     es.addEventListener('error', (event) => {
-      console.log('error', event)
+      // 删除最后一个loading消息
+      setMessages(prev => prev.filter(msg => !msg.loading))
+      AntdMessage.error(`请求失败, 异常信息: ${event.error}`)
     })
 
     // Remove loading message and add AI response
@@ -134,11 +146,11 @@ export default function Deepseek() {
     <Layout
       className="relative overflow-hidden bg-white pt-10px box-border"
       style={{
-        height: 'calc(100vh - 250px)',
+        height: '350px',
       }}
     >
       <Content className="p-4 flex flex-col">
-        <div className="flex-1 overflow-auto pb-80px">
+        <div className="flex-1 overflow-auto pb-80px pr-10px">
           <List
             split={false}
             dataSource={messages}
@@ -149,12 +161,12 @@ export default function Deepseek() {
                     className="mx-2"
                     src={message.isUser ? 'https://avatars.githubusercontent.com/u/88939906?v=4' : 'https://chat.deepseek.com/favicon.svg'}
                   />
-                  <div className={`p-3 rounded-lg ${message.isUser ? 'bg-blue-500 ' : 'bg-gray-100'}`}>
+                  <div className={`p-3 rounded-lg max-w-1/2 ${message.isUser ? 'bg-blue-500 ' : 'bg-gray-100'}`}>
                     {message.isUser
                       ? (
-                          <Text style={{ color: 'white' }}>
+                          <ReactMarkdown className="color-white">
                             {message.content}
-                          </Text>
+                          </ReactMarkdown>
                         )
                       : (
                           <div className="markdown-body" style={{ color: 'black' }}>
@@ -174,16 +186,17 @@ export default function Deepseek() {
               </List.Item>
             )}
           />
+          <div ref={messagesEndRef} />
         </div>
 
-        <div className="border-box absolute bottom-20px flex w-full items-center">
+        <div className="border-box absolute bottom-20px left-10px right-20px flex w-full items-center">
           <TextArea
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             placeholder="输入消息..."
             autoSize={{ minRows: 1, maxRows: 4 }}
             style={{
-              maxWidth: 'calc(100% - 140px)',
+              maxWidth: 'calc(100% - 150px)',
             }}
             onPressEnter={(e) => {
               if (!e.shiftKey) {
