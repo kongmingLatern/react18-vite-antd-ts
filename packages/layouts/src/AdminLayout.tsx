@@ -67,7 +67,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = () => {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center', color: '#999' }}>
-          &copy; 风之兮原 KongmingLatern 2024 版权所有
+          &copy; 风之兮原 KongmingLatern 2025 版权所有
         </Footer>
       </Layout>
     </Layout>
