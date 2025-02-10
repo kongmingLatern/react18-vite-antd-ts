@@ -4,6 +4,8 @@ import { message as AntdMessage, Avatar, Button, Input, Layout, List, theme, Typ
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 const { Content } = Layout
 const { TextArea } = Input
@@ -12,7 +14,9 @@ const { Text } = Typography
 interface Message {
   content: string
   isUser: boolean
+  canPaste?: boolean
   loading?: boolean
+  hasDone?: boolean
   role: 'user' | 'assistant'
 }
 
@@ -24,11 +28,9 @@ export default function Deepseek() {
   const [messages, setMessages] = useState<Message[]>([{
     content: '你好, 请问有什么可以帮助您的?',
     isUser: false,
+    canPaste: false,
+    hasDone: true,
     role: 'assistant',
-  }, {
-    content: '我想了解一下深度搜索的产品',
-    isUser: true,
-    role: 'user',
   }])
   const [inputValue, setInputValue] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -59,11 +61,10 @@ export default function Deepseek() {
     setMessages(prev => [...prev, {
       content: '...',
       isUser: false,
+      hasDone: false,
       role: 'assistant',
       loading: true,
     }])
-
-    console.log(import.meta.env)
 
     // Simulate AI response
     // const res = await httpPost('/deepseek/chat', {
@@ -102,6 +103,7 @@ export default function Deepseek() {
       if (event.data) {
         const { data } = event
         if (data === '[DONE]') {
+          setMessages(prev => prev.filter(msg => !msg.isUser).map(msg => ({ ...msg, canPaste: true, hasDone: true })))
           es.close()
           return
         }
@@ -115,8 +117,10 @@ export default function Deepseek() {
             return [...prev.slice(0, -1), {
               content: content || '',
               isUser: false,
+              hasDone: false,
               role: 'assistant',
               loading: false,
+              canPaste: false,
             }]
           }
           else {
@@ -124,6 +128,8 @@ export default function Deepseek() {
             return [...prev.slice(0, -1), {
               ...prev[prev.length - 1],
               content: prev[prev.length - 1].content + (content || ''),
+              canPaste: false,
+              hasDone: false,
             }]
           }
         })
@@ -154,6 +160,12 @@ export default function Deepseek() {
     // }
   }
 
+  const handleCopy = (content: string, type: 'markdown' | 'text') => {
+    const textToCopy = type === 'markdown' ? content : content.replace(/[#*`]/g, '')
+    navigator.clipboard.writeText(textToCopy)
+    AntdMessage.success(`已复制${type === 'markdown' ? 'Markdown' : '纯文本'}内容到剪贴板`)
+  }
+
   return (
     <Layout
       className="relative overflow-hidden pt-10px box-border"
@@ -174,10 +186,33 @@ export default function Deepseek() {
                     className="mx-2"
                     src={message.isUser ? 'https://avatars.githubusercontent.com/u/88939906?v=4' : 'https://chat.deepseek.com/favicon.svg'}
                   />
-                  <div className={`p-3 rounded-lg max-w-1/2 ${message.isUser ? 'bg-blue-500 ' : 'bg-gray-100'}`}>
+                  <div className={`p-3 rounded-lg max-w-1/2 relative ${message.isUser ? 'bg-blue-500 ' : 'bg-gray-100'}`}>
                     {message.isUser
                       ? (
-                          <ReactMarkdown className="color-white">
+                          <ReactMarkdown
+                            className="color-white"
+                            components={{
+                              code: (props) => {
+                                const { children, className, node, ...rest } = props
+                                const match = /language-(\w+)/.exec(className || '')
+                                return match
+                                  ? (
+                                      <SyntaxHighlighter
+                                        {...rest}
+                                        PreTag="div"
+                                        children={String(children).replace(/\n$/, '')}
+                                        language={match[1]}
+                                        style={dark}
+                                      />
+                                    )
+                                  : (
+                                      <code {...rest} className={className}>
+                                        {children}
+                                      </code>
+                                    )
+                              },
+                            }}
+                          >
                             {message.content}
                           </ReactMarkdown>
                         )
@@ -188,9 +223,43 @@ export default function Deepseek() {
                                   <span className="animate-pulse">{message.content}</span>
                                 )
                               : (
-                                  <ReactMarkdown>
-                                    {message.content}
-                                  </ReactMarkdown>
+                                  <>
+                                    <ReactMarkdown
+                                      components={{
+                                        code: (props) => {
+                                          const { children, className, node, ...rest } = props
+                                          const match = /language-(\w+)/.exec(className || '')
+                                          return match
+                                            ? (
+                                                <SyntaxHighlighter
+                                                  {...rest}
+                                                  PreTag="div"
+                                                  children={String(children).replace(/\n$/, '')}
+                                                  language={match[1]}
+                                                  style={dark}
+                                                />
+                                              )
+                                            : (
+                                                <code {...rest} className={className}>
+                                                  {children}
+                                                </code>
+                                              )
+                                        },
+                                      }}
+                                    >
+                                      {message.content}
+                                    </ReactMarkdown>
+                                    {!message.loading && message.canPaste && (
+                                      <div className="absolute bottom-1 right-1 flex gap-1">
+                                        <Button size="small" onClick={() => handleCopy(message.content, 'markdown')}>
+                                          复制Markdown
+                                        </Button>
+                                        <Button size="small" onClick={() => handleCopy(message.content, 'text')}>
+                                          复制纯文本
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </>
                                 )}
                           </div>
                         )}
