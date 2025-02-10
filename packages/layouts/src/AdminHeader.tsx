@@ -85,7 +85,7 @@ export default function AdminHeader(props: AdminHeaderProps) {
             <span
               key={item.path}
               style={{
-                color: item.path === location.pathname ? 'rgb(51, 54, 57)' : 'rgb(118, 124, 130)',
+                color: item.path === location.pathname ? token.colorTextBase : token.colorTextSecondary,
                 cursor: 'pointer',
               }}
               onClick={() => navigate(item.path)}
