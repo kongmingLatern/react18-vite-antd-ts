@@ -48,7 +48,7 @@ function Login() {
         navigate('/index')
       }
       catch (error) {
-        message.error('登录失败')
+        message.error(`登录失败: ${error instanceof Error ? error.message : '未知错误'}`)
       }
       finally {
         setLoading(false)
