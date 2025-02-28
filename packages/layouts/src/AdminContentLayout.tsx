@@ -29,7 +29,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     const formData = searchFormRef.current?.getFormData()
 
     setSearchLoading(true)
-    tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
+    await tableRef.current?.fetchData(dataCfg.getUrl, (params: Record<string, any>) => {
       const combineParams = toolCfg?.searchFormCfg?.onBeforeSearch
         ? toolCfg.searchFormCfg.onBeforeSearch({
           ...params,
@@ -44,9 +44,9 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
     return Promise.resolve(values)
   }
 
-  function onReset(formInstance: FormInstance | null) {
+  async function onReset(formInstance: FormInstance | null) {
     if (toolCfg?.searchFormCfg?.onReset) {
-      return toolCfg.searchFormCfg.onReset(searchFormRef.current?.getFormData() || {}, {
+      return await toolCfg.searchFormCfg.onReset(searchFormRef.current?.getFormData() || {}, {
         searchFormRef: searchFormRef.current,
         tableRef: tableRef.current,
       })
@@ -54,7 +54,7 @@ export const AdminContentLayout = forwardRef((props: AdminContentLayoutProps, re
 
     formInstance?.resetFields()
     setLoading(true)
-    tableRef.current?.fetchData(dataCfg.getUrl, (params) => {
+    await tableRef.current?.fetchData(dataCfg.getUrl, (params) => {
       const formData = searchFormRef.current?.getFormData() || {}
       return {
         ...params,
